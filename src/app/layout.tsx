@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { fontTitle } from "@/src/config/fonts";
 import type { ILayout } from "@/src/types/components";
 
-import "@/src/components/styles/globals.css";
+import "@/src/styles/globals.css";
 
 export const metadata: Metadata = {
   title: "TRD Caribe Shop",

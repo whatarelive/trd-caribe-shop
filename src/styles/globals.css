@@ -1,8 +1,13 @@
-@import "bootstrap/dist/css/bootstrap.css";
-
 :root {
-  --background: #ffffff;
+  --background: oklch(0.985 0.002 247.839);
   --foreground: #171717;
+
+  --neutral-400: #A1A1A1FF;
+  --blue-50: oklch(0.97 0.014 254.604);
+  --blue-400: #00BCFFFF;
+  --blue-500: oklch(0.623 0.214 259.815);
+  --blue-600: oklch(0.546 0.245 262.881);
+  --blue-700: oklch(0.488 0.243 264.376);
 }
 
 html, body {
