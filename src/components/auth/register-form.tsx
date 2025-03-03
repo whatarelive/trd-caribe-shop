@@ -30,7 +30,7 @@ const RegisterForm = () => {
                 id="user"
                 name="user"
                 type="text"
-                placeholder="Ingrese su correo electronico"
+                placeholder="Ingrese el nombre de usuario"
                 icon={MdOutlinePerson2}
             />
 
