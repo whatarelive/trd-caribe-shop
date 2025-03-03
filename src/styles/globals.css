@@ -2,7 +2,9 @@
   --background: oklch(0.985 0.002 247.839);
   --foreground: #171717;
 
+  --neutral-200: oklch(0.87 0 0);
   --neutral-400: #A1A1A1FF;
+
   --blue-50: oklch(0.97 0.014 254.604);
   --blue-400: #00BCFFFF;
   --blue-500: oklch(0.623 0.214 259.815);

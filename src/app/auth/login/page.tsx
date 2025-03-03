@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { LoginForm } from "@/src/components/auth/login-form";
 
-import styles from "./login.module.css";
+import styles from "@/src/app/auth/auth.module.css";
 
 export default function LoginPage() {
     return (
