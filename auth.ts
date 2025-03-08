@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import authConfig from "@/auth.config";
-import { ShopApi } from "@/src/lib/api/shop-api";
+import { shopApi } from "@/src/lib/api/shop-api";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
     ...authConfig,
@@ -27,10 +27,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         async jwt({ token, user }) {
             // Si hay un usuario, agrega los tokens de acceso y de refresco al token JWT
             if (user) {
+                token.username = user.username;
+                token.isAdmin = user.isAdmin;
                 token.accessToken = user.accessToken;
                 token.refreshToken = user.refreshToken;
-                token.accessTokenExpires = Date.now() + 60 * 4 * 1000; // 4 minutos de vida
-                token.refreshTokenExpires = Date.now() + 6 * 24 * 60 * 60 * 1000; // 6 días de vida
+                token.accessTokenExpires = Date.now() + 60 * 59 * 1000; // 59 minutos de vida
+                token.refreshTokenExpires = Date.now() + 23 * 60 * 60 * 1000; // 23 horas de vida
             }
 
             // Verificar si el token de refresco ha expirado
@@ -41,19 +43,21 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 token.refreshToken = undefined;
                 token.accessTokenExpires = undefined;
                 token.refreshTokenExpires = undefined;
+                token.username = undefined;
+                token.isAdmin = undefined;
             }
 
             // Verificar si el token de acceso ha expirado y renovarlo usando el token de refresco
             if (token.refreshTokenExpires && token.accessTokenExpires && Date.now() > token.accessTokenExpires) {
                 try {
                     // Intenta renovar el token de acceso usando el token de refresco
-                    const { data } = await ShopApi.post("/token/refresh/", { refresh: token.refreshToken });
+                    const { data } = await shopApi.post("/user/login/refresh/", { refresh: token.refreshToken });
 
                     if (!data) throw new Error("Error al renovar el token");
 
                     // Actualiza el token de acceso y su tiempo de expiración
                     token.accessToken = data.access;
-                    token.accessTokenExpires = Date.now() + 60 * 4 * 1000;
+                    token.accessTokenExpires = Date.now() + 60 * 59 * 1000;
 
                 } catch (error) {
                     console.log("Error al renovar el token de acceso", error);
@@ -72,6 +76,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             // Agrega los tokens de acceso y de refresco a la sesión
             session.accessToken = token.accessToken;
             session.refreshToken = token.refreshToken;
+
+            // Agrega la información del usuario a la sesión
+            session.user.username = token.username;
+            session.user.isAdmin = token.isAdmin;
             
             // Se establece el estado de la autentificación
             session.isAuthenticated = session.accessToken ? true : false;

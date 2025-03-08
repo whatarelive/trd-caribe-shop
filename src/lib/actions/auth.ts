@@ -1,11 +1,11 @@
 "use server"; // Indica que esta función se ejecuta en el servidor
 
 // Importaciones necesarias para el registro y autenticación
-import { signIn } from "@/auth";
-import { ShopApi } from "@/src/lib/api/shop-api";
-import { LoginSchemaWithEmail, LoginSchemaWithUserName, RegisterSchema } from "@/src/lib/validations/auth-schema";
+import { auth, signIn, signOut } from "@/auth";
+import { shopApi } from "@/src/lib/api/shop-api";
+import { LoginSchema, RegisterSchema } from "@/src/lib/validations/auth-schema";
 import type { LoginState, RegisterState } from "@/src/types/actions-props";
-import type { User } from "@/src/types/models";
+import type { UserRegister } from "@/src/types/models";
 
 /**
  * Crea un nuevo usuario y realiza el inicio de sesión automático
@@ -16,7 +16,7 @@ import type { User } from "@/src/types/models";
 async function createUser(_prevState: RegisterState, formData: FormData) {
     // Convertir el FormData a un objeto plano para poder validarlo
     const fields = Object.fromEntries(formData.entries());
-    
+
     // Validar los datos usando Zod schema para asegurar que cumplen con el formato requerido
     const { success, data, error } = RegisterSchema.safeParse(fields);
 
@@ -33,7 +33,7 @@ async function createUser(_prevState: RegisterState, formData: FormData) {
 
     try {
         // Intentar crear el usuario en el backend mediante una petición POST
-        const { data: response, status } = await ShopApi.post<User>("/user/register/", {
+        const { data: response, status } = await shopApi.post<UserRegister>("/user/register/", {
             first_name, last_name, email, username, password
         });
 
@@ -43,7 +43,7 @@ async function createUser(_prevState: RegisterState, formData: FormData) {
         } 
 
         // Si el registro es exitoso, iniciar sesión automáticamente con las credenciales
-        return await signIn("credentials", response);
+        return await signIn("credentials", { ...response, redirect: false });
         
     } catch (error) {
         // Registrar el error en la consola para debugging
@@ -67,13 +67,8 @@ async function verifyUser(_prevState: LoginState, formData: FormData) {
     // Convertir el FormData a un objeto plano para poder validarlo
     const fields = Object.fromEntries(formData.entries());
     
-    // Determinar si estamos usando email o username basado en los campos presentes
-    const isUsingEmail = "email" in fields;
-    
     // Validar los datos usando el schema apropiado
-    const { data, success, error } = isUsingEmail
-        ? LoginSchemaWithEmail.safeParse(fields)
-        : LoginSchemaWithUserName.safeParse(fields);
+    const { data, success, error } = LoginSchema.safeParse(fields);
 
     // Si la validación falla, retornar los errores específicos de cada campo
     if (!success) {
@@ -83,18 +78,48 @@ async function verifyUser(_prevState: LoginState, formData: FormData) {
         }
     }
 
-    // Preparar los datos para el inicio de sesión
-    const loginData = {
-        user: isUsingEmail ? data.email : data.username,
-        password: data.password
-    };
-
     // Inicio sesión con las credenciales
-    return await signIn("credentials", loginData);
+    return await signIn("credentials", data);
+}
+
+/**
+ * Cierra la sesión del usuario actual
+ * @returns Promise que resuelve con el resultado del cierre de sesión o un objeto con el error
+ * Si es exitoso, elimina la sesión del cliente y del servidor
+ * Si falla, retorna un objeto con el mensaje de error
+ */
+async function logoutUser() {
+    try {
+        // Obtener la sesión actual
+        const session = await auth();
+
+        // Realizar la petición al backend para cerrar la sesión
+        const { status } = await shopApi.post("/user/logout/", {
+            headers: { Authorization: `Bearer ${session?.accessToken}` },
+            body: { refresh: session?.refreshToken }
+        });
+        
+        // Verificar si la petición fue exitosa
+        if (status !== 201) throw new Error("No se pudo cerrar la sesión");
+        
+    } catch (error) {
+        // Registrar cualquier error que ocurra durante el proceso
+        console.log(error);
+        
+        // Retornar un objeto con información sobre el error
+        return {
+            success: false,
+            message: "Error al cerrar la sesión. Por favor, intente nuevamente."
+        }
+    }
+    
+    // Si el logout en el backend es exitoso, cerrar la sesión en el cliente
+    return await signOut({ redirectTo: "/" });
 }
 
 // Exportar la función para su uso en componentes
 export {
     createUser,
     verifyUser,
+    logoutUser
 }

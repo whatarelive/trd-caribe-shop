@@ -1,5 +1,6 @@
 import axios from "axios";
 
-export const ShopApi = axios.create({
+// Instancia para las peticiones que necesitan un token.
+export const shopApi = axios.create({
     baseURL: process.env.BACKEND_URL,
-});
+})

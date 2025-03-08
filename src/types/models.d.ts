@@ -1,4 +1,4 @@
-export interface User {
+export interface UserRegister {
     username: string;
     email: string;
     first_name:	string;
@@ -7,4 +7,9 @@ export interface User {
         refresh: string;
         access: string;   
     };
+}
+
+export interface UserLogin {
+    username: string;
+    password: string;
 }
