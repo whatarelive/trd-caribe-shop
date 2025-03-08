@@ -1,6 +1,6 @@
 "use client";
 
-import { MdOutlineLock, MdOutlinePerson2, MdOutlineLockClock } from "react-icons/md";
+import { MdOutlineLock, MdOutlinePerson2, MdOutlineLockClock, MdOutlineEmail } from "react-icons/md";
 import { TextInput, TextInputWithPassword } from "@/src/components/ui/input";
 
 const RegisterForm = () => {
@@ -31,6 +31,15 @@ const RegisterForm = () => {
                 type="text"
                 placeholder="Ingrese el nombre de usuario"
                 icon={MdOutlinePerson2}
+            />
+
+            <TextInput
+                label="Correo"
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Ingrese su correo electronico"
+                icon={MdOutlineEmail}
             />
 
             <TextInputWithPassword
