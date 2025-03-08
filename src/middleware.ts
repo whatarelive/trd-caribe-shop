@@ -13,14 +13,21 @@ const { auth: middleware } = NextAuth(authConfig);
 export default middleware(({ nextUrl, auth }) => {
     // Verifica si el usuario está autenticado.
     const isLoggedIn = !!auth;
+    const isAdmin = auth?.user?.isAdmin;
+    const isStaticFile = nextUrl.pathname.includes('.png') || nextUrl.pathname.includes('.jpg');
 
     // Protección de rutas privadas.
-    if (!publicRoutes.includes(nextUrl.pathname) && !isLoggedIn) {
+    if (!publicRoutes.includes(nextUrl.pathname) && !isLoggedIn && !isStaticFile) {
         return NextResponse.redirect(new URL("/auth/login", nextUrl));
     }
 
+    // Protección de rutas de administrador.
+    if (nextUrl.pathname.startsWith('/admin') && !isAdmin && !isStaticFile) {
+        return NextResponse.redirect(new URL("/", nextUrl));
+    }
+
     // Restricción de rutas de autentificación.
-    if (authRoutes.includes(nextUrl.pathname) && isLoggedIn) {
+    if (authRoutes.includes(nextUrl.pathname) && isLoggedIn && !isStaticFile) {
         return NextResponse.redirect(new URL("/", nextUrl));
     }
 
