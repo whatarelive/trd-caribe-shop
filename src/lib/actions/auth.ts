@@ -94,13 +94,17 @@ async function logoutUser() {
         const session = await auth();
 
         // Realizar la petición al backend para cerrar la sesión
-        const { status } = await shopApi.post("/user/logout/", {
-            headers: { Authorization: `Bearer ${session?.accessToken}` },
-            body: { refresh: session?.refreshToken }
-        });
-        
+        const { status } = await shopApi.post("/user/logout/", 
+            { refresh: session?.refreshToken },
+            {
+                headers: { 
+                    Authorization: `Bearer ${session?.accessToken}` 
+                }
+            }
+        );
+
         // Verificar si la petición fue exitosa
-        if (status !== 201) throw new Error("No se pudo cerrar la sesión");
+        if (status !== 205) throw new Error("No se pudo cerrar la sesión");
         
     } catch (error) {
         // Registrar cualquier error que ocurra durante el proceso
