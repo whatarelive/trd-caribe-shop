@@ -1,7 +1,7 @@
 export type LoginState = {
-    isEmail?: boolean;
     errors?: {
-        user?: string[];
+        username?: string[];
+        email?: string[];
         password?: string[];
     };
     message?: string | null;

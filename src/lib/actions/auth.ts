@@ -5,7 +5,7 @@ import { signIn } from "@/auth";
 import { ShopApi } from "@/src/lib/api/shop-api";
 import { LoginSchemaWithEmail, LoginSchemaWithUserName, RegisterSchema } from "@/src/lib/validations/auth-schema";
 import type { LoginState, RegisterState } from "@/src/types/actions-props";
-import { User } from "@/src/types/models";
+import type { User } from "@/src/types/models";
 
 /**
  * Crea un nuevo usuario y realiza el inicio de sesión automático
@@ -57,26 +57,40 @@ async function createUser(_prevState: RegisterState, formData: FormData) {
     }
 }
 
-async function verifyUser(prevState: LoginState, formData: FormData) {
+/**
+ * Verifica el usuario y realiza el inicio de sesión automático
+ * @param _prevState - Estado anterior del formulario (no utilizado)
+ * @param formData - Datos del formulario de inicio de sesión
+ * @returns Objeto con errores si falla la validación o el inicio, o redirige si es exitoso
+ */
+async function verifyUser(_prevState: LoginState, formData: FormData) {
     // Convertir el FormData a un objeto plano para poder validarlo
     const fields = Object.fromEntries(formData.entries());
-
-    // Validar los datos usando Zod schema para asegurar que cumplen con el formato requerido
-    const { success, data, error } = prevState.isEmail 
-        ? LoginSchemaWithEmail.safeParse(fields) 
+    
+    // Determinar si estamos usando email o username basado en los campos presentes
+    const isUsingEmail = "email" in fields;
+    
+    // Validar los datos usando el schema apropiado
+    const { data, success, error } = isUsingEmail
+        ? LoginSchemaWithEmail.safeParse(fields)
         : LoginSchemaWithUserName.safeParse(fields);
 
     // Si la validación falla, retornar los errores específicos de cada campo
     if (!success) {
         return {
-            isEmail: prevState.isEmail,
             errors: error.flatten().fieldErrors,
-            message: "Error de Registro",
+            message: "Error de inicio de sesión",
         }
     }
 
-    // Inicio sesión automáticamente con las credenciales
-    return await signIn("credentials", data);
+    // Preparar los datos para el inicio de sesión
+    const loginData = {
+        user: isUsingEmail ? data.email : data.username,
+        password: data.password
+    };
+
+    // Inicio sesión con las credenciales
+    return await signIn("credentials", loginData);
 }
 
 // Exportar la función para su uso en componentes
