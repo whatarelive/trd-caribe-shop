@@ -13,7 +13,7 @@ body {
 }
 
 .input-container {
-  @apply flex flex-col w-full h-[75px] mb-2
+  @apply flex flex-col w-full h-[85px] mb-2
 }
 
 .input-subcontainer {
@@ -24,3 +24,26 @@ body {
 .button-primary {
   @apply p-2 rounded-sm cursor-pointer font-semibold bg-blue-600 text-white hover:bg-blue-500
 }
+
+.loader {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: block;
+  margin: 8px auto;
+  position: relative;
+  background: #FFF;
+  box-sizing: border-box;
+  animation: shadowExpandX 2s linear infinite alternate;
+}
+
+@keyframes shadowExpandX {
+  0% {
+    box-shadow: 0 0, 0 0;
+    color: rgba(255, 255, 255, 0.2);
+  }
+  100% {
+    box-shadow: -24px 0, 24px 0;
+    color: rgba(255, 255, 255, 0.8);
+  }
+} 

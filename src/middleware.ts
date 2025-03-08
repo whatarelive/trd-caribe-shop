@@ -14,9 +14,6 @@ export default middleware(({ nextUrl, auth }) => {
     // Verifica si el usuario está autenticado.
     const isLoggedIn = !!auth;
 
-    console.log(isLoggedIn);
-    
-
     // Protección de rutas privadas.
     if (!publicRoutes.includes(nextUrl.pathname) && !isLoggedIn) {
         return NextResponse.redirect(new URL("/auth/login", nextUrl));
