@@ -1,24 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { useActionState, useState } from "react";
 import { MdOutlinePerson2, MdOutlineLock, MdOutlineEmail, MdOutlinePublishedWithChanges } from "react-icons/md";
+import { verifyUser } from "@/src/lib/actions/auth";
 import { TextInput, TextInputWithPassword } from "@/src/components/ui/input";
+import type { LoginState } from "@/src/types/actions-props";
 
 export const LoginForm = () => {
     const [isEmail, setIsEmail] = useState<boolean>(false);
+    
+    // Inicializa el estado del formulario con mensaje y errores vacíos
+    const initialState: LoginState = { isEmail, message: null, errors: {} };
+
+    // Utiliza una acción del servidor para el envío del formulario y seguimiento del estado de carga
+    const [errorMessage, formAction, isPending] = useActionState(verifyUser, initialState);
 
     return (
-        <form action="" className="flex flex-col mt-6">
-            <div className="inline-flex items-center gap-2">
+        <form action={formAction} className="flex flex-col mt-6">
+            <div className="inline-flex gap-2">
                 {
                     isEmail ? (
                         <TextInput
                             label="Correo"
-                            id="email"
-                            name="email"
+                            id="user"
+                            name="user"
                             type="email"
                             placeholder="Ingrese su correo electronico"
                             icon={MdOutlineEmail}
+                            aria-describedby="email-error"
+                            errors={errorMessage.errors?.user}
                         />
                     ) : (
                         <TextInput
@@ -28,6 +38,8 @@ export const LoginForm = () => {
                             type="text"
                             placeholder="Ingrese el nombre de usuario"
                             icon={MdOutlinePerson2}
+                            aria-describedby="username-error"
+                            errors={errorMessage.errors?.user}
                         />
                     )
                 }
@@ -35,7 +47,7 @@ export const LoginForm = () => {
                 <button 
                     type="button" 
                     onClick={() => setIsEmail(!isEmail)}
-                    className="h-10 mt-1 p-2 cursor-pointer rounded-sm border border-neutral-300"
+                    className="h-[38px] mt-6 p-2 cursor-pointer rounded-sm border border-neutral-300"
                 >
                     <MdOutlinePublishedWithChanges />
                 </button>
@@ -47,10 +59,20 @@ export const LoginForm = () => {
                 name="password"
                 placeholder="Ingrese su contraseña"
                 icon={MdOutlineLock}
+                aria-describedby="password-error"
+                errors={errorMessage.errors?.password}
             />
 
-            <button type="submit" className="button-primary mt-4">
-                Iniciar sesión
+            <button 
+                type="submit" 
+                disabled={isPending} 
+                className="button-primary mt-4"
+            >
+                {
+                    isPending 
+                        ? <span className="loader"></span> 
+                        : 'Iniciar sesión'
+                }
             </button>
         </form>
     )

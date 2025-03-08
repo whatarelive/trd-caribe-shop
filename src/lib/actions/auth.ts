@@ -3,8 +3,8 @@
 // Importaciones necesarias para el registro y autenticación
 import { signIn } from "@/auth";
 import { ShopApi } from "@/src/lib/api/shop-api";
-import { RegisterSchema } from "@/src/lib/validations/auth-schema";
-import type { RegisterState } from "@/src/types/actions-props";
+import { LoginSchemaWithEmail, LoginSchemaWithUserName, RegisterSchema } from "@/src/lib/validations/auth-schema";
+import type { LoginState, RegisterState } from "@/src/types/actions-props";
 import { User } from "@/src/types/models";
 
 /**
@@ -57,7 +57,30 @@ async function createUser(_prevState: RegisterState, formData: FormData) {
     }
 }
 
+async function verifyUser(prevState: LoginState, formData: FormData) {
+    // Convertir el FormData a un objeto plano para poder validarlo
+    const fields = Object.fromEntries(formData.entries());
+
+    // Validar los datos usando Zod schema para asegurar que cumplen con el formato requerido
+    const { success, data, error } = prevState.isEmail 
+        ? LoginSchemaWithEmail.safeParse(fields) 
+        : LoginSchemaWithUserName.safeParse(fields);
+
+    // Si la validación falla, retornar los errores específicos de cada campo
+    if (!success) {
+        return {
+            isEmail: prevState.isEmail,
+            errors: error.flatten().fieldErrors,
+            message: "Error de Registro",
+        }
+    }
+
+    // Inicio sesión automáticamente con las credenciales
+    return await signIn("credentials", data);
+}
+
 // Exportar la función para su uso en componentes
 export {
     createUser,
+    verifyUser,
 }

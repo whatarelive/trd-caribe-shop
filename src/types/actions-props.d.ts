@@ -1,14 +1,7 @@
-export type LoginStateWithUser = {
+export type LoginState = {
+    isEmail?: boolean;
     errors?: {
-        username?: string[];
-        password?: string[];
-    };
-    message?: string | null;
-};
-
-export type LoginStateWithEmail = {
-    errors?: {
-        username?: string[];
+        user?: string[];
         password?: string[];
     };
     message?: string | null;
