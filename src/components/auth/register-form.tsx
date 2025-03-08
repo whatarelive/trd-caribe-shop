@@ -1,13 +1,3 @@
-/**
- * Componente RegisterForm
- * 
- * Componente de formulario del lado del cliente para registro de usuarios que maneja:
- * - Validación de datos de entrada
- * - Estado del envío del formulario
- * - Visualización de errores
- * - Diseño responsivo
- */
-
 "use client";
 
 import { useActionState } from "react";
@@ -16,6 +6,14 @@ import { createUser } from "@/src/lib/actions/auth";
 import { TextInput, TextInputWithPassword } from "@/src/components/ui/input";
 import type { RegisterState } from "@/src/types/actions-props";
 
+/**
+ * @description Componente de formulario del lado del cliente para registro de usuarios que maneja:
+ * @summary
+ * - Validación de datos de entrada
+ * - Estado del envío del formulario
+ * - Visualización de errores
+ * - Diseño responsivo
+ */
 export const RegisterForm = () => {
     // Inicializa el estado del formulario con mensaje y errores vacíos
     const initialState: RegisterState = { message: null, errors: {} };

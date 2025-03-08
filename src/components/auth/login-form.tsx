@@ -1,7 +1,3 @@
-/**
- * Componente de formulario de inicio de sesión
- * Permite al usuario ingresar con nombre de usuario o correo electrónico
- */
 "use client";
 
 import { useActionState, useState } from "react";
@@ -10,13 +6,19 @@ import { verifyUser } from "@/src/lib/actions/auth";
 import { TextInput, TextInputWithPassword } from "@/src/components/ui/input";
 import type { LoginState } from "@/src/types/actions-props";
 
+/**
+ * @description Componente de formulario del lado del cliente para el inicio de sesion de los usuarios.
+ * @summary
+ * - Validación de datos de entrada
+ * - Estado del envío del formulario
+ * - Visualización de errores
+ * - Diseño responsivo
+ */
 export const LoginForm = () => {
     // Estado para controlar si se muestra el campo de correo o nombre de usuario
     const [isEmail, setIsEmail] = useState<boolean>(false);
-    
     // Inicializa el estado del formulario con mensaje y errores vacíos
     const initialState: LoginState = { message: null, errors: {} };
-
     // Utiliza una acción del servidor para el envío del formulario y seguimiento del estado de carga
     const [errorMessage, formAction, isPending] = useActionState(verifyUser, initialState);
 
