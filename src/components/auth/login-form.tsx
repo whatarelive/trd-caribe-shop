@@ -1,18 +1,17 @@
 "use client";
 
-import { MdOutlinePerson2,  MdOutlineLock } from "react-icons/md";
+import { MdOutlinePerson2, MdOutlineLock } from "react-icons/md";
 import { TextInput, TextInputWithPassword } from "@/src/components/ui/input";
-import styles from "./auth-form.module.css";
 
-const LoginForm = () => {
+export const LoginForm = () => {
     return (
-        <form action="" className={styles.form}>
+        <form action="" className="flex flex-col mt-6">
             <TextInput
-                label="Usuario"
-                id="user"
-                name="user"
-                type="text"
-                placeholder="Ingrese su nombre de usuario"
+                label="Correo"
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Ingrese su correo electronico"
                 icon={MdOutlinePerson2}
             />
 
@@ -24,13 +23,9 @@ const LoginForm = () => {
                 icon={MdOutlineLock}
             />
 
-            <button type="submit" className={styles.form_button}>
+            <button type="submit" className="button-primary mt-4">
                 Iniciar sesión
             </button>
         </form>
     )
 }
-
-export {
-    LoginForm
-};

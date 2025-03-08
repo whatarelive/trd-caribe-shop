@@ -2,12 +2,11 @@
 
 import { MdOutlineLock, MdOutlinePerson2, MdOutlineLockClock } from "react-icons/md";
 import { TextInput, TextInputWithPassword } from "@/src/components/ui/input";
-import styles from "./auth-form.module.css";
 
 const RegisterForm = () => {
     return (
-        <form action="" className={styles.form}>
-            <div className={styles.form_inputRow}>
+        <form action="" className="flex flex-col mt-6">
+            <div className="flex flex-col md:flex-row md:gap-3">
                 <TextInput
                     label="Nombre"
                     id="name"
@@ -50,7 +49,7 @@ const RegisterForm = () => {
                 icon={MdOutlineLockClock}
             />
 
-            <button type="submit" className={styles.form_button}>
+            <button type="submit" className="button-primary mt-4">
                 Registrar Cuenta
             </button>
         </form>

@@ -4,19 +4,24 @@ import { useState, type FC } from "react";
 import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
 import type { ITextInput } from "@/src/types/components";
 
-import styles from "./input.module.css";
-
 const TextInput: FC<ITextInput> = ({ label, icon, ...props }) => {
     const Icon = icon;
 
     return (
-        <div className={styles.container}>
-            <label className={styles.label} htmlFor={props.name}>
+        <div className="input-container">
+            <label htmlFor={props.name} className="text-neutral-600 text-sm font-semibold mb-1 select-none">
                 { label }
             </label>
-            <div className={styles.sub_container}>
-                { Icon && <Icon size={18}/> }
-                <input id={props.name} className={styles.input} { ...props } />
+    
+            <div className="input-subcontainer">
+                { Icon && <Icon size={20}/> }
+                
+                <input 
+                    id={props.name} 
+                    autoComplete="off"
+                    className="w-full p-2 border-0 text-sm bg-transparent outline-none"
+                    { ...props } 
+                />
             </div>
         </div>
     )
@@ -29,23 +34,24 @@ const TextInputWithPassword: FC<ITextInput> = ({ label, icon, ...props }) => {
     const handleClick = () => setView(!view);
 
     return (
-        <div className={styles.container}>
-            <label className={styles.label} htmlFor={props.name}>
+        <div className="input-container">
+            <label htmlFor={props.name} className="text-neutral-600 text-sm font-semibold mb-1 select-none">
                 { label }
             </label>
-            <div className={styles.sub_container}>
-                { Icon && <Icon size={18}/> }
+
+            <div className="input-subcontainer">
+                { Icon && <Icon size={20}/> }
 
                 <input 
                     id={props.name} { ...props } 
-                    className={styles.input} 
+                    className="w-full p-2 border-0 text-sm bg-transparent outline-none"
                     type={ view ? "text" : "password" }    
                 />
 
                 { 
                     view 
-                    ? <MdOutlineVisibility size={18} onClick={handleClick} style={{ cursor: "pointer" }}/> 
-                    : <MdOutlineVisibilityOff size={18} onClick={handleClick} style={{ cursor: "pointer" }}/> 
+                    ? <MdOutlineVisibility size={20} onClick={handleClick} className="cursor-pointer"/> 
+                    : <MdOutlineVisibilityOff size={20} onClick={handleClick} className="cursor-pointer"/> 
                 }
             </div>
         </div>
