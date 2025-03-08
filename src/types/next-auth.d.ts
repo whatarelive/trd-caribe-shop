@@ -17,10 +17,18 @@ declare module "next-auth" {
 
   /**
    * Extiende la interfaz User de NextAuth
+   * @property {string} username - Nombre de usuario
+   * @property {string} email - Correo electronico del usuario
+   * @property {string} firstName - Primer nombre del usuario
+   * @property {string} lastName - Apellidos del usuario
    * @property {string} accessToken - Token de acceso JWT del usuario
    * @property {string} refreshToken - Token de refresco del usuario
    */
   interface User {
+    username?: string;
+    email?: string;
+    firstNname?:	string;
+    lastNname?:	string;
     accessToken?: string;
     refreshToken?: string;
   }

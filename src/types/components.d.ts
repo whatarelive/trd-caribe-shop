@@ -8,4 +8,5 @@ export interface ILayout {
 export interface ITextInput extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
     label: string; 
     icon?: IconType;
+    errors?: string[];
 };

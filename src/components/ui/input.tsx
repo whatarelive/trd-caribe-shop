@@ -4,7 +4,7 @@ import { useState, type FC } from "react";
 import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
 import type { ITextInput } from "@/src/types/components";
 
-const TextInput: FC<ITextInput> = ({ label, icon, ...props }) => {
+const TextInput: FC<ITextInput> = ({ label, errors, icon, ...props }) => {
     const Icon = icon;
 
     return (
@@ -23,11 +23,22 @@ const TextInput: FC<ITextInput> = ({ label, icon, ...props }) => {
                     { ...props } 
                 />
             </div>
+            {
+                errors && (
+                    <div id={props["aria-describedby"]} aria-live="polite" aria-atomic="true">
+                        {
+                            <p className="text-sm text-red-500" key={errors[0]}>
+                                { errors[0] }
+                            </p>
+                        }
+                    </div>
+                )
+            }
         </div>
     )
 }
 
-const TextInputWithPassword: FC<ITextInput> = ({ label, icon, ...props }) => {
+const TextInputWithPassword: FC<ITextInput> = ({ label, errors, icon, ...props }) => {
     const [view, setView] = useState(false);
     const Icon = icon;
 
@@ -54,6 +65,18 @@ const TextInputWithPassword: FC<ITextInput> = ({ label, icon, ...props }) => {
                     : <MdOutlineVisibilityOff size={20} onClick={handleClick} className="cursor-pointer"/> 
                 }
             </div>
+
+            {
+                errors && (
+                    <div id={props["aria-describedby"]} aria-live="polite" aria-atomic="true">
+                        {
+                            <p className="text-sm text-red-500" key={errors[0]}>
+                                { errors[0] }
+                            </p>
+                        }
+                    </div>
+                )
+            }
         </div>
     )
 }
