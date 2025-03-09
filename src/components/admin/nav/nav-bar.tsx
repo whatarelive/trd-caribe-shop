@@ -17,7 +17,7 @@ import { ButtonLogout, ButtonOpenSidebar } from "@/src/components/ui/buttons";
  */
 export const NavBar = () => {
     return (
-        <header className="flex justify-between items-center px-6 w-full h-16 border-b border-neutral-200">
+        <header className="fixed z-50 flex justify-between items-center px-6 w-full h-16 border-b border-neutral-200 bg-white">
             {/* Contenedor principal */}
             <div className="flex items-center gap-4">
                 {/* Contenedor de icono y título */}

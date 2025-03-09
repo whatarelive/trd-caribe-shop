@@ -24,14 +24,16 @@ export default function AdminLayout({ children }: ILayout) {
             <NavBar />
 
             {/* Área principal */}
-            <main className="flex h-[calc(100vh-64px)] bg-green-500">
+            <main className="relative flex top-16">
                 {/* Barra lateral fija */}
-                <section className="hidden lg:block w-64 h-[calc(100vh-64px)] border-r border-gray-200 bg-white">
+                <section className="hidden z-20 lg:block fixed w-64 border-r lg:h-[calc(100vh-64px)] border-gray-200 bg-white">
                     <NavList />
                 </section>
 
                 {/* Contenido dinámico */}
-                {children}
+                <section className="relative w-full lg:left-64 lg:w-[calc(100vw-274px)] lg:h-[calc(100vh-72px)]">
+                    {children}
+                </section>
             </main>
         </>
     )
