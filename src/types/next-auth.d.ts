@@ -16,7 +16,7 @@ declare module "next-auth" {
     user?: {
       username?: string;
       isAdmin?: boolean;
-    }
+    };
   }
 
   /**

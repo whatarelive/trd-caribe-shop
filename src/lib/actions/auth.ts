@@ -1,7 +1,7 @@
 "use server"; // Indica que esta función se ejecuta en el servidor
 
 // Importaciones necesarias para el registro y autenticación
-import { auth, signIn, signOut } from "@/auth";
+import { signIn, signOut } from "@/auth";
 import { shopApi } from "@/src/lib/api/shop-api";
 import { LoginSchema, RegisterSchema } from "@/src/lib/validations/auth-schema";
 import type { LoginState, RegisterState } from "@/src/types/actions-props";
@@ -84,41 +84,11 @@ async function verifyUser(_prevState: LoginState, formData: FormData) {
 
 /**
  * Cierra la sesión del usuario actual
- * @returns Promise que resuelve con el resultado del cierre de sesión o un objeto con el error
+ * @returns Promise que resuelve con el resultado del cierre de sesión
  * Si es exitoso, elimina la sesión del cliente y del servidor
- * Si falla, retorna un objeto con el mensaje de error
  */
 async function logoutUser() {
-    try {
-        // Obtener la sesión actual
-        const session = await auth();
-
-        // Realizar la petición al backend para cerrar la sesión
-        const { status } = await shopApi.post("/user/logout/", 
-            { refresh: session?.refreshToken },
-            {
-                headers: { 
-                    Authorization: `Bearer ${session?.accessToken}` 
-                }
-            }
-        );
-
-        // Verificar si la petición fue exitosa
-        if (status !== 205) throw new Error("No se pudo cerrar la sesión");
-        
-    } catch (error) {
-        // Registrar cualquier error que ocurra durante el proceso
-        console.log(error);
-        
-        // Retornar un objeto con información sobre el error
-        return {
-            success: false,
-            message: "Error al cerrar la sesión. Por favor, intente nuevamente."
-        }
-    }
-    
-    // Si el logout en el backend es exitoso, cerrar la sesión en el cliente
-    return await signOut({ redirectTo: "/" });
+    return await signOut();
 }
 
 // Exportar la función para su uso en componentes

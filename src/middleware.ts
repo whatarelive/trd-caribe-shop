@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
+import { auth as Session } from "@/auth";
 import authConfig from "@/auth.config";
 
 // Define las rutas de autenticación y las rutas públicas.
@@ -10,24 +11,36 @@ const publicRoutes = ['/', ...authRoutes];
 const { auth: middleware } = NextAuth(authConfig);
 
 // Exporta el middleware con la lógica de protección de rutas.
-export default middleware(({ nextUrl, auth }) => {
+export default middleware( async({ nextUrl, auth }) => {
     // Verifica si el usuario está autenticado.
-    const isLoggedIn = !!auth;
-    const isAdmin = auth?.user?.isAdmin;
-    const isStaticFile = nextUrl.pathname.includes('.png') || nextUrl.pathname.includes('.jpg');
+    const isLoggedIn = !!auth;  
+    
+    // Proteccioón de las rutas del DashBoard
+    if (nextUrl.pathname.startsWith("/admin") && isLoggedIn) {
+        // Se recupera la sesión del usuario.
+        const session = await Session();
+        
+        // Si el usuario es Admin se deja pasar la petición
+        if (session?.user?.isAdmin) {
+            return NextResponse.next();
+        } 
+        
+        // Si no se redirecciona a la página pública
+        else return NextResponse.redirect(new URL("/", nextUrl));
+    }
+
+    // Se ignoran los archivos con esa extensión
+    if (nextUrl.pathname.includes('.png') || nextUrl.pathname.includes('.jpg')) {
+        return NextResponse.next();
+    }    
 
     // Protección de rutas privadas.
-    if (!publicRoutes.includes(nextUrl.pathname) && !isLoggedIn && !isStaticFile) {
+    if (!publicRoutes.includes(nextUrl.pathname) && !isLoggedIn) {
         return NextResponse.redirect(new URL("/auth/login", nextUrl));
     }
 
-    // Protección de rutas de administrador.
-    if (nextUrl.pathname.startsWith('/admin') && !isAdmin && !isStaticFile) {
-        return NextResponse.redirect(new URL("/", nextUrl));
-    }
-
     // Restricción de rutas de autentificación.
-    if (authRoutes.includes(nextUrl.pathname) && isLoggedIn && !isStaticFile) {
+    if (authRoutes.includes(nextUrl.pathname) && isLoggedIn) {
         return NextResponse.redirect(new URL("/", nextUrl));
     }
 

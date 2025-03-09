@@ -1,14 +1,15 @@
-"use client";
+import { auth } from "@/auth";
+import { ButtonLogout } from "@/src/components/ui/buttons";
 
-import { logoutUser } from "@/src/lib/actions/auth";
-
-export default function Home() {
+export default async function Home() {
+  const session = await auth();
   return (
     <div>
       <h1>TRD Caribe Shop</h1>
-      <button onClick={async () => await logoutUser()}>
-        Cerrar Sesión
-      </button>
+      <ButtonLogout/>
+      <pre>
+        {JSON.stringify({session})}
+      </pre>
     </div>
   );
 }

@@ -3,7 +3,8 @@
 import { useActionState } from "react";
 import { MdOutlinePerson2, MdOutlineLock } from "react-icons/md";
 import { verifyUser } from "@/src/lib/actions/auth";
-import { TextInput, TextInputWithPassword } from "@/src/components/ui/input";
+import { TextInput } from "@/src/components/ui/input/input-text";
+import { TextInputWithPassword } from "@/src/components/ui/input/input-password";
 import type { LoginState } from "@/src/types/actions-props";
 
 /**
