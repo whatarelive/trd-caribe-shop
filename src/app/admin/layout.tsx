@@ -7,7 +7,7 @@ export default function AdminLayout({ children }: ILayout) {
         <>
             <NavBar />
             
-            <main className="flex bg-green-500">
+            <main className="flex h-[calc(100vh-64px)] bg-green-500">
                 <SideBar />
                 {children}
             </main>
