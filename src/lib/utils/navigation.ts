@@ -20,6 +20,7 @@ export interface Breadcrumb {
  */
 const pathTranslations: Record<string, string> = {
     'products': 'Productos',
+    'create': 'Creación',
     'promotions': 'Promociones',
     'categories': 'Categorías',
     'settings': 'Configuración',
