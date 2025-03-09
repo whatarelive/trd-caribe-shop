@@ -3,7 +3,8 @@
 import { useActionState } from "react";
 import { MdOutlineLock, MdOutlinePerson2, MdOutlineLockClock, MdOutlineEmail } from "react-icons/md";
 import { createUser } from "@/src/lib/actions/auth";
-import { TextInput, TextInputWithPassword } from "@/src/components/ui/input";
+import { TextInput } from "@/src/components/ui/input/input-text";
+import { TextInputWithPassword } from "@/src/components/ui/input/input-password";
 import type { RegisterState } from "@/src/types/actions-props";
 
 /**

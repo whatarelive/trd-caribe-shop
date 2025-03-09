@@ -1,6 +1,7 @@
 "use client";
 
-import { TextInput, FileInput } from '@/src/components/ui/input';
+import { TextInput } from '@/src/components/ui/input/input-text';
+import { FileInput } from '@/src/components/ui/input/input-file';
 import { SelectCategories } from '@/src/components/admin/products/select-categories';
 
 export const CreateProductForm = () => {
