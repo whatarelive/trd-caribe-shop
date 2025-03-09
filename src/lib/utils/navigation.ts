@@ -1,9 +1,23 @@
+/**
+ * Interfaz que define la estructura de un elemento de navegación tipo breadcrumb.
+ */
 export interface Breadcrumb {
+    /** Texto que se mostrará en la interfaz */
     label: string;
+    /** URL de destino para la navegación */
     href: string;
 }
 
-// Mapeo de rutas en inglés a español
+/**
+ * Diccionario de traducciones para los segmentos de ruta.
+ * 
+ * Mapea los nombres de ruta en inglés a sus equivalentes en español
+ * para mostrar breadcrumbs con etiquetas localizadas.
+ * 
+ * @example
+ * URL: /products/categories
+ * Breadcrumbs: Inicio > Productos > Categorías
+ */
 const pathTranslations: Record<string, string> = {
     'products': 'Productos',
     'promotions': 'Promociones',
@@ -13,6 +27,19 @@ const pathTranslations: Record<string, string> = {
     'users': 'Usuarios',
 };
 
+/**
+ * Genera una lista de breadcrumbs basada en la ruta actual.
+ * 
+ * @param pathname - Ruta actual de la aplicación
+ * @returns Array de objetos Breadcrumb con etiquetas traducidas y URLs
+ * 
+ * Características:
+ * - Elimina query params y hash de la URL
+ * - Siempre incluye un breadcrumb de inicio
+ * - Traduce segmentos de ruta al español usando pathTranslations
+ * - Genera etiquetas legibles para rutas sin traducción
+ * - Construye URLs acumulativamente
+ */
 export function generateBreadcrumbs(pathname: string): Breadcrumb[] {
     // Eliminar query params y hash si existen
     const path = pathname.split('?')[0].split('#')[0];

@@ -1,13 +1,27 @@
 import clsx from "clsx"
 import Link from "next/link"
 
+// Interfaz para las propiedades del componente LinkComponent
 interface Props {
+    /** URL de destino del enlace */
     href: string;
+    /** Texto que se mostrará en el enlace */
     label: string;
+    /** Elementos hijos opcionales que se renderizarán antes de la etiqueta (normalmente iconos) */
     children?: React.ReactNode;
+    /** Indica si el enlace está actualmente activo */
     isActive: boolean;
 }
 
+/**
+ * Componente de enlace de navegación con estilos para estado activo.
+ * Utilizado para crear elementos de navegación con indicador visual de la página actual.
+ * 
+ * Características:
+ * - Soporta iconos o elementos personalizados antes del texto
+ * - Incluye estados hover y active con transiciones suaves
+ * - Estilizado con Tailwind CSS para una apariencia moderna
+ */
 export const LinkComponent: React.FC<Props> = ({ href, label, children, isActive }) => {
     return (
         <li>
