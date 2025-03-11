@@ -1,18 +1,14 @@
+import type { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { shopApi } from "@/src/lib/api/shop-api";
-import type { NextAuthConfig } from "next-auth";
+import { isRegisterUser } from "@/src/lib/utils/type-guards";
 import type { UserLogin, UserRegister } from "@/src/types/models";
 
-// Tipo de usuario que puede ser tanto para login como para registro
-type User = UserLogin | UserRegister; 
-
-/**
- * Verifica si el usuario es de tipo registro comprobando si tiene token
- * @param user Usuario a verificar
- * @returns true si es un usuario de registro, false si es de login
- */
-function isRegisterUser(user: User): user is UserRegister {
-    return (user as UserRegister).token !== undefined;   
+// Type de la petición de login del usuario.
+type LoginPost = {
+    is_admin: boolean; // rol del usuario
+    access: string; // token de acceso
+    refresh: string; // token de refresh
 }
 
 export default {
@@ -23,7 +19,7 @@ export default {
                 if (!credentials) return null;
 
                 // Convertir credentials a tipo User de forma segura
-                const user = credentials as unknown as User;
+                const user = credentials as unknown as UserLogin | UserRegister;
 
                 if (isRegisterUser(user)) {
                     // Si es un usuario registrado, retornar los tokens y datos del usuario
@@ -36,7 +32,7 @@ export default {
 
                 } else {
                     // Si es un intento de login, hacer la petición al endpoint de login
-                    const { data } = await shopApi.post('/user/login/', { ...user });
+                    const { data } = await shopApi.post<LoginPost, UserLogin>('/user/login/', { ...user });
 
                     // Si no hay datos en la respuesta, retornar null
                     if (!data) return null;

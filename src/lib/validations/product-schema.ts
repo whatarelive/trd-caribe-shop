@@ -6,7 +6,7 @@ const CreateProductSchema = z.object({
         .max(60, "El nombre no puede exceder los 60 caracteres"),
     description: z.string()
         .min(1, "La descripción del producto es requerida"),
-    category: z.coerce.number()
+    categorie: z.coerce.number()
         .min(1, "Debe seleccionar una categoría válida"),
     price: z.coerce.number()
         .positive("El stock tiene que ser un número positivo")

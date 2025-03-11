@@ -2,6 +2,12 @@ import NextAuth from "next-auth";
 import authConfig from "@/auth.config";
 import { shopApi } from "@/src/lib/api/shop-api";
 
+// Type de la petición de refresh del token.
+type RefreshPost = {
+    access: string; // Token de accseso
+    refresh?: string; // Token de refresh
+}
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
     ...authConfig,
     
@@ -47,7 +53,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             if (token.refreshTokenExpires && token.accessTokenExpires && Date.now() > token.accessTokenExpires) {
                 try {
                     // Intenta renovar el token de acceso usando el token de refresco
-                    const { data } = await shopApi.post("/user/login/refresh/", { refresh: token.refreshToken });
+                    const { data } = await shopApi.post<RefreshPost, Pick<RefreshPost, "refresh">>(
+                        "/user/login/refresh/", 
+                        { refresh: token.refreshToken }
+                    );
 
                     if (!data) throw new Error("Error al renovar el token");
 

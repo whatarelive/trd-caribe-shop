@@ -1,11 +1,12 @@
 "use server";
 
 import { auth } from "@/auth";
-import { shopApi } from "@/src/lib/api/shop-api";
-import type { CreateProductState } from "@/src/types/actions-props";
-import { CreateProductSchema } from "../validations/product-schema";
-import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+import { shopApi } from "@/src/lib/api/shop-api";
+import { CreateProductSchema } from "@/src/lib/validations/product-schema";
+import type { CreateProductState } from "@/src/types/actions-props";
+import type { IProducts, ProductsPost } from "@/src/types/models";
 
 async function getProducts() {
     try {
@@ -39,11 +40,15 @@ async function createProduct(_prevState: CreateProductState, formData: FormData)
     try {
         const session = await auth();
 
-        const response = await shopApi.post("/store/products", data, {
-            headers: {
-                Authorization: `Bearer ${session?.accessToken}`
+        const response = await shopApi.post<IProducts, ProductsPost>(
+            "/store/products/", 
+            data, 
+            {
+                headers: {
+                    Authorization: `Bearer ${session?.accessToken}`
+                }
             }
-        });
+        );
 
         if (!response.data) {
             throw new Error("Error al crear el producto.");

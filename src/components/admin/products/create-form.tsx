@@ -24,11 +24,11 @@ export const CreateProductForm = () => {
 
             <SelectCategories 
                 label="Categoría" 
-                name="category"
-                id="category" 
+                name="categorie"
+                id="categorie" 
                 categories={[{ id:1, name:"Ropa" }, { id:2, name:"Zapatos" }]}
-                aria-describedby="category-error"
-                errors={errorMessage.errors?.category}
+                aria-describedby="categorie-error"
+                errors={errorMessage.errors?.categorie}
             />
 
             <TextInput 

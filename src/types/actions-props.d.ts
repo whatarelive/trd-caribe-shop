@@ -22,7 +22,7 @@ export type CreateProductState = {
     errors?: {
         name?: string[];
         description?: string[];
-        category?: string[];
+        categorie?: string[];
         price?: string[]; 
         stock?: string[];
     };
