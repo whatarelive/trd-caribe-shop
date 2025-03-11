@@ -13,6 +13,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     // Configuración de la estrategia de sesión
     session: { 
         strategy: "jwt",
+        maxAge: 23 * 60 * 60, // 23 horas en segundos
     },
 
     // Callbacks para personalizar el comportamiento de la autenticación
@@ -37,14 +38,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
             // Verificar si el token de refresco ha expirado
             if (token.refreshTokenExpires && Date.now() > token.refreshTokenExpires) {
-                console.log("El token de refresco ha expirado");
-                // Aquí puedes manejar la expiración del token de refresco, por ejemplo, redirigiendo al usuario a la página de inicio de sesión
-                token.accessToken = undefined;
-                token.refreshToken = undefined;
-                token.accessTokenExpires = undefined;
-                token.refreshTokenExpires = undefined;
-                token.username = undefined;
-                token.isAdmin = undefined;
+                console.log("El token de refresco ha expirado - Cerrando sesión");
+                // Limpiar TODOS los datos del token para forzar el cierre de sesión
+                return {};
             }
 
             // Verificar si el token de acceso ha expirado y renovarlo usando el token de refresco
@@ -61,9 +57,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
                 } catch (error) {
                     console.log("Error al renovar el token de acceso", error);
-                    // En caso de error, limpia los tokens de acceso
-                    token.accessToken = undefined;
-                    token.accessTokenExpires = undefined;
+                    // En caso de error, limpiar todos los datos del token
+                    return {};
                 }
             }
 
@@ -85,7 +80,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             session.isAuthenticated = session.accessToken ? true : false;
 
             // Retorna la sesión modificada
-            return session
+            return session;
         },
     }
 });
