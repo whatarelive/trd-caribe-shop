@@ -26,13 +26,13 @@ export const NavList = () => {
                     <IoHomeOutline size={24} />
                 </LinkComponent>
                 
-                <LinkComponent href="/admin/products" label="Productos" isActive={pathname.includes("/admin/products")}>
-                    <IoGridOutline size={24} />
-                </LinkComponent>      
-
                 <LinkComponent href="/admin/categories" label="Categorías" isActive={pathname.includes("/admin/categories")}>
                     <IoBookmarksOutline size={24}/>
                 </LinkComponent>
+
+                <LinkComponent href="/admin/products" label="Productos" isActive={pathname.includes("/admin/products")}>
+                    <IoGridOutline size={24} />
+                </LinkComponent>      
 
                 <LinkComponent href="/admin/promotions" label="Promociones" isActive={pathname.includes("/admin/promotions")}>
                     <IoCardOutline size={24} />
