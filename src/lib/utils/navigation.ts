@@ -19,6 +19,7 @@ export interface Breadcrumb {
  * Breadcrumbs: Inicio > Productos > Categorías
  */
 const pathTranslations: Record<string, string> = {
+    'admin': 'Resumen',
     'products': 'Productos',
     'create': 'Creación',
     'promotions': 'Promociones',
@@ -73,10 +74,14 @@ export function generateBreadcrumbs(pathname: string): Breadcrumb[] {
                 .split(' ')
                 .map(word => word.charAt(0).toUpperCase() + word.slice(1))
                 .join(' ');
+
+            if (typeof Number(label) === "number") {
+                label = "Detalles";
+            }
         }
 
         breadcrumbs.push({
-            label,
+            label: label,
             href: currentPath
         });
     });
