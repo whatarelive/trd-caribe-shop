@@ -1,6 +1,8 @@
 "use client";
 
+import Link from 'next/link';
 import { FC, useActionState } from 'react';
+import { IoAddOutline } from 'react-icons/io5';
 import { createProduct } from '@/src/lib/actions/products';
 import { TextInput } from '@/src/components/ui/input/input-text';
 import { FileInput } from '@/src/components/ui/input/input-file';
@@ -27,14 +29,20 @@ export const CreateProductForm: FC<Props> = ({ categories }) => {
                 errors={errorMessage.errors?.name}
             />
 
-            <SelectCategories 
-                label="Categoría" 
-                name="categorie"
-                id="categorie" 
-                categories={categories}
-                aria-describedby="categorie-error"
-                errors={errorMessage.errors?.categorie}
-            />
+            <div className="flex gap-2">
+                <SelectCategories 
+                    label="Categoría" 
+                    name="categorie"
+                    id="categorie" 
+                    categories={categories}
+                    aria-describedby="categorie-error"
+                    errors={errorMessage.errors?.categorie}
+                />
+
+                <Link href="/admin/categories/create" className="button-primary h-10 mt-6">
+                    <IoAddOutline size={24}/>
+                </Link>
+            </div>
 
             <TextInput 
                 label="Descripción del producto" 
