@@ -1,19 +1,20 @@
+"use client";
+
 import type { DetailedHTMLProps, FC, SelectHTMLAttributes } from "react";
-import { getCategories } from "@/src/lib/actions/categories";
+import type { ICategories } from "@/src/types/models";
 
 //Props del componente SelectCategories
 interface Props extends DetailedHTMLProps<SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement> {
     label: string;
     errors?: string[]
+    categories: ICategories[];
 }
 
 /**
  * Componente que renderiza un campo de selección de categorías.
  * Permite al usuario seleccionar una categoría de una lista predefinida.
  */
-export const SelectCategories: FC<Props> = async ({ label, errors, ...props }) => {
-    const data = await getCategories();
-
+export const SelectCategories: FC<Props> = ({ label, categories, errors, ...props }) => {
     return (
         <div className="input-container">
             {/* Etiqueta del campo de selección */}
@@ -38,7 +39,7 @@ export const SelectCategories: FC<Props> = async ({ label, errors, ...props }) =
 
                     {/* Mapeo de las categorías disponibles */}
                     {
-                        data && data.results.map((cat) => (
+                        categories.map((cat) => (
                             <option key={cat.id} value={cat.id.toString()}>
                                 {cat.name}
                             </option>

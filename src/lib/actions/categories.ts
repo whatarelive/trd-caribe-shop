@@ -8,7 +8,9 @@ async function getCategories() {
         return data;
 
     } catch (error) {
-        console.log("Error al recuperar las categorías", error);       
+        console.log("Error al recuperar las categorías", error);
+        
+        return null;
     }
 }
 

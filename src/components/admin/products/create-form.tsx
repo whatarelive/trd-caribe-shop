@@ -1,13 +1,18 @@
 "use client";
 
-import { Suspense, useActionState } from 'react';
+import { FC, useActionState } from 'react';
 import { createProduct } from '@/src/lib/actions/products';
 import { TextInput } from '@/src/components/ui/input/input-text';
 import { FileInput } from '@/src/components/ui/input/input-file';
 import { SelectCategories } from '@/src/components/admin/products/select-categories';
 import type { CreateProductState } from '@/src/types/actions-props';
+import type { ICategories } from '@/src/types/models';
 
-export const CreateProductForm = () => {
+interface Props {
+    categories: ICategories[];
+}
+
+export const CreateProductForm: FC<Props> = ({ categories }) => {
     const initialState: CreateProductState = { message: null, errors: {} };
     const [errorMessage, formAction, isPending] = useActionState(createProduct, initialState);
 
@@ -22,15 +27,14 @@ export const CreateProductForm = () => {
                 errors={errorMessage.errors?.name}
             />
 
-            <Suspense fallback={<p>Cargando...</p>}>
-                <SelectCategories 
-                    label="Categoría" 
-                    name="categorie"
-                    id="categorie" 
-                    aria-describedby="categorie-error"
-                    errors={errorMessage.errors?.categorie}
-                />
-            </Suspense>
+            <SelectCategories 
+                label="Categoría" 
+                name="categorie"
+                id="categorie" 
+                categories={categories}
+                aria-describedby="categorie-error"
+                errors={errorMessage.errors?.categorie}
+            />
 
             <TextInput 
                 label="Descripción del producto" 
