@@ -4,6 +4,7 @@ import { getProducts } from "@/src/lib/actions/products";
 import { ProductsTable } from "@/src/components/admin/products/products-table";
 import { ProductsList } from "@/src/components/admin/products/products-list";
 import { SearchInput } from "@/src/components/ui/input/input-search";
+
 export default async function ProductsPage() {
     const products = await getProducts();
 
@@ -17,7 +18,7 @@ export default async function ProductsPage() {
                 </h1>
 
                 <div className="flex items-center gap-2 lg:gap-4">
-                    <SearchInput />
+                    <SearchInput placeholder="Buscar producto"/>
 
                     <Link href="/admin/products/create" className="inline-flex items-center gap-2 font-normal p-2 lg:p-3 rounded-md bg-blue-500 text-white hover:bg-blue-600">
                         <IoAddOutline size={24} />

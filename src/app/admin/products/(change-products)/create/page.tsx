@@ -1,3 +1,5 @@
+import { revalidatePath } from "next/cache";
+import { getCategories } from "@/src/lib/actions/categories";
 import { CreateProductForm } from "@/src/components/admin/products/create-form";
 
 /**
@@ -5,7 +7,13 @@ import { CreateProductForm } from "@/src/components/admin/products/create-form";
  * Esta página proporciona una interfaz para que los administradores puedan
  * agregar nuevos productos al catálogo de la tienda.
  */
-export default function ProductCreatePage() {
+export default async function ProductCreatePage() {
+    const data = await getCategories();
+
+    if (!data) {
+        return revalidatePath("/admin/products/create");
+    }
+
     return (
         <section className="w-full sm:p-4 md:p-12">
             {/* Sección del formulario con fondo blanco y bordes redondeados */}
@@ -16,7 +24,7 @@ export default function ProductCreatePage() {
                 </h1>
             
                 {/* Formulario de creación de producto */}
-                <CreateProductForm />
+                <CreateProductForm categories={data.results}/>
             </section>
         </section>
     );

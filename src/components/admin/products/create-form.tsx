@@ -1,13 +1,20 @@
 "use client";
 
-import { useActionState } from 'react';
+import Link from 'next/link';
+import { FC, useActionState } from 'react';
+import { IoAddOutline } from 'react-icons/io5';
 import { createProduct } from '@/src/lib/actions/products';
 import { TextInput } from '@/src/components/ui/input/input-text';
 import { FileInput } from '@/src/components/ui/input/input-file';
 import { SelectCategories } from '@/src/components/admin/products/select-categories';
 import type { CreateProductState } from '@/src/types/actions-props';
+import type { ICategories } from '@/src/types/models';
 
-export const CreateProductForm = () => {
+interface Props {
+    categories: ICategories[];
+}
+
+export const CreateProductForm: FC<Props> = ({ categories }) => {
     const initialState: CreateProductState = { message: null, errors: {} };
     const [errorMessage, formAction, isPending] = useActionState(createProduct, initialState);
 
@@ -22,14 +29,20 @@ export const CreateProductForm = () => {
                 errors={errorMessage.errors?.name}
             />
 
-            <SelectCategories 
-                label="Categoría" 
-                name="categorie"
-                id="categorie" 
-                categories={[{ id:1, name:"Ropa" }, { id:2, name:"Zapatos" }]}
-                aria-describedby="categorie-error"
-                errors={errorMessage.errors?.categorie}
-            />
+            <div className="flex gap-2">
+                <SelectCategories 
+                    label="Categoría" 
+                    name="categorie"
+                    id="categorie" 
+                    categories={categories}
+                    aria-describedby="categorie-error"
+                    errors={errorMessage.errors?.categorie}
+                />
+
+                <Link href="/admin/categories/create" className="button-primary h-10 mt-6">
+                    <IoAddOutline size={24}/>
+                </Link>
+            </div>
 
             <TextInput 
                 label="Descripción del producto" 

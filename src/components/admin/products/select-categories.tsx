@@ -1,13 +1,13 @@
+"use client";
+
 import type { DetailedHTMLProps, FC, SelectHTMLAttributes } from "react";
+import type { ICategories } from "@/src/types/models";
 
 //Props del componente SelectCategories
 interface Props extends DetailedHTMLProps<SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement> {
     label: string;
-    categories: {
-        id: number;
-        name: string;
-    }[];
     errors?: string[]
+    categories: ICategories[];
 }
 
 /**
