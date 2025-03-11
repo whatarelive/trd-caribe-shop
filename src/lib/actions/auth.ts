@@ -5,7 +5,7 @@ import { signIn, signOut } from "@/auth";
 import { shopApi } from "@/src/lib/api/shop-api";
 import { LoginSchema, RegisterSchema } from "@/src/lib/validations/auth-schema";
 import type { LoginState, RegisterState } from "@/src/types/actions-props";
-import type { UserRegister } from "@/src/types/models";
+import type { UserRegister, UserRegisterPost } from "@/src/types/models";
 
 /**
  * Crea un nuevo usuario y realiza el inicio de sesión automático
@@ -33,9 +33,10 @@ async function createUser(_prevState: RegisterState, formData: FormData) {
 
     try {
         // Intentar crear el usuario en el backend mediante una petición POST
-        const { data: response, status } = await shopApi.post<UserRegister>("/user/register/", {
-            first_name, last_name, email, username, password
-        });
+        const { data: response, status } = await shopApi.post<UserRegister, UserRegisterPost>(
+            "/user/register/", 
+            { first_name, last_name, email, username, password }
+        );
 
         // Verificar si la creación fue exitosa (código 201 Created)
         if (status !== 201) {
