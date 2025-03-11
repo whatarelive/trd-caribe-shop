@@ -1,3 +1,9 @@
+type GetParams = {
+    count: number;
+    next: string;
+    previous: string;
+}
+
 export interface IUser {
     username: string;
     password: string;
@@ -28,3 +34,14 @@ export interface IProducts {
 }
 
 export type ProductsPost = Omit<IProducts, "id" | "discount" | "created" | "updated">
+
+export interface ICategories {
+    id: number;
+    name: string;
+    created: string;
+    updated: string;
+}
+
+export type CategoriesGet = {
+    results: ICategories[];
+} & GetParams;
