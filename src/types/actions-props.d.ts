@@ -17,3 +17,14 @@ export type RegisterState = {
     };
     message?: string | null;
 };
+
+export type CreateProductState = {
+    errors?: {
+        name?: string[];
+        description?: string[];
+        category?: string[];
+        price?: string[]; 
+        stock?: string[];
+    };
+    message?: string | null;
+}
