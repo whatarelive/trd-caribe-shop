@@ -3,7 +3,7 @@ import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from "@
 
 export const ProductsTable = () => {
     return (
-        <Table className="min-h-[700px]">
+        <Table className="min-h-[600px]">
             <TableHeader>
                 <TableRow className="border-neutral-300 border-b">
                     <TableHead>

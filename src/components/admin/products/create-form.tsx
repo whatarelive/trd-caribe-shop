@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from 'react';
+import { Suspense, useActionState } from 'react';
 import { createProduct } from '@/src/lib/actions/products';
 import { TextInput } from '@/src/components/ui/input/input-text';
 import { FileInput } from '@/src/components/ui/input/input-file';
@@ -22,14 +22,15 @@ export const CreateProductForm = () => {
                 errors={errorMessage.errors?.name}
             />
 
-            <SelectCategories 
-                label="Categoría" 
-                name="categorie"
-                id="categorie" 
-                categories={[{ id:1, name:"Ropa" }, { id:2, name:"Zapatos" }]}
-                aria-describedby="categorie-error"
-                errors={errorMessage.errors?.categorie}
-            />
+            <Suspense fallback={<p>Cargando...</p>}>
+                <SelectCategories 
+                    label="Categoría" 
+                    name="categorie"
+                    id="categorie" 
+                    aria-describedby="categorie-error"
+                    errors={errorMessage.errors?.categorie}
+                />
+            </Suspense>
 
             <TextInput 
                 label="Descripción del producto" 
