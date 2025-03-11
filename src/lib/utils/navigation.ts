@@ -19,7 +19,7 @@ export interface Breadcrumb {
  * Breadcrumbs: Inicio > Productos > Categorías
  */
 const pathTranslations: Record<string, string> = {
-    'admin': 'Resumen',
+    'admin': 'Inicio',
     'products': 'Productos',
     'create': 'Creación',
     'promotions': 'Promociones',
@@ -50,12 +50,7 @@ export function generateBreadcrumbs(pathname: string): Breadcrumb[] {
     const segments = path.split('/').filter(Boolean);
     
     // Siempre incluir el inicio
-    const breadcrumbs: Breadcrumb[] = [
-        {
-            label: 'Inicio',
-            href: '/'
-        }
-    ];
+    const breadcrumbs: Breadcrumb[] = [];
 
     // Construir los breadcrumbs acumulativamente
     let currentPath = '';
