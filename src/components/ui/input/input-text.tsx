@@ -1,7 +1,7 @@
 "use client";
 
 import type { FC } from 'react';
-import type { ITextInput } from "@/src/types/components";
+import type { ITextInput } from "@/interfaces/components";
 
 /**
  * Componente de entrada de texto básico

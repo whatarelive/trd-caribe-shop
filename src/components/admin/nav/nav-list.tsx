@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { IoCardOutline, IoCartOutline, IoGridOutline, IoHomeOutline, IoPeopleOutline, IoBookmarksOutline } from "react-icons/io5";
-import { LinkComponent } from '@/src/components/admin/nav/nav-links';
+import { LinkComponent } from '@/components/admin/nav/nav-links';
 
 /**
  * Este componente renderiza una barra de navegación vertical con enlaces a las diferentes

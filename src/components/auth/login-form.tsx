@@ -2,10 +2,10 @@
 
 import { useActionState } from "react";
 import { MdOutlinePerson2, MdOutlineLock } from "react-icons/md";
-import { verifyUser } from "@/src/lib/actions/auth";
-import { TextInput } from "@/src/components/ui/input/input-text";
-import { TextInputWithPassword } from "@/src/components/ui/input/input-password";
-import type { LoginState } from "@/src/types/actions-props";
+import { autheticate } from "@/actions/auth/login";
+import { TextInput } from "@/components/ui/input/input-text";
+import { TextInputWithPassword } from "@/components/ui/input/input-password";
+import type { LoginState } from "@/interfaces/models/user.interface";
 
 /**
  * @description Componente de formulario del lado del cliente para el inicio de sesion de los usuarios.
@@ -17,9 +17,9 @@ import type { LoginState } from "@/src/types/actions-props";
  */
 export const LoginForm = () => {
     // Inicializa el estado del formulario con mensaje y errores vacíos
-    const initialState: LoginState = { message: null, errors: {} };
+    const initialState: LoginState = { errors: {} };
     // Utiliza una acción del servidor para el envío del formulario y seguimiento del estado de carga
-    const [errorMessage, formAction, isPending] = useActionState(verifyUser, initialState);
+    const [errorMessage, formAction, isPending] = useActionState(autheticate, initialState);
 
     return (
         <form action={formAction} className="flex flex-col mt-6">

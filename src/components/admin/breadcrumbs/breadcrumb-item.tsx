@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { FC } from "react";
 import { MdChevronRight } from "react-icons/md";
-import type { Breadcrumb } from "@/src/lib/utils/navigation";
+import type { Breadcrumb } from "@/utils/navigation";
 
 interface Props {
     /** Objeto que contiene la información del breadcrumb (label y href) */

@@ -50,7 +50,7 @@ export async function autheticate(_prevState: LoginState, formData: FormData) {
 
         // Mensaje de error condificional cuando ocurre un problema en la petición
         return { 
-            errors: { email: message, password: message } 
+            errors: { username: message, password: message } 
         }
     }
 

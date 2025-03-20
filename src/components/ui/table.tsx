@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { cn } from "@/src/lib/utils/tailwind-cn";
+import { cn } from "@/utils/tailwind-cn";
 
 interface Props {
   className?: string;

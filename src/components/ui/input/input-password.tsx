@@ -2,7 +2,7 @@
 
 import { type FC, useState } from "react";
 import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
-import type { ITextInput } from "@/src/types/components";
+import type { ITextInput } from "@/interfaces/components";
 
 /**
  * Componente de entrada de texto para contraseñas

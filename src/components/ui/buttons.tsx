@@ -1,8 +1,8 @@
 "use client"
 
 import { IoMenu, IoReturnDownForwardOutline } from "react-icons/io5";
-import { logoutUser } from "@/src/lib/actions/auth"
-import { useMenuStore } from "@/src/store/menu-store";
+import { logout } from "@/actions/auth/logout"
+import { useMenuStore } from "@/store/menu-store";
 
 /**
  * Botón de cierre de sesión con diseño adaptativo.
@@ -15,7 +15,7 @@ import { useMenuStore } from "@/src/store/menu-store";
  */
 export const ButtonLogout = () => {
     // Función para cerrar sesión
-    const handleClick = async () => await logoutUser();
+    const handleClick = async () => await logout();
 
     return (
         <button 

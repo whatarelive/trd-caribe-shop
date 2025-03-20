@@ -1,4 +1,4 @@
-import { cn } from "@/src/lib/utils/tailwind-cn";
+import { cn } from "@/utils/tailwind-cn";
 
 export function Skeleton({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (

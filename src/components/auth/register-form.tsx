@@ -2,10 +2,10 @@
 
 import { useActionState } from "react";
 import { MdOutlineLock, MdOutlinePerson2, MdOutlineLockClock, MdOutlineEmail } from "react-icons/md";
-import { createUser } from "@/src/lib/actions/auth";
-import { TextInput } from "@/src/components/ui/input/input-text";
-import { TextInputWithPassword } from "@/src/components/ui/input/input-password";
-import type { RegisterState } from "@/src/types/actions-props";
+import { createUser } from "@/actions/auth/register";
+import { TextInput } from "@/components/ui/input/input-text";
+import { TextInputWithPassword } from "@/components/ui/input/input-password";
+import type { RegisterState } from "@/interfaces/models/user.interface";
 
 /**
  * @description Componente de formulario del lado del cliente para registro de usuarios que maneja:
@@ -17,7 +17,7 @@ import type { RegisterState } from "@/src/types/actions-props";
  */
 export const RegisterForm = () => {
     // Inicializa el estado del formulario con mensaje y errores vacíos
-    const initialState: RegisterState = { message: null, errors: {} };
+    const initialState: RegisterState = { errors: {} };
     // Utiliza una acción del servidor para el envío del formulario y seguimiento del estado de carga
     const [errorMessage, formAction, isPending] = useActionState(createUser, initialState);
 

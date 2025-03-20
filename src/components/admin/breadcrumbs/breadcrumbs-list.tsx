@@ -1,7 +1,7 @@
 "use client"
 
 import { usePathname } from "next/navigation";
-import { generateBreadcrumbs } from "@/src/lib/utils/navigation";
+import { generateBreadcrumbs } from "@/utils/navigation";
 import { BreadcrumbItem } from "./breadcrumb-item";
 
 /**
