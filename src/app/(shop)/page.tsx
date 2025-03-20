@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { auth } from "@/auth.config";
 import { ButtonLogout } from "@/src/components/ui/buttons";
 
 export default async function Home() {

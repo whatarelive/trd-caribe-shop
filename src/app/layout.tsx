@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { auth } from "@/auth";
+import { auth } from "@/auth.config";
 import { fontTitle } from "@/src/config/fonts";
 import { logoutUser } from "@/src/lib/actions/auth";
 import type { ILayout } from "@/src/types/components";

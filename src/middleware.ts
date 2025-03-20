@@ -1,7 +1,6 @@
 import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
-import { auth as Session } from "@/auth";
-import authConfig from "@/auth.config";
+import { authConfig, auth as Session } from "@/auth.config";
 
 // Define las rutas de autenticación y las rutas públicas.
 const authRoutes = ['/auth/login', '/auth/register'];
@@ -29,11 +28,6 @@ export default middleware( async({ nextUrl, auth }) => {
         else return NextResponse.redirect(new URL("/", nextUrl));
     }
 
-    // Se ignoran los archivos con esa extensión
-    if (nextUrl.pathname.includes('.png') || nextUrl.pathname.includes('.jpg')) {
-        return NextResponse.next();
-    }    
-
     // Protección de rutas privadas.
     if (!publicRoutes.includes(nextUrl.pathname) && !isLoggedIn) {
         return NextResponse.redirect(new URL("/auth/login", nextUrl));
@@ -50,5 +44,5 @@ export default middleware( async({ nextUrl, auth }) => {
 // Configuración del middleware para que se ejecute en todas las rutas excepto las API, archivos estáticos, imágenes y archivos PNG
 export const config = {
     // https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
-    matcher: ['/((?!api|_next/static|_next/image|.*\\.svg|.png).*)'],
+    matcher: ['/((?!api|_next/static|_next/image|favicon.ico|.*|.svg|.png|.jpg|.css).*)'],
 }

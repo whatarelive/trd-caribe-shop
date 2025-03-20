@@ -1,4 +1,4 @@
-import type { UserLogin, UserRegister } from "@/src/types/models";
+import type { UserLogin, UserRegister } from "@/interfaces/models/user.interface";
 
 /**
  * Verifica si el usuario es de tipo registro comprobando si tiene token

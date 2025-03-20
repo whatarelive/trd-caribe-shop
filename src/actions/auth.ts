@@ -1,7 +1,7 @@
 "use server"; // Indica que esta función se ejecuta en el servidor
 
 // Importaciones necesarias para el registro y autenticación
-import { signIn, signOut } from "@/auth";
+import { signIn, signOut } from "@/auth.config";
 import { shopApi } from "@/src/lib/api/shop-api";
 import { LoginSchema, RegisterSchema } from "@/src/lib/validations/auth-schema";
 import type { LoginState, RegisterState } from "@/src/types/actions-props";

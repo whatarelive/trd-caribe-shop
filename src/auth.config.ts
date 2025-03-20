@@ -1,19 +1,33 @@
-import NextAuth from "next-auth";
-import authConfig from "@/auth.config";
-import { shopApi } from "@/src/lib/api/shop-api";
+import NextAuth, { NextAuthConfig } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
+import { shopApi } from "@/lib/api/shop-api";
+import { isRegisterUser } from "@/utils/type-guards";
+import type { UserLogin, UserRegister } from "@/interfaces/models/user.interface";
 
-// Type de la petición de refresh del token.
-type RefreshPost = {
-    access: string; // Token de accseso
-    refresh?: string; // Token de refresh
+// Tipo de dato de la respuesta de la petición de refresh del token.
+type ResponseToken = {
+    readonly access: string; // Token de accseso
+    readonly refresh: string; // Token de refresh
 }
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
-    ...authConfig,
-    
+// Tipo de dato de la petición de refresh del token
+type RequestToken = {
+    readonly refresh: string | undefined; // Token de refresh
+}
+
+// Tipo de dato de la petición de login del usuario.
+type LoginPost = {
+    readonly is_admin: boolean; // rol del usuario
+    readonly access: string; // token de acceso
+    readonly refresh: string; // token de refresh
+}
+
+// Declaración de la configuración de autentificación
+export const authConfig: NextAuthConfig = {
     // Configuración de las páginas de autenticación
     pages: {
         signIn: "/auth/login",
+        newUser: "/auth/register",
     },
 
     // Configuración de la estrategia de sesión
@@ -53,7 +67,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             if (token.refreshTokenExpires && token.accessTokenExpires && Date.now() > token.accessTokenExpires) {
                 try {
                     // Intenta renovar el token de acceso usando el token de refresco
-                    const { data } = await shopApi.post<RefreshPost, Pick<RefreshPost, "refresh">>(
+                    const { data } = await shopApi.post<ResponseToken, RequestToken>(
                         "/user/login/refresh/", 
                         { refresh: token.refreshToken }
                     );
@@ -91,5 +105,46 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             // Retorna la sesión modificada
             return session;
         },
-    }
-});
+    },
+
+    // Provedores de autentificación
+    providers: [
+        Credentials({
+            async authorize(credentials) {
+                // Si no hay credenciales, retornar null
+                if (!credentials) return null;
+
+                // Convertir credentials a tipo User de forma segura
+                const user = credentials as unknown as UserLogin | UserRegister;
+
+                if (isRegisterUser(user)) {
+                    // Si es un usuario registrado, retornar los tokens y datos del usuario
+                    return {
+                        username: user.username,
+                        isAdmin: false,
+                        accessToken: user.token.access,
+                        refreshToken: user.token.refresh
+                    }
+
+                } else {
+                    // Si es un intento de login, hacer la petición al endpoint de login
+                    const { data } = await shopApi.post<LoginPost, UserLogin>('/user/login/', { ...user });
+
+                    // Si no hay datos en la respuesta, retornar null
+                    if (!data) return null;
+                    
+                    // Retornar los datos del usuario y sus tokens de acceso
+                    return {
+                        username: user.username,
+                        isAdmin: data.is_admin,
+                        accessToken: data.access,
+                        refreshToken: data.refresh
+                    }
+                }
+            }
+        })
+    ]
+};
+
+// Exportación de los métodos y declaración de controladores 
+export const { handlers, auth, signIn, signOut } = NextAuth( authConfig );
