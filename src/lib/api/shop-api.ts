@@ -1,4 +1,4 @@
-import { FetchAdapter } from "@/src/lib/utils/fetch-adapter";
+import { FetchAdapter } from "@/utils/fetch-adapter";
 
 /**
  * Instancia global del FetchAdapter con la URL base configurada

@@ -13,4 +13,14 @@ export interface IProducts {
     image_id: string;
 }
 
-export type ProductsPost = Omit<IProducts, "id" | "discount" | "created" | "updated">
+export type CreateProductState = {
+    errors?: {
+        name?: string[];
+        description?: string[];
+        categorie?: string[];
+        price?: string[]; 
+        stock?: string[];
+    };
+}
+
+export type RequestProduct = Pick<IProducts, "categorie" | "description" | "image" | "name" | "price" | "stock">
