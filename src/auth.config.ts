@@ -1,7 +1,7 @@
 import NextAuth, { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { shopApi } from "@/lib/api/shop-api";
-import { isRegisterUser } from "@/utils/type-guards";
+import { isRegisterUser } from "@/lib/guards/user-type-guards";
 import type { UserLogin, UserRegister } from "@/interfaces/models/user.interface";
 
 // Tipo de dato de la respuesta de la petición de refresh del token.

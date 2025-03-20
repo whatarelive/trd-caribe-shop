@@ -1,7 +1,7 @@
-import { NavBar } from "@/src/components/admin/nav/nav-bar";
-import { NavList } from "@/src/components/admin/nav/nav-list";
-import { SideBarMobile } from "@/src/components/admin/nav/side-bar-mobile";
-import type { ILayout } from "@/src/types/components";
+import { NavBar } from "@/components/admin/nav/nav-bar";
+import { NavList } from "@/components/admin/nav/nav-list";
+import { SideBarMobile } from "@/components/admin/nav/side-bar-mobile";
+import type { ILayout } from "@/interfaces/components";
 
 /**
  * Componente de diseño principal para la sección de administración.

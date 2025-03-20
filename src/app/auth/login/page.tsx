@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { LoginForm } from "@/src/components/auth/login-form";
+import { LoginForm } from "@/components/auth/login-form";
 
 export default function LoginPage() {
     return (
@@ -11,6 +11,7 @@ export default function LoginPage() {
                     alt="Logo de la empresa" 
                     width={200} 
                     height={100}
+                    priority
                     className="ml-7"
                 />
 

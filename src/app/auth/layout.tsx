@@ -1,4 +1,4 @@
-import type { ILayout } from "@/src/types/components";
+import type { ILayout } from "@/interfaces/components";
 
 export default function AuthLayout({ children }: ILayout) {
     return (
