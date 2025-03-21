@@ -17,7 +17,7 @@ type RequestToken = {
 
 // Tipo de dato de la petición de login del usuario.
 type LoginPost = {
-    readonly is_admin: boolean; // rol del usuario
+    readonly is_staff: boolean; // rol del usuario
     readonly access: string; // token de acceso
     readonly refresh: string; // token de refresh
 }
@@ -136,7 +136,7 @@ export const authConfig: NextAuthConfig = {
                     // Retornar los datos del usuario y sus tokens de acceso
                     return {
                         username: user.username,
-                        isAdmin: data.is_admin,
+                        isAdmin: data.is_staff,
                         accessToken: data.access,
                         refreshToken: data.refresh
                     }
