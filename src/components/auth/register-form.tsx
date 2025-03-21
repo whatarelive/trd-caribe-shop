@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { MdOutlineLock, MdOutlinePerson2, MdOutlineLockClock, MdOutlineEmail } from "react-icons/md";
+import { useFormError } from "@/lib/hooks/useFormError";
 import { createUser } from "@/actions/auth/register";
 import { TextInput } from "@/components/ui/input/input-text";
 import { TextInputWithPassword } from "@/components/ui/input/input-password";
@@ -20,6 +21,8 @@ export const RegisterForm = () => {
     const initialState: RegisterState = { errors: {} };
     // Utiliza una acción del servidor para el envío del formulario y seguimiento del estado de carga
     const [errorMessage, formAction, isPending] = useActionState(createUser, initialState);
+    // Control de la visibilidad de los errores del formulario
+    const { showErrors, handleFocus } = useFormError({ errors: errorMessage.errors });
 
     return (
         <form action={formAction} className="flex flex-col mt-6">
@@ -33,7 +36,8 @@ export const RegisterForm = () => {
                     type="text"
                     placeholder="Ingrese el nombre"
                     aria-describedby="first_name-error"
-                    errors={errorMessage.errors?.first_name}
+                    onFocus={handleFocus}
+                    errors={showErrors ? errorMessage.errors?.first_name : undefined}
                 />
 
                 {/* Campo de Apellidos */}
@@ -44,7 +48,8 @@ export const RegisterForm = () => {
                     type="text"
                     placeholder="Ingrese los apellidos"
                     aria-describedby="last_name-error"
-                    errors={errorMessage.errors?.last_name}
+                    onFocus={handleFocus}
+                    errors={showErrors ? errorMessage.errors?.last_name : undefined}
                 />
             </div>
 
@@ -57,7 +62,8 @@ export const RegisterForm = () => {
                 placeholder="Ingrese el nombre de usuario"
                 icon={MdOutlinePerson2}
                 aria-describedby="username-error"
-                errors={errorMessage.errors?.username}
+                onFocus={handleFocus}
+                errors={showErrors ? errorMessage.errors?.username : undefined}
             />
 
             {/* Campo de Correo con Ícono de Email */}
@@ -69,7 +75,8 @@ export const RegisterForm = () => {
                 placeholder="Ingrese su correo electronico"
                 icon={MdOutlineEmail}
                 aria-describedby="email-error"
-                errors={errorMessage.errors?.email}
+                onFocus={handleFocus}
+                errors={showErrors ? errorMessage.errors?.email : undefined}
             />
 
             {/* Campo de Contraseña con Ícono de Candado */}
@@ -80,7 +87,8 @@ export const RegisterForm = () => {
                 placeholder="Ingrese su contraseña"
                 icon={MdOutlineLock}
                 aria-describedby="password-error"
-                errors={errorMessage.errors?.password}
+                onFocus={handleFocus}
+                errors={showErrors ? errorMessage.errors?.password : undefined}
             />
 
             {/* Campo de Confirmación de Contraseña con Ícono de Candado y Reloj */}
@@ -91,7 +99,8 @@ export const RegisterForm = () => {
                 placeholder="Confirme la contraseña"
                 icon={MdOutlineLockClock}
                 aria-describedby="passwordConfirm-error"
-                errors={errorMessage.errors?.passwordConfirm}
+                onFocus={handleFocus}
+                errors={showErrors ? errorMessage.errors?.passwordConfirm : undefined}
             />
 
             {/* Botón de Envío con Estado de Carga */}

@@ -1,5 +1,6 @@
 "use client";
 
+import clsx from 'clsx';
 import type { FC } from 'react';
 import type { ITextInput } from "@/interfaces/components";
 
@@ -20,9 +21,13 @@ export const TextInput: FC<ITextInput> = ({ label, errors, icon, ...props }) => 
                 { label }
             </label>
     
-            <div className="input-subcontainer">
+            <div className={clsx(
+                    "input-subcontainer border border-neutral-300", 
+                    { "border-red-500" : errors }
+                )}
+            >
                 {/* Renderiza el icono si existe */}
-                { Icon && <Icon size={20}/> }
+                { Icon && <Icon size={20} className={clsx("text-black", { "text-red-500" : errors })}/> }
                 
                 {/* Campo de entrada */}
                 <input 

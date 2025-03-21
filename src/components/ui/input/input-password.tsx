@@ -1,5 +1,6 @@
 "use client";
 
+import clsx from "clsx";
 import { type FC, useState } from "react";
 import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
 import type { ITextInput } from "@/interfaces/components";
@@ -27,9 +28,12 @@ export const TextInputWithPassword: FC<ITextInput> = ({ label, errors, icon, ...
                 { label }
             </label>
 
-            <div className="input-subcontainer">
+            <div className={clsx(
+                "input-subcontainer border border-neutral-300", 
+                { "border-red-500" : errors }
+            )}>
                 {/* Renderiza el icono si existe */}
-                { Icon && <Icon size={20}/> }
+                { Icon && <Icon size={20} className={clsx("text-black", { "text-red-500" : errors })}/> }
 
                 {/* Campo de entrada de contraseña */}
                 <input 
@@ -41,8 +45,22 @@ export const TextInputWithPassword: FC<ITextInput> = ({ label, errors, icon, ...
                 {/* Botón para mostrar/ocultar contraseña */}
                 { 
                     view 
-                    ? <MdOutlineVisibility size={20} onClick={handleClick} className="cursor-pointer"/> 
-                    : <MdOutlineVisibilityOff size={20} onClick={handleClick} className="cursor-pointer"/> 
+                        ? <MdOutlineVisibility 
+                            size={20} 
+                            onClick={handleClick} 
+                            className={clsx(
+                                "text-black cursor-pointer", 
+                                { "text-red-500" : errors }
+                            )}
+                        /> 
+                        : <MdOutlineVisibilityOff 
+                            size={20} 
+                            onClick={handleClick} 
+                            className={clsx(
+                                "text-black cursor-pointer", 
+                                { "text-red-500" : errors }
+                            )}
+                        /> 
                 }
             </div>
 
