@@ -1,6 +1,6 @@
 import { revalidatePath } from "next/cache";
-import { getCategories } from "@/src/lib/actions/categories";
-import { CreateProductForm } from "@/src/components/admin/products/create-form";
+import { getCategories } from "@/actions/categories/get-categories";
+import { CreateProductForm } from "@/components/admin/products/create-form";
 
 /**
  * Página para la creación de nuevos productos en el panel de administración.

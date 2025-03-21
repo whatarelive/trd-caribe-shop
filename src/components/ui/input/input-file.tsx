@@ -2,7 +2,7 @@
 
 import { type FC, useRef, useState } from "react";
 import { IoCloudUploadOutline } from "react-icons/io5";
-import type { ITextInput } from "@/src/types/components";
+import type { ITextInput } from "@/interfaces/components";
 
 /**
  * Componente de entrada para archivos de imagen
@@ -55,7 +55,7 @@ export const FileInput: FC<Pick<ITextInput, 'label'| 'name'>> = ({ label, name }
                 </div>
                 
                 {/* Campo de entrada */}
-                <input type="file" ref={inputRef} onChange={handleChange} accept="image/*" className="hidden" />
+                <input type="file" ref={inputRef} onChange={handleChange} accept="image/*" className="hidden" name={name} />
             </div>
         </div>    
     )

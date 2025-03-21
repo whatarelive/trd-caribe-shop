@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { IoAddOutline } from "react-icons/io5";
-import { SearchInput } from "@/src/components/ui/input/input-search";
+import { SearchInput } from "@/components/ui/input/input-search";
 
 export default function CategoriesPage() {
     return (

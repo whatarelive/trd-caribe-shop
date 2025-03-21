@@ -2,8 +2,8 @@
 
 import clsx from "clsx";
 import { IoCloseOutline } from "react-icons/io5";
-import { useMenuStore } from "@/src/store/menu-store";
-import { NavList } from "@/src/components/admin/nav/nav-list";
+import { useMenuStore } from "@/store/menu-store";
+import { NavList } from "@/components/admin/nav/nav-list";
 
 /**
  * Barra lateral de navegación para dispositivos móviles que se muestra/oculta mediante un estado global.

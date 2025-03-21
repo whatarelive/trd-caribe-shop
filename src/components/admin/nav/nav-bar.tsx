@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { MdSpaceDashboard } from "react-icons/md";
 import { IoSettingsOutline } from "react-icons/io5";
-import { NavMenu } from "@/src/components/admin/nav/nav-menu";
-import { BreadcrumbsList } from "@/src/components/admin/breadcrumbs/breadcrumbs-list";
-import { ButtonLogout, ButtonOpenSidebar } from "@/src/components/ui/buttons";
+import { NavMenu } from "@/components/admin/nav/nav-menu";
+import { BreadcrumbsList } from "@/components/admin/breadcrumbs/breadcrumbs-list";
+import { ButtonLogout, ButtonOpenSidebar } from "@/components/ui/buttons";
 
 /**
  * Barra de navegación superior del panel de administración.

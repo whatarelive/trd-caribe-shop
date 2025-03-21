@@ -2,10 +2,11 @@
 
 import { useActionState } from "react";
 import { MdOutlinePerson2, MdOutlineLock } from "react-icons/md";
-import { verifyUser } from "@/src/lib/actions/auth";
-import { TextInput } from "@/src/components/ui/input/input-text";
-import { TextInputWithPassword } from "@/src/components/ui/input/input-password";
-import type { LoginState } from "@/src/types/actions-props";
+import { useFormError } from "@/lib/hooks/useFormError";
+import { autheticate } from "@/actions/auth/login";
+import { TextInput } from "@/components/ui/input/input-text";
+import { TextInputWithPassword } from "@/components/ui/input/input-password";
+import type { LoginState } from "@/interfaces/models/user.interface";
 
 /**
  * @description Componente de formulario del lado del cliente para el inicio de sesion de los usuarios.
@@ -17,9 +18,11 @@ import type { LoginState } from "@/src/types/actions-props";
  */
 export const LoginForm = () => {
     // Inicializa el estado del formulario con mensaje y errores vacíos
-    const initialState: LoginState = { message: null, errors: {} };
+    const initialState: LoginState = { errors: {} };
     // Utiliza una acción del servidor para el envío del formulario y seguimiento del estado de carga
-    const [errorMessage, formAction, isPending] = useActionState(verifyUser, initialState);
+    const [errorMessage, formAction, isPending] = useActionState(autheticate, initialState);
+    // Control de la visibilidad de los errores del formulario
+    const { showErrors, handleFocus } = useFormError({ errors: errorMessage.errors });
 
     return (
         <form action={formAction} className="flex flex-col mt-6">
@@ -32,7 +35,8 @@ export const LoginForm = () => {
                 placeholder="Ingrese el nombre de usuario"
                 icon={MdOutlinePerson2}
                 aria-describedby="username-error"
-                errors={errorMessage.errors?.username}
+                onFocus={handleFocus}
+                errors={showErrors ? errorMessage.errors?.username : undefined}
             />
            
             {/* Campo de contraseña */}
@@ -43,7 +47,8 @@ export const LoginForm = () => {
                 placeholder="Ingrese su contraseña"
                 icon={MdOutlineLock}
                 aria-describedby="password-error"
-                errors={errorMessage.errors?.password}
+                onFocus={handleFocus}
+                errors={showErrors ? errorMessage.errors?.password : undefined}
             />
 
             {/* Botón de envío del formulario */}

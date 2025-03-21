@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { auth } from "@/auth";
-import { fontTitle } from "@/src/config/fonts";
-import { logoutUser } from "@/src/lib/actions/auth";
-import type { ILayout } from "@/src/types/components";
+import { auth } from "@/auth.config";
+import { fontTitle } from "@/config/fonts";
+import { logout } from "@/actions/auth/logout";
+import type { ILayout } from "@/interfaces/components";
 
-import "@/src/styles/globals.css";
+import "@/app/globals.css";
 
 export const metadata: Metadata = {
     title: "TRD Caribe Shop",
@@ -20,7 +20,7 @@ export default async function RootLayout({ children }: ILayout) {
     // Por lo que se debe cerrar la sesión
     if (session && session?.isAuthenticated === false) {
         // Si el usuario no está autenticado, se cierra la sesión
-        await logoutUser();   
+        await logout();   
     }
 
     return (

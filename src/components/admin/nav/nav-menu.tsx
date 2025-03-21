@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { IoEllipsisVertical, IoSettingsOutline } from "react-icons/io5";
-import { ButtonLogout } from "@/src/components/ui/buttons";
+import { ButtonLogout } from "@/components/ui/buttons";
 
 /**
  * Menú de navegación desplegable para dispositivos móviles.

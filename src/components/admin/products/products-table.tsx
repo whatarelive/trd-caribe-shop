@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from "@/src/components/ui/table"
+import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from "@/components/ui/table"
 
 export const ProductsTable = () => {
     return (

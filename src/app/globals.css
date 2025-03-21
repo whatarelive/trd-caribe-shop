@@ -17,8 +17,8 @@ body {
 }
 
 .input-subcontainer {
-  @apply flex items-center px-1.5 rounded-sm border border-neutral-300
-  focus-within:ring-blue-300 focus-within:ring-2 focus-within:outline-none inset-ring-transparent
+  @apply flex items-center px-1.5 rounded-sm focus-within:ring-blue-300 focus-within:ring-2 
+  focus-within:outline-none inset-ring-transparent
 }
 
 .button-primary {

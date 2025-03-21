@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { IoAddOutline } from "react-icons/io5";
-import { getProducts } from "@/src/lib/actions/products";
-import { ProductsTable } from "@/src/components/admin/products/products-table";
-import { ProductsList } from "@/src/components/admin/products/products-list";
-import { SearchInput } from "@/src/components/ui/input/input-search";
+import { getProducts } from "@/actions/products/get-products";
+import { ProductsTable } from "@/components/admin/products/products-table";
+import { ProductsList } from "@/components/admin/products/products-list";
+import { SearchInput } from "@/components/ui/input/input-search";
 
 export default async function ProductsPage() {
     const products = await getProducts();

@@ -3,19 +3,19 @@
 import Link from 'next/link';
 import { FC, useActionState } from 'react';
 import { IoAddOutline } from 'react-icons/io5';
-import { createProduct } from '@/src/lib/actions/products';
-import { TextInput } from '@/src/components/ui/input/input-text';
-import { FileInput } from '@/src/components/ui/input/input-file';
-import { SelectCategories } from '@/src/components/admin/products/select-categories';
-import type { CreateProductState } from '@/src/types/actions-props';
-import type { ICategories } from '@/src/types/models';
+import { createProduct } from '@/actions/products/create-product';
+import { TextInput } from '@/components/ui/input/input-text';
+import { FileInput } from '@/components/ui/input/input-file';
+import { SelectCategories } from '@/components/admin/products/select-categories';
+import type { CreateProductState } from '@/interfaces/models/product.interface';
+import type { ICategories } from '@/interfaces/models/categorie.interface';
 
 interface Props {
     categories: ICategories[];
 }
 
 export const CreateProductForm: FC<Props> = ({ categories }) => {
-    const initialState: CreateProductState = { message: null, errors: {} };
+    const initialState: CreateProductState = { errors: {} };
     const [errorMessage, formAction, isPending] = useActionState(createProduct, initialState);
 
     return (
@@ -73,7 +73,7 @@ export const CreateProductForm: FC<Props> = ({ categories }) => {
                 errors={errorMessage.errors?.price}
             />
 
-            <FileInput label="Imagen del producto"/>
+            <FileInput label="Imagen del producto" name="image"/>
 
             <button 
                 type="submit" 
