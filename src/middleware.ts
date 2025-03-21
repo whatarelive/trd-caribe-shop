@@ -13,7 +13,7 @@ const { auth: middleware } = NextAuth(authConfig);
 export default middleware( async({ nextUrl, auth }) => {
     // Verifica si el usuario está autenticado.
     const isLoggedIn = !!auth;  
-    
+
     // Proteccioón de las rutas del DashBoard
     if (nextUrl.pathname.startsWith("/admin") && isLoggedIn) {
         // Se recupera la sesión del usuario.
@@ -44,5 +44,5 @@ export default middleware( async({ nextUrl, auth }) => {
 // Configuración del middleware para que se ejecute en todas las rutas excepto las API, archivos estáticos, imágenes y archivos PNG
 export const config = {
     // https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
-    matcher: ['/((?!api|_next/static|_next/image|favicon.ico|.*|.svg|.png|.jpg|.css).*)'],
+    matcher: ['/((?!api|favicon.ico|_next/static|_next/image|.*\\.png).*)'],
 }

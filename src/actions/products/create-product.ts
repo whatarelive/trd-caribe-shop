@@ -64,6 +64,11 @@ export async function createProduct(_prevState: CreateProductState, formData: Fo
         if (status !== 201) {
             throw new Error("Error al crear el producto.");
         } 
+
+        // Se limpia el cache de la página principal de productos
+        revalidatePath("/admin/products");
+        // se redirecciona al usuario a la página principal de productos 
+        redirect("/admin/products");
         
     } catch (error) {
          // Mensaje de error que se envia al usuario  
@@ -82,9 +87,4 @@ export async function createProduct(_prevState: CreateProductState, formData: Fo
             },
         }
     }    
-
-    // Se limpia el cache de la página principal de productos
-    revalidatePath("/admin/products");
-    // se redirecciona al usuario a la página principal de productos 
-    redirect("/admin/products");
 }
