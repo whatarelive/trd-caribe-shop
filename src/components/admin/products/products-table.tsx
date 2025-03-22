@@ -1,81 +1,87 @@
-import Image from "next/image"
+import Link from 'next/link';
+import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
 import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from "@/components/ui/table"
+import { products } from "@/lib/data/products";
 
 export const ProductsTable = () => {
     return (
-        <Table className="min-h-[600px]">
+        <Table className="hidden lg:flex flex-col p-4 bg-gray-50 rounded-lg">
             <TableHeader>
-                <TableRow className="border-neutral-300 border-b">
-                    <TableHead>
+                <TableRow className="flex w-full">
+                    <TableHead className="w-2/6">
                         Producto
                     </TableHead>
-                    <TableHead>
-                        Precio
-                    </TableHead>
-                    <TableHead>
-                        Descuento
-                    </TableHead>
-                    <TableHead>
+                    <TableHead className="w-1/6">
                         Categoría
                     </TableHead>
-                    <TableHead>
-                        Disponibilidad
+                    <TableHead className="w-1/6">
+                        Existencia
                     </TableHead>
-                    <TableHead>
+                    <TableHead className="w-1/6">
+                        Precio x Unidad
+                    </TableHead>
+                    <TableHead className="w-1/6">
                         Opciones
                     </TableHead>
                 </TableRow>
             </TableHeader>
-            <TableBody>
-                { [].map((product, index) => (
-                    <TableRow key={index} className="hover:bg-p_gray_100 hover:rounded-lg">
-                        <TableCell className="flex gap-4">
-                            <Image 
-                                src={""} 
-                                alt={""}
-                                width={64}
-                                height={64}
-                                loading="lazy"
-                                className="rounded-2xl w-16 h-16"
-                            />
-        
-                            <div className="flex flex-col justify-center">
-                                {/* <h2 
-                                    className={clsx(
-                                        'font-medium',
-                                        { 
-                                        'text-p_green' : product.stock,
-                                        'text-p_rose_900' : !product.stock,
-                                        }
-                                    )}
-                                    >
-                                        {product.title}
-                                </h2>
-        
-                                <p className="text-wrap text-[13px] line-clamp-2 max-w-[266px] text-p_gray_600">
-                                    {product.subtitle}
-                                </p> */}
+            <TableBody className="flex flex-col gap-2">
+                { products.map((product) => (
+                    <TableRow key={product.id} className="bg-white">
+                        <TableCell className="w-2/6">
+                           <div className="flex items-center gap-4">
+                                <picture>
+                                    <img 
+                                        src={product.image} 
+                                        alt={`Imagen del producto ${product.image}`}
+                                        width={64}
+                                        height={64}
+                                        loading="lazy"
+                                        className="rounded-xl min-w-16 h-16"
+                                    />
+                                </picture>
+            
+                                <div className="flex flex-col justify-center">
+                                    <h3 className="font-medium line-clamp-1">
+                                        {product.name}
+                                    </h3>
+            
+                                    <p className="text-wrap text-[13px] line-clamp-2 pr-12 text-neutral-500">
+                                        {product.description}
+                                    </p>
+                                </div>
+                           </div>
+                        </TableCell>
+                            
+                        <TableCell className="w-1/6">
+                            <span className="font-medium bg-cyan-400 text-white p-2 rounded-lg max-w-40 w-fit line-clamp-1">
+                                { product.categorie }
+                            </span>
+                        </TableCell>
+
+                        <TableCell className="w-1/6">
+                            { product.stock } unidades
+                        </TableCell>
+
+                        <TableCell className="w-1/6 font-medium">
+                            { product.price }
+                        </TableCell>    
+                        
+                        <TableCell className="w-1/6">
+                            <div className="inline-flex items-center gap-4">
+                                <Link 
+                                    href={`/admin/products/${product.id}`} 
+                                    className="p-2 rounded-md border border-neutral-500 hover:bg-blue-400 hover:text-white hover:border-blue-400"
+                                >
+                                    <MdOutlineEdit size={20}/>
+                                </Link>
+
+                                <button 
+                                    className="p-2 rounded-md border border-neutral-500 hover:bg-red-500 hover:text-white hover:border-red-500 cursor-pointer"
+                                >
+                                    <MdDeleteOutline size={20}/>
+                                </button>
                             </div>
-                        </TableCell>
-                            
-                        <TableCell className="text-p_gray_900 font-medium">
-                            {/* $ { 
-                                product.price.toString().length === 3 
-                                    ? product.price.toPrecision(5)
-                                    : product.price.toPrecision(6)
-                            } */}
-                        </TableCell>
-                            
-                        <TableCell>
-                            {/* <ProductCategory category={product.category}/> */}
-                        </TableCell>
-                        
-                        <TableCell>
-                            {/* <ProductDisponibility stock={product.stock}/> */}
-                        </TableCell>
-                        
-                        <TableCell>
-                            {/* <ProductOptions productId={product.id} name={product.title}/> */}
                         </TableCell>
                     </TableRow>
                 ))}

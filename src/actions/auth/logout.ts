@@ -1,4 +1,4 @@
-"use server"; // Indica que esta función se ejecuta en el servidor
+'use server'
 
 import { auth, signOut } from "@/auth.config";
 import { shopApi } from "@/lib/api/shop-api";
@@ -27,8 +27,14 @@ export async function logout() {
             }
         );
 
+        // Si el codigo devuelto es 401 el token es invalido
+        if (resp.status === 401) {
+            // Se cierra la sesión
+            await signOut({ redirect: true, redirectTo: "/" });
+        }
+
         // Si el codigo devuelto no es el esperado
-        if (resp.status !== 200) {
+        if (resp.status !== 205) {
             // Se lanza el error de cierre de sesión
             throw new Error("Fallo el cierre de sesión");
         }
@@ -41,4 +47,8 @@ export async function logout() {
     // Si se realiza el cierre de sesión el backend correctamente
     // se cierra la sesión en el Frontend y redirecciona al usuario a la página principal 
     return await signOut(); 
+}
+
+export async function expiresSession() {
+    await signOut();
 }

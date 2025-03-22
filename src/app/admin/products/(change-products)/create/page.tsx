@@ -1,4 +1,4 @@
-import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { getCategories } from "@/actions/categories/get-categories";
 import { CreateProductForm } from "@/components/admin/products/create-form";
 
@@ -11,7 +11,7 @@ export default async function ProductCreatePage() {
     const data = await getCategories();
 
     if (!data) {
-        return revalidatePath("/admin/products/create");
+        return redirect("/admin/products");
     }
 
     return (

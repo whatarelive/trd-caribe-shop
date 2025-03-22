@@ -15,7 +15,7 @@ export const Table: FC<Props> = ({ className, children }) => (
 )
 
 export const TableHeader: FC<Props> = ({ className, children }) => (
-  <thead className={cn("border-b", className)}>
+  <thead className={className}>
     { children }
   </thead>
 )
@@ -27,19 +27,19 @@ export const TableBody: FC<Props> = ({ className, children }) => (
 )
 
 export const TableFooter: FC<Props> = ({ className, children }) => (
-  <tfoot className={cn("border-t bg-muted/50 font-medium [&>tr]:last:border-b-0", className)}>
+  <tfoot className={cn("border-t font-medium [&>tr]:last:border-b-0", className)}>
     { children }
   </tfoot>
 )
 
 export const TableRow: FC<Props> = ({ className, children }) => (
-  <tr className={cn("border-b-4 border-white transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted", className)}>
+  <tr className={cn("border-b-4 border-white transition-colors", className)}>
     { children }
   </tr>
 )
 
 export const TableHead: FC<Props> = ({ className, children }) => (
-  <th className={cn("px-2 py-3 text-left w-[120px] align-middle font-bold text-p_gray_900", className ) }>
+  <th className={cn("px-2 py-3 text-left w-[120px] align-middle font-medium", className ) }>
     { children }
   </th>
 )
@@ -51,7 +51,7 @@ export const TableCell: FC<Props> = ({ className, children }) => (
 )
 
 export const TableCaption: FC<Props> = ({ className, children }) => (
-  <caption className={cn("mt-4 text-sm text-muted-foreground", className)}>
+  <caption className={cn("mt-4 text-sm", className)}>
     { children }
   </caption>
 )

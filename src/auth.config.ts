@@ -17,7 +17,7 @@ type RequestToken = {
 
 // Tipo de dato de la petición de login del usuario.
 type LoginPost = {
-    readonly is_admin: boolean; // rol del usuario
+    readonly is_staff: boolean; // rol del usuario
     readonly access: string; // token de acceso
     readonly refresh: string; // token de refresh
 }
@@ -91,6 +91,9 @@ export const authConfig: NextAuthConfig = {
         
         // Callback que se ejecuta cuando se crea la sesión
         async session({ session, token }) {  
+            // Si no se encuentra el token de acceso se elimina la sesión
+            if (token.accessToken === undefined) return session;
+
             // Agrega los tokens de acceso y de refresco a la sesión
             session.accessToken = token.accessToken;
             session.refreshToken = token.refreshToken;
@@ -136,7 +139,7 @@ export const authConfig: NextAuthConfig = {
                     // Retornar los datos del usuario y sus tokens de acceso
                     return {
                         username: user.username,
-                        isAdmin: data.is_admin,
+                        isAdmin: data.is_staff,
                         accessToken: data.access,
                         refreshToken: data.refresh
                     }
