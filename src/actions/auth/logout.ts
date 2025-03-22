@@ -1,4 +1,4 @@
-"use server"; // Indica que esta función se ejecuta en el servidor
+'use server'
 
 import { auth, signOut } from "@/auth.config";
 import { shopApi } from "@/lib/api/shop-api";
@@ -47,4 +47,8 @@ export async function logout() {
     // Si se realiza el cierre de sesión el backend correctamente
     // se cierra la sesión en el Frontend y redirecciona al usuario a la página principal 
     return await signOut(); 
+}
+
+export async function expiresSession() {
+    await signOut();
 }

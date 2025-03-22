@@ -5,7 +5,7 @@ import { products } from "@/lib/data/products";
 
 export const ProductsTable = () => {
     return (
-        <Table className="hidden md:flex flex-col p-4 bg-gray-50 rounded-lg mt-6">
+        <Table className="hidden lg:flex flex-col p-4 bg-gray-50 rounded-lg">
             <TableHeader>
                 <TableRow className="flex w-full">
                     <TableHead className="w-2/6">
@@ -25,10 +25,10 @@ export const ProductsTable = () => {
                     </TableHead>
                 </TableRow>
             </TableHeader>
-            <TableBody>
+            <TableBody className="flex flex-col gap-2">
                 { products.map((product) => (
-                    <TableRow key={product.id} className="bg-white border-b border-neutral-600">
-                        <TableCell className="w-2/6 p-4">
+                    <TableRow key={product.id} className="bg-white">
+                        <TableCell className="w-2/6">
                            <div className="flex items-center gap-4">
                                 <picture>
                                     <img 

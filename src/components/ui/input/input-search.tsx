@@ -7,7 +7,7 @@ export const SearchInput: FC<Omit<ITextInput, "icon" | "label">> = ({ ...props }
     return (
         <input 
             type="search"  
-            className="w-full lg:w-80 border border-neutral-400 rounded-md p-2 lg:p-3 focus:outline-blue-400" 
+            className="w-full border border-gray-100 rounded-md p-2 lg:p-3 focus:outline-blue-400" 
             { ...props }
         />
     )

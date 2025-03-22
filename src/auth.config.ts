@@ -91,6 +91,9 @@ export const authConfig: NextAuthConfig = {
         
         // Callback que se ejecuta cuando se crea la sesión
         async session({ session, token }) {  
+            // Si no se encuentra el token de acceso se elimina la sesión
+            if (token.accessToken === undefined) return session;
+
             // Agrega los tokens de acceso y de refresco a la sesión
             session.accessToken = token.accessToken;
             session.refreshToken = token.refreshToken;
