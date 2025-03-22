@@ -24,9 +24,9 @@ export default function AdminLayout({ children }: ILayout) {
             <NavBar />
 
             {/* Área principal */}
-            <main className="relative flex top-16">
+            <main className="relative flex top-16 bg-white">
                 {/* Barra lateral fija */}
-                <section className="hidden z-20 lg:block fixed w-64 border-r lg:h-[calc(100vh-64px)] border-gray-200 bg-white">
+                <section className="hidden z-20 lg:block fixed w-64 border-r lg:h-[calc(100vh-64px)] border-gray-200">
                     <NavList />
                 </section>
 

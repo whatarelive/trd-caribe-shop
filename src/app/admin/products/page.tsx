@@ -1,15 +1,10 @@
 import Link from "next/link";
 import { IoAddOutline } from "react-icons/io5";
-import { getProducts } from "@/actions/products/get-products";
 import { ProductsTable } from "@/components/admin/products/products-table";
 import { ProductsList } from "@/components/admin/products/products-list";
 import { SearchInput } from "@/components/ui/input/input-search";
 
-export default async function ProductsPage() {
-    const products = await getProducts();
-
-    console.log(products);
-
+export default function ProductsPage() {
     return (
         <section className="flex flex-col gap-4 p-8">
             <div className="flex flex-col min-[500px]:flex-row gap-4 justify-between min-[500px]:items-center">
@@ -27,10 +22,8 @@ export default async function ProductsPage() {
                 </div>
             </div>
             
-            <div className="hidden lg:block p-4 bg-white rounded-lg mt-6">
-                <ProductsTable />
-            </div>
-
+            <ProductsTable />
+            
             <div className="lg:hidden">
                 <ProductsList />
             </div>

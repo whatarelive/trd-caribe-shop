@@ -18,7 +18,7 @@ export default async function RootLayout({ children }: ILayout) {
     // Se comprueba la sesión del usuario
     // Debido q que si el servidor se apaga, la sesión de auth js se matiene viva
     // Por lo que se debe cerrar la sesión
-    if (session && session?.isAuthenticated === false) {
+    if (session?.isAuthenticated === false) {
         // Si el usuario no está autenticado, se cierra la sesión
         await logout();   
     }
