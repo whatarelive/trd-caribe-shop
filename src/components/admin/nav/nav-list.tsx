@@ -20,32 +20,30 @@ export const NavList = () => {
     const pathname = usePathname();
 
     return (
-        <nav className="p-6">
-            <ul className="flex flex-col gap-4">
-                <LinkComponent href="/admin" label="Inicio" isActive={pathname === "/admin"}>
-                    <IoHomeOutline size={24} />
-                </LinkComponent>
-                
-                <LinkComponent href="/admin/categories" label="Categorías" isActive={pathname.includes("/admin/categories")}>
-                    <IoBookmarksOutline size={24}/>
-                </LinkComponent>
+        <nav className="flex flex-col w-64 gap-2">
+            <LinkComponent href="/admin" label="Inicio" isActive={pathname === "/admin"}>
+                <IoHomeOutline size={24} />
+            </LinkComponent>
+            
+            <LinkComponent href="/admin/categories" label="Categorías" isActive={pathname.includes("/admin/categories")}>
+                <IoBookmarksOutline size={24}/>
+            </LinkComponent>
 
-                <LinkComponent href="/admin/products" label="Productos" isActive={pathname.includes("/admin/products")}>
-                    <IoGridOutline size={24} />
-                </LinkComponent>      
+            <LinkComponent href="/admin/products" label="Productos" isActive={pathname.includes("/admin/products")}>
+                <IoGridOutline size={24} />
+            </LinkComponent>      
 
-                <LinkComponent href="/admin/promotions" label="Promociones" isActive={pathname.includes("/admin/promotions")}>
-                    <IoCardOutline size={24} />
-                </LinkComponent>
+            <LinkComponent href="/admin/promotions" label="Promociones" isActive={pathname.includes("/admin/promotions")}>
+                <IoCardOutline size={24} />
+            </LinkComponent>
 
-                <LinkComponent href="/admin/users" label="Usuarios" isActive={pathname.includes("/admin/users")}>
-                    <IoPeopleOutline size={24} />                        
-                </LinkComponent>
+            <LinkComponent href="/admin/users" label="Usuarios" isActive={pathname.includes("/admin/users")}>
+                <IoPeopleOutline size={24} />                        
+            </LinkComponent>
 
-                <LinkComponent href="/admin/sales" label="Ventas" isActive={pathname.includes("/admin/sales")}>
-                    <IoCartOutline size={24} />                        
-                </LinkComponent>
-            </ul>
+            <LinkComponent href="/admin/sales" label="Ventas" isActive={pathname.includes("/admin/sales")}>
+                <IoCartOutline size={24} />                        
+            </LinkComponent>
         </nav>
     )
 }

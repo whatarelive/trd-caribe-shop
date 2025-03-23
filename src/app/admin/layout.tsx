@@ -1,4 +1,5 @@
-import { SideBarMobile } from '@/components/admin/nav/side-bar';
+import { SideBar } from '@/components/admin/nav/side-bar';
+import { SideBarMobile } from '@/components/admin/nav/side-bar-mobile';
 import type { ILayout } from "@/interfaces/components";
 
 /**
@@ -13,9 +14,12 @@ import type { ILayout } from "@/interfaces/components";
  */
 export default function AdminLayout({ children }: ILayout) {
     return (
-        <main className="relative flex w-full min-h-screen gap-8 bg-white">
+        <main className="relative flex w-full min-h-screen xl:gap-8 bg-white">
             {/* Barra lateral mobile */}
             <SideBarMobile />
+            
+            {/* Barra lateral desktop */}
+            <SideBar/>
 
             {/* Contenido dinámico */}
             { children }

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { auth } from "@/auth.config";
 import { fontTitle } from "@/config/fonts";
 import type { ILayout } from "@/interfaces/components";
 
@@ -11,17 +10,6 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: ILayout) {
-    // Se recupera la sesión del usuario
-    const session = await auth();
-
-    // Se comprueba la sesión del usuario
-    // Debido q que si el servidor se apaga, la sesión de auth js se matiene viva
-    // Por lo que se debe cerrar la sesión
-    if (!session?.isAuthenticated) {
-        // Si el usuario no está autenticado, se cierra la sesión
-        ;   
-    }
-
     return (
         <html lang="es">
             <body className={`${fontTitle.className} antialiased`}>
