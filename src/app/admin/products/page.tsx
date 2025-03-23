@@ -6,7 +6,7 @@ import { SearchInput } from "@/components/ui/input/input-search";
 
 export default function ProductsPage() {
     return (
-        <section className="flex flex-col gap-6 py-8 px-16">
+        <section className="flex flex-col gap-6 py-8 pl-8 pr-16">
             <h1 className="text-2xl lg:text-2xl font-semibold text-neutral-500">
                 Listado de Productos
             </h1>

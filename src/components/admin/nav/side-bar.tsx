@@ -1,54 +1,46 @@
-"use client";
-
-import clsx from "clsx";
+import { MdSpaceDashboard, MdLogout } from "react-icons/md";
+import { logout } from "@/actions/auth/logout";
 import { NavList } from "@/components/admin/nav/nav-list";
-import { MdArrowForwardIos } from "react-icons/md";
-import { useMenuStore } from "@/store/menu-store";
 
 /**
- * Barra lateral de navegación para dispositivos móviles que se muestra/oculta mediante un estado global.
+ * Barra lateral de navegación.
  * 
  * Este componente implementa una barra lateral responsiva que:
- * - Se oculta en dispositivos desktop (lg:hidden)
- * - Tiene una animación de deslizamiento al mostrarse/ocultarse
- * - Incluye un botón para cerrar la barra
+ * - Se muestra en dispositivos desktop
  * - Muestra una lista de navegación usando el componente NavList
  */
-export const SideBarMobile = () => {
-    // Estado global para controlar la visibilidad del menú
-    const { isOpen, setIsOpen } = useMenuStore();
-
+export const SideBar = () => {
     return (
-        <section className={clsx(
-            "absolute xl:hidden flex flex-col w-64 h-full bg-gray-50 z-50 transition-transform duration-300",
-            {
-                "-translate-x-full": !isOpen,
-                "translate-x-0": isOpen
-            },
-        )}>
-
+        <section className="hidden xl:flex xl:flex-col xl:gap-2 p-4">
             {/* Contenedor de encabezado */}
-            <button 
-                onClick={() => setIsOpen(!isOpen)} 
-                className={clsx(
-                    "absolute top-24 bg-blue-400 rounded-full p-2 cursor-pointer transition-all duration-300",
-                    {
-                        "rotate-180 -right-4": isOpen,
-                        "-right-6" : !isOpen
-                    },
-                )}
-            >
-                <MdArrowForwardIos size={18} className="text-white" />
-            </button>
+            <div className="flex flex-col px-4 py-8 items-center justify-center rounded-md bg-blue-600">
+                <div className="flex gap-3 py-1 border-b border-white">
+                    <MdSpaceDashboard size={30} className="text-white"/>
 
-            <div className="flex relative justify-between items-center p-[18px] border-b border-gray-200">
-                <h1 className="text-xl font-medium">
-                    Dashboard
-                </h1>
+                    <h1 className="text-2xl text-white font-medium">
+                        TRD CARIBE
+                    </h1>
+                </div>
+
+                <p className="mt-1 text-white font-medium">
+                    Panel de Administración
+                </p>
             </div>
 
             {/* Lista de navegación */}
             <NavList />
+
+            <div className="bg-gray-50 h-full rounded-md"/>
+
+            <form action={logout}>
+                <button
+                    type="submit" 
+                    className="flex w-full items-center gap-3 py-2 px-4 rounded-md cursor-pointer bg-gray-50 hover:bg-red-100 hover:text-red-500 transition-colors"
+                >
+                    <MdLogout size={24}/>
+                    Cerrar Sesión
+                </button>
+            </form>
         </section>
     )
 }

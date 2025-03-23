@@ -1,5 +1,6 @@
 'use server'
 
+import { redirect } from "next/navigation";
 import { auth, signOut } from "@/auth.config";
 import { shopApi } from "@/lib/api/shop-api";
 import type { ResquestLogout } from "@/interfaces/models/user.interface";
@@ -30,7 +31,9 @@ export async function logout() {
         // Si el codigo devuelto es 401 el token es invalido
         if (resp.status === 401) {
             // Se cierra la sesión
-            await signOut({ redirect: true, redirectTo: "/" });
+            await signOut({ redirect: false });
+
+            redirect("/")
         }
 
         // Si el codigo devuelto no es el esperado
@@ -41,14 +44,13 @@ export async function logout() {
 
     } catch (error) {
         // Se propaga el error a la ui, para el manejo en el cliente
-        return error;
+        console.log(error);
+        return;
     }
 
     // Si se realiza el cierre de sesión el backend correctamente
     // se cierra la sesión en el Frontend y redirecciona al usuario a la página principal 
-    return await signOut(); 
-}
-
-export async function expiresSession() {
     await signOut();
+    
+    return;
 }
