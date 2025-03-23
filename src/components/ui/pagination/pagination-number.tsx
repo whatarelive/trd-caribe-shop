@@ -20,7 +20,7 @@ export const PaginationNumber: FC<Props> = memo(({ page, href, isActive, positio
         }
     );
 
-    return isActive ? (
+    return isActive || page === "..." ? (
         <span className={className}>
             {page}
         </span>
