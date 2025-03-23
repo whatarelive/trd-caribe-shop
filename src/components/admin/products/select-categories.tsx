@@ -33,6 +33,7 @@ export const SelectCategories: FC<Props> = ({ label, categories, errors, ...prop
                     id={props.id} 
                     name={props.name} 
                     defaultValue={""}
+                    onFocus={props.onFocus}
                     className="h-10 w-full border-0 outline-none text-sm"
                     { ...props }
                 >

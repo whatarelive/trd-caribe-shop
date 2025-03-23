@@ -5,6 +5,9 @@ interface Props<T> {
     errors: T; // Objeto opcional que mapea nombres de campos a arrays de mensajes de error
 }
 
+// Tipo de dato del evento de focus
+type EventFocus = React.FocusEvent<HTMLInputElement, Element> | React.FocusEvent<HTMLSelectElement, Element>;
+
 /**
  * Hook personalizado para manejar errores del formulario
  * @description Este hook gestiona la visibilidad de los mensajes de error en los campos de texto
@@ -24,7 +27,7 @@ export function useFormError<T>({ errors }: Props<T>) {
     }, [errors])
 
     // Oculta los mensajes de error cuando un campo recibe el foco
-    const handleFocus = (event: React.FocusEvent<HTMLInputElement, Element>) => {
+    const handleFocus = (event: EventFocus) => {
        event.preventDefault();
        
         // Si no hay errores para este campo, no hacer nada

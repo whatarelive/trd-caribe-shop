@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { FC, useActionState } from 'react';
 import { IoAddOutline } from 'react-icons/io5';
 import { createProduct } from '@/actions/products/create-product';
+import { useFormError } from '@/lib/hooks/useFormError';
 import { TextInput } from '@/components/ui/input/input-text';
 import { FileInput } from '@/components/ui/input/input-file';
 import { SelectCategories } from '@/components/admin/products/select-categories';
@@ -17,16 +18,18 @@ interface Props {
 export const CreateProductForm: FC<Props> = ({ categories }) => {
     const initialState: CreateProductState = { errors: {} };
     const [errorMessage, formAction, isPending] = useActionState(createProduct, initialState);
+    const { showErrors, handleFocus } = useFormError({ errors: errorMessage });
 
     return (
-        <form action={formAction} className="flex flex-col mt-6 w-full rounded-md">
+        <form action={formAction} className="flex flex-col mt-6 w-full md:bg-gray-50 md:p-6 md:rounded-lg">
             <TextInput 
                 label="Nombre del producto" 
                 type="text" 
                 name="name" 
                 placeholder="Ingrese el nombre"
                 aria-describedby="name-error"
-                errors={errorMessage.errors?.name}
+                onFocus={handleFocus}
+                errors={showErrors ? errorMessage.errors?.name : undefined}
             />
 
             <div className="flex gap-2">
@@ -36,7 +39,8 @@ export const CreateProductForm: FC<Props> = ({ categories }) => {
                     id="categorie" 
                     categories={categories}
                     aria-describedby="categorie-error"
-                    errors={errorMessage.errors?.categorie}
+                    onFocus={handleFocus}
+                    errors={showErrors ? errorMessage.errors?.categorie : undefined}
                 />
 
                 <Link href="/admin/categories/create" className="button-primary h-10 mt-6">
@@ -50,28 +54,33 @@ export const CreateProductForm: FC<Props> = ({ categories }) => {
                 name="description"
                 placeholder="Ingrese la descripción del producto"
                 aria-describedby="description-error"
-                errors={errorMessage.errors?.description}
+                onFocus={handleFocus}
+                errors={showErrors ? errorMessage.errors?.description : undefined}
             />
 
-            <TextInput 
-                label="Cantidad exitente" 
-                type="number"
-                name="stock"
-                min={0} 
-                placeholder="Ingrese la cantidad existente"
-                aria-describedby="stock-error"
-                errors={errorMessage.errors?.stock}
-            />
+            <div className="flex flex-col md:flex-row gap-4">
+                <TextInput 
+                    label="Cantidad exitente" 
+                    type="number"
+                    name="stock"
+                    min={0} 
+                    placeholder="Ingrese la cantidad existente"
+                    aria-describedby="stock-error"
+                    onFocus={handleFocus}
+                    errors={showErrors ? errorMessage.errors?.stock : undefined}
+                />
 
-            <TextInput 
-                label="Precio del producto" 
-                type="number" 
-                name="price"
-                min={0} 
-                placeholder="Ingrese el precio"
-                aria-describedby="price-error"
-                errors={errorMessage.errors?.price}
-            />
+                <TextInput 
+                    label="Precio del producto" 
+                    type="number" 
+                    name="price"
+                    min={0} 
+                    placeholder="Ingrese el precio"
+                    aria-describedby="price-error"
+                    onFocus={handleFocus}
+                    errors={showErrors ? errorMessage.errors?.price : undefined}
+                />
+            </div>
 
             <FileInput label="Imagen del producto" name="image"/>
 

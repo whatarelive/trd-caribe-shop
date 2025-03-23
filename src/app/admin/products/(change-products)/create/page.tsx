@@ -17,7 +17,7 @@ export default async function ProductCreatePage() {
     }
 
     return (
-        <section className="flex flex-col w-full gap-6 py-8 pl-8 pr-16">
+        <section className="flex flex-col w-full gap-6 p-4 min-[375px]:p-8 xl:pr-16">
             {/* Sección del formulario con fondo blanco y bordes redondeados */}
             <div>
                 <TitlePage title="Creación de Productos"/>
