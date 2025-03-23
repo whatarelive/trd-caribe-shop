@@ -24,7 +24,7 @@ export default async function ProductCreatePage() {
                 </h1>
             
                 {/* Formulario de creación de producto */}
-                <CreateProductForm categories={data.results}/>
+                <CreateProductForm categories={[{ id:1, name: "Alimentos", created: "", updated: "" }]}/>
             </section>
         </section>
     );
