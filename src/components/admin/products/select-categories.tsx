@@ -1,5 +1,6 @@
 "use client";
 
+import clsx from "clsx";
 import type { DetailedHTMLProps, FC, SelectHTMLAttributes } from "react";
 import type { ICategories } from "@/interfaces/models/categorie.interface";
 
@@ -23,12 +24,16 @@ export const SelectCategories: FC<Props> = ({ label, categories, errors, ...prop
             </label>
 
             {/* Contenedor del campo de selección */}
-            <div className="input-subcontainer">
+            <div className={clsx(
+                "input-subcontainer border border-neutral-300", 
+                { "border-red-500" : errors }
+            )}>
                 {/* Campo select con las opciones de categorías */}
                 <select 
                     id={props.id} 
                     name={props.name} 
                     defaultValue={""}
+                    onFocus={props.onFocus}
                     className="h-10 w-full border-0 outline-none text-sm"
                     { ...props }
                 >

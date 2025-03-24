@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { auth, signOut } from "@/auth.config";
 import { shopApi } from "@/lib/api/shop-api";
 import type { ResquestLogout } from "@/interfaces/models/user.interface";
+import { revalidatePath } from "next/cache";
 
 /** 
  * @description Acción de servidor para manejar el cierre de la sesión,
@@ -12,6 +13,7 @@ import type { ResquestLogout } from "@/interfaces/models/user.interface";
 export async function logout() {
     // Se recupera la sesión actual
     const session = await auth();
+    let isclose: boolean = false;
 
     try {
         // Petición http al Backend
@@ -32,8 +34,7 @@ export async function logout() {
         if (resp.status === 401) {
             // Se cierra la sesión
             await signOut({ redirect: false });
-
-            redirect("/")
+            isclose = true;
         }
 
         // Si el codigo devuelto no es el esperado
@@ -46,6 +47,11 @@ export async function logout() {
         // Se propaga el error a la ui, para el manejo en el cliente
         console.log(error);
         return;
+    }
+
+    if (isclose) {
+        revalidatePath("/");
+        return redirect("/");
     }
 
     // Si se realiza el cierre de sesión el backend correctamente

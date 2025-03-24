@@ -1,4 +1,6 @@
 import { redirect } from "next/navigation";
+import { TitlePage } from "@/components/admin/title-page";
+import { BreadcrumbsPage } from "@/components/admin/breadcrumbs-page";
 import { getCategories } from "@/actions/categories/get-categories";
 import { CreateProductForm } from "@/components/admin/products/create-form";
 
@@ -15,17 +17,22 @@ export default async function ProductCreatePage() {
     }
 
     return (
-        <section className="w-full sm:p-4 md:p-12">
+        <section className="flex flex-col w-full gap-6 p-4 min-[375px]:p-8 xl:pr-16">
             {/* Sección del formulario con fondo blanco y bordes redondeados */}
-            <section className="flex flex-col justify-between bg-white rounded-lg p-6 sm:p-8">
-                {/* Título de la página */}
-                <h1 className="text-2xl lg:text-3xl font-semibold text-neutral-500">
-                    Crear producto
-                </h1>
-            
-                {/* Formulario de creación de producto */}
-                <CreateProductForm categories={[{ id:1, name: "Alimentos", created: "", updated: "" }]}/>
-            </section>
+            <div>
+                <TitlePage title="Creación de Productos"/>
+
+                <BreadcrumbsPage 
+                    breadcrumbs={[
+                        { label: "Inicio", destiny: "/admin" },
+                        { label: "Productos", destiny: "/admin/products" },
+                    ]} 
+                    final="Crear Producto"
+                />
+            </div>
+
+            {/* Formulario de creación de producto */}
+            <CreateProductForm categories={[{ id:1, name: "Alimentos", created: "", updated: "" }]}/>
         </section>
     );
 }

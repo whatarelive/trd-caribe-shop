@@ -1,6 +1,6 @@
 export interface IProducts {
     id: number;
-    categorie: number;
+    categorie: string;
     name: string;
     price: number;
     description: string;
@@ -23,4 +23,6 @@ export type CreateProductState = {
     };
 }
 
-export type RequestProduct = Pick<IProducts, "categorie" | "description" | "image" | "name" | "price" | "stock">
+export type RequestProduct = {
+    categorie: number;
+} & Pick<IProducts, "description" | "image" | "name" | "price" | "stock">
