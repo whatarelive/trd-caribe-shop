@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { TitlePage } from "@/components/admin/title-page";
 import { ToolsSectionPage } from "@/components/admin/tools-section-page";
 import { ProductsTable } from "@/components/admin/products/products-table";
@@ -23,7 +24,9 @@ export default function ProductsPage() {
                 label="Nuevo Producto"
             />
             
-            <ProductsTable />   
+            <Suspense fallback={<p>Cargando...</p>}>
+                <ProductsTable />   
+            </Suspense>
         </section>
     );
 }
