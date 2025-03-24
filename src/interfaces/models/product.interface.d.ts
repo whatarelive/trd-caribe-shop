@@ -23,4 +23,6 @@ export type CreateProductState = {
     };
 }
 
-export type RequestProduct = Pick<IProducts, "categorie" | "description" | "image" | "name" | "price" | "stock">
+export type RequestProduct = {
+    categorie: number;
+} & Pick<IProducts, "description" | "image" | "name" | "price" | "stock">
