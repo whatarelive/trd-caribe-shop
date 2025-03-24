@@ -11,22 +11,27 @@ interface Props {
 
 export const PaginationArrow: FC<Props> = memo(({ href, direction, isDisabled }) => {
     const className = clsx(
-        "flex h-10 w-10 items-center justify-center rounded-md border border-gray-400 text-gray-600",
+        "flex gap-2 px-2 h-10 min-w-10 items-center justify-center rounded-md border",
         {
-        "pointer-events-none text-gray-300": isDisabled,
-        "hover:bg-gray-100": !isDisabled,
-        "mr-2 md:mr-4": direction === 'left',
-        "ml-2 md:ml-4": direction === 'right',
+            "pointer-events-none text-gray-300 text-gray-100 border-gray-100": isDisabled,
+            "hover:bg-gray-50 border-gray-300 text-gray-600": !isDisabled,
+            "mr-2 md:mr-4": direction === 'left',
+            "flex-row-reverse ml-2 md:ml-4": direction === 'right',
         }
     );
 
     const Icon = direction === 'left' ? MdArrowBack : MdArrowForward;
+    const label = direction === 'left' ? "Anterior" : "Siguiente";
 
     return isDisabled ? (
-        <div className={className}><Icon size={18} /></div>
+        <div className={className}>
+            <Icon size={18} />
+            <span>{ label }</span>
+        </div>
     ) : (
         <Link href={href} className={className}>
             <Icon size={18} />
+            <span>{ label }</span>
         </Link>
     );
 });

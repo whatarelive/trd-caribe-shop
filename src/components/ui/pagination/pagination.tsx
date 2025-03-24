@@ -3,12 +3,14 @@
 import { usePagination } from "@/lib/hooks/usePagination";
 import { PaginationArrow } from "@/components/ui/pagination/pagination-arrow";
 import { PaginationNumber } from "@/components/ui/pagination/pagination-number";
+import { cn } from "@/utils/tailwind-cn";
 
 interface Props {
   totalPages: number;
+  className?: string;
 }
 
-export const Pagination = ({ totalPages }: Props) => {
+export const Pagination = ({ totalPages, className }: Props) => {
   const { allPages, currentPage, createPageURL } = usePagination({ totalPages });
 
   return (
@@ -19,7 +21,7 @@ export const Pagination = ({ totalPages }: Props) => {
         isDisabled={currentPage <= 1}
       />
 
-      <div className="flex -space-x-px">
+      <div className={cn("flex -space-x-px", className)}>
         {allPages.map((page, index) => {
           return (
             <PaginationNumber

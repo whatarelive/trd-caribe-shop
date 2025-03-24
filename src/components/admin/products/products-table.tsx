@@ -1,13 +1,25 @@
 import Link from 'next/link';
 import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
 import { Pagination } from '@/components/ui/pagination/pagination';
+import { ProductCard } from '@/components/admin/products/product-card';
 import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from "@/components/ui/table"
 import { products } from "@/lib/data/products";
 
 export const ProductsTable = () => {
     return (
         <>
-            <Table className="hidden lg:flex flex-col p-4 bg-gray-50 rounded-lg">
+            {/* Listado de productos para dispositivos moviles */}
+            <ul className="flex flex-col gap-5 lg:hidden">
+                {products.map((product) => (
+                    <ProductCard 
+                        key={product.id} 
+                        product={product}
+                    />
+                ))}
+            </ul>
+
+            {/* Tabla de productos para dispositivos de escritorio */}
+            <Table className="hidden flex-col p-4 bg-gray-50 rounded-lg lg:flex">
                 <TableHeader>
                     <TableRow className="flex w-full">
                         <TableHead className="w-2/6">
@@ -56,7 +68,7 @@ export const ProductsTable = () => {
                             </TableCell>
                                 
                             <TableCell className="w-1/6">
-                                <span className="font-medium bg-cyan-400 text-white p-2 rounded-lg max-w-40 w-fit line-clamp-1">
+                                <span className="font-medium text-sm text-white bg-orange-400 py-1 px-2 rounded-sm max-w-40 w-fit line-clamp-1">
                                     { product.categorie }
                                 </span>
                             </TableCell>
@@ -66,7 +78,7 @@ export const ProductsTable = () => {
                             </TableCell>
 
                             <TableCell className="w-1/6 font-medium">
-                                { product.price }
+                                $ { product.price }
                             </TableCell>    
                             
                             <TableCell className="w-1/6">
@@ -90,7 +102,8 @@ export const ProductsTable = () => {
                 </TableBody>
             </Table>
                         
-            <Pagination totalPages={8}/>
+            {/* Componente para la paginación de los productos */}
+            <Pagination totalPages={8} className="hidden md:flex"/>
         </>
     )
 }
