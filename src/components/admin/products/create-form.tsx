@@ -1,12 +1,11 @@
 "use client";
 
-import Link from 'next/link';
 import { FC, useActionState } from 'react';
-import { IoAddOutline } from 'react-icons/io5';
 import { createProduct } from '@/actions/products/create-product';
 import { useFormError } from '@/lib/hooks/useFormError';
 import { TextInput } from '@/components/ui/input/input-text';
 import { FileInput } from '@/components/ui/input/input-file';
+import { ModalCreateCategorie } from '@/components/admin/categories/modal-create';
 import { SelectCategories } from '@/components/admin/products/select-categories';
 import type { CreateProductState } from '@/interfaces/models/product.interface';
 import type { ICategories } from '@/interfaces/models/categorie.interface';
@@ -43,9 +42,8 @@ export const CreateProductForm: FC<Props> = ({ categories }) => {
                     errors={showErrors ? errorMessage.errors?.categorie : undefined}
                 />
 
-                <Link href="/admin/categories/create" className="button-primary h-10 mt-6">
-                    <IoAddOutline size={24}/>
-                </Link>
+                {/* Modal para crear una nueva categoria */}
+                <ModalCreateCategorie/>
             </div>
 
             <TextInput 

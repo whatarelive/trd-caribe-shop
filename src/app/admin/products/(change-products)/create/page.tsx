@@ -33,6 +33,8 @@ export default async function ProductCreatePage() {
 
             {/* Formulario de creación de producto */}
             <CreateProductForm categories={[{ id:1, name: "Alimentos", created: "", updated: "" }]}/>
+            
+            <div id="modal-create-product" />
         </section>
     );
 }
