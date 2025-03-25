@@ -23,7 +23,7 @@ export const ModalCreateCategorie = () => {
             </button>
 
             {view && (
-                <Modal rootID="modal-create-product" onDismiss={() => setView(false)}>
+                <Modal rootID="modal-create-categorie" onDismiss={() => setView(false)}>
                     <h3 className="text-xl font-medium text-start w-full">
                         Crear Nueva Categoría
                     </h3>

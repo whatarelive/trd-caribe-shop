@@ -32,7 +32,7 @@ export const Modal: FC<Props> = ({ rootID, children, onDismiss }) => {
             >
                 { children }
 
-                <MdClose onClick={onDismiss} size={24} className="absolute top-4 right-4"/>
+                <MdClose onClick={onDismiss} size={24} className="absolute top-4 right-4 cursor-pointer"/>
             </dialog>
         </div>,
         document.getElementById(rootID)!

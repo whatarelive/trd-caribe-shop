@@ -6,6 +6,7 @@ import { useFormError } from '@/lib/hooks/useFormError';
 import { TextInput } from '@/components/ui/input/input-text';
 import { FileInput } from '@/components/ui/input/input-file';
 import { ModalCreateCategorie } from '@/components/admin/categories/modal-create';
+import { ModalListCategorie } from '@/components/admin/categories/modal-list';
 import { SelectCategories } from '@/components/admin/products/select-categories';
 import type { CreateProductState } from '@/interfaces/models/product.interface';
 import type { ICategories } from '@/interfaces/models/categorie.interface';
@@ -44,6 +45,9 @@ export const CreateProductForm: FC<Props> = ({ categories }) => {
 
                 {/* Modal para crear una nueva categoria */}
                 <ModalCreateCategorie/>
+
+                {/* Modal para listar las categorías */}
+                <ModalListCategorie/>
             </div>
 
             <TextInput 
