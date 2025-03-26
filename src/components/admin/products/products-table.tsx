@@ -9,7 +9,7 @@ export const ProductsTable = () => {
     return (
         <>
             {/* Listado de productos para dispositivos moviles */}
-            <ul className="flex flex-col gap-5 lg:hidden">
+            <ul className="flex flex-col gap-2 bg-gray-50 p-2 lg:hidden">
                 {products.map((product) => (
                     <ProductCard 
                         key={product.id} 
@@ -19,69 +19,69 @@ export const ProductsTable = () => {
             </ul>
 
             {/* Tabla de productos para dispositivos de escritorio */}
-            <Table className="hidden flex-col p-4 bg-gray-50 rounded-lg lg:flex">
+            <Table className="hidden lg:bg-gray-50 p-4 lg:table lg:table-fixed lg:border-spacing-6 lg:border-8 lg:border-gray-50">
                 <TableHeader>
-                    <TableRow className="flex w-full">
-                        <TableHead className="w-2/6">
+                    <TableRow>
+                        <TableHead className="w-60">
                             Producto
                         </TableHead>
-                        <TableHead className="w-1/6">
+                        <TableHead>
                             Categoría
                         </TableHead>
-                        <TableHead className="w-1/6">
+                        <TableHead>
                             Existencia
                         </TableHead>
-                        <TableHead className="w-1/6">
+                        <TableHead>
                             Precio x Unidad
                         </TableHead>
-                        <TableHead className="w-1/6">
+                        <TableHead>
                             Opciones
                         </TableHead>
                     </TableRow>
                 </TableHeader>
-                <TableBody className="flex flex-col gap-2">
+                <TableBody>
                     { products.map((product) => (
-                        <TableRow key={product.id} className="bg-white">
-                            <TableCell className="w-2/6">
-                            <div className="flex items-center gap-4">
-                                    <picture>
-                                        <img 
-                                            src={product.image} 
-                                            alt={`Imagen del producto ${product.image}`}
-                                            width={64}
-                                            height={64}
-                                            loading="lazy"
-                                            className="rounded-xl min-w-16 h-16"
-                                        />
-                                    </picture>
-                
-                                    <div className="flex flex-col justify-center">
-                                        <h3 className="font-medium line-clamp-1">
-                                            {product.name}
-                                        </h3>
-                
-                                        <p className="text-wrap text-[13px] line-clamp-2 pr-12 text-neutral-500">
-                                            {product.description}
-                                        </p>
-                                    </div>
-                            </div>
+                        <TableRow key={product.id} className="lg:border-b-2 lg:border-gray-200 lg:bg-white">
+                            <TableCell className="w-60">
+                                <div className="flex items-center gap-4">
+                                        <picture>
+                                            <img 
+                                                src={product.image} 
+                                                alt={`Imagen del producto ${product.image}`}
+                                                width={64}
+                                                height={64}
+                                                loading="lazy"
+                                                className="rounded-xl min-w-16 h-16"
+                                            />
+                                        </picture>
+                    
+                                        <div className="flex flex-col justify-center">
+                                            <h3 className="font-medium line-clamp-1">
+                                                {product.name}
+                                            </h3>
+                    
+                                            <p className="text-wrap text-[13px] line-clamp-2 pr-12 text-neutral-500">
+                                                {product.description}
+                                            </p>
+                                        </div>
+                                </div>
                             </TableCell>
                                 
-                            <TableCell className="w-1/6">
+                            <TableCell>
                                 <span className="font-medium text-sm text-white bg-orange-400 py-1 px-2 rounded-sm max-w-40 w-fit line-clamp-1">
                                     { product.categorie }
                                 </span>
                             </TableCell>
 
-                            <TableCell className="w-1/6">
+                            <TableCell>
                                 { product.stock } unidades
                             </TableCell>
 
-                            <TableCell className="w-1/6 font-medium">
+                            <TableCell className="font-medium">
                                 $ { product.price }
                             </TableCell>    
                             
-                            <TableCell className="w-1/6">
+                            <TableCell>
                                 <div className="inline-flex items-center gap-4">
                                     <Link 
                                         href={`/admin/products/${product.id}`} 
