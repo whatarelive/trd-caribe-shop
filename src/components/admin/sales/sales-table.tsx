@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import Link from "next/link";
 import { MdInfoOutline } from "react-icons/md";
+import { SalesCard } from "@/components/admin/sales/sales-card";
 import { Pagination } from "@/components/ui/pagination/pagination";
 import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from "@/components/ui/table"
 import { sales } from "@/lib/data/sales";
@@ -10,14 +11,14 @@ export const SalesTable = () => {
     return (
         <>
             {/* Listado de ventas para dispositivos moviles */}
-            {/* <ul className="flex flex-col gap-2 bg-gray-50 p-2 lg:hidden">
-                {users.map((user) => (
-                    <UserCard
-                        key={user.id} 
-                        user={user}
+            <ul className="flex flex-col gap-2 bg-gray-50 p-2 lg:hidden">
+                {sales.map((sale) => (
+                    <SalesCard
+                        key={sale.id} 
+                        sale={sale}
                     />
                 ))}
-            </ul> */}
+            </ul>
 
             {/* Tabla de ventas para dispositivos de escritorio */}
             <Table className="hidden lg:bg-gray-50 p-4 lg:table lg:table-fixed lg:border-spacing-6 lg:border-8 lg:border-gray-50">
