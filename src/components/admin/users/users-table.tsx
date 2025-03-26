@@ -8,7 +8,7 @@ import { users } from "@/lib/data/users";
 export const UsersTable = () => {
     return (
         <>
-            {/* Listado de productos para dispositivos moviles */}
+            {/* Listado de usuarios para dispositivos moviles */}
             <ul className="flex flex-col gap-2 bg-gray-50 p-2 lg:hidden">
                 {users.map((user) => (
                     <UserCard
