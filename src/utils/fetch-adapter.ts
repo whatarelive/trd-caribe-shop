@@ -1,3 +1,4 @@
+import { config } from '../middleware';
 /**
  * Configuración para las peticiones HTTP
  * @interface RequestConfig
@@ -99,6 +100,7 @@ export class FetchAdapter {
             method,
             headers,
             body: data ? JSON.stringify(data) : undefined,
+            cache: method === "GET" ? "force-cache" : "default"
         });
 
         // Parsear la data 
@@ -134,7 +136,7 @@ export class FetchAdapter {
      * });
      */
     async get<T>(url: string, config?: RequestConfig): Promise<FetchResponse<T>> {
-        return this.request<T>('GET', url, undefined, config);
+        return this.request<T>('GET', url, undefined, {...config, });
     }
 
     /**
