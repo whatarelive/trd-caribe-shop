@@ -18,11 +18,7 @@ export default function UsersPage() {
                 />
             </div>
 
-            <ToolsSectionPage 
-                placeholder="Buscar usuarios" 
-                destiny="/admin/users/create" 
-                label="Nuevo Usuario"
-            />
+            <ToolsSectionPage placeholder="Buscar usuarios"/>
             
             <Suspense fallback={<p>Cargando...</p>}>
                 <UsersTable />   
