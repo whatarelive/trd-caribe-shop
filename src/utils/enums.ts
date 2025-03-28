@@ -14,3 +14,9 @@ export enum SaleStatus {
     DELIVERED = "Entregada", 
     CANCELED = "Cancelada",
 }
+
+export enum PromotionChoice {
+    greater = "Mayor que", 
+    less = "Menor que", 
+    between = "Entre",
+}
