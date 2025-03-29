@@ -7,7 +7,7 @@ interface Props {
 }
 
 export const Table: FC<Props> = ({ className, children }) => (
-  <div className="relative w-full overflow-none">
+  <div className="lg:relative w-full overflow-none rounded-lg lg:bg-gray-50 lg:p-1">
     <table className={cn("w-full caption-bottom text-sm", className)}>
       { children }
     </table>
@@ -21,7 +21,7 @@ export const TableHeader: FC<Props> = ({ className, children }) => (
 )
 
 export const TableBody: FC<Props> = ({ className, children }) => (
-  <tbody className={cn("[&_tr:last-child]:border-0", className)}>
+  <tbody className={className}>
     { children }
   </tbody>
 )
@@ -33,7 +33,7 @@ export const TableFooter: FC<Props> = ({ className, children }) => (
 )
 
 export const TableRow: FC<Props> = ({ className, children }) => (
-  <tr className={cn("border-b-4 border-white transition-colors", className)}>
+  <tr className={className}>
     { children }
   </tr>
 )

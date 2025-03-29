@@ -5,8 +5,8 @@ import { SearchInput } from "@/components/ui/input/input-search";
 
 interface Props {
     placeholder: string;
-    destiny: string;
-    label: string;
+    destiny?: string;
+    label?: string;
 }
 
 export const ToolsSectionPage: FC<Props> = ({ placeholder, destiny, label }) => {
@@ -14,16 +14,20 @@ export const ToolsSectionPage: FC<Props> = ({ placeholder, destiny, label }) => 
         <div className="flex gap-2 lg:gap-4">
             <SearchInput placeholder={placeholder}/>
 
-            <Link 
-                href={destiny} 
-                className="flex h-11 min-w-fit items-center gap-2 font-normal px-2 rounded-md bg-blue-500 text-white hover:bg-blue-600"
-            >
-                <MdAdd size={24} className="min-w-6 min-h-6"/>
-                
-                <span className="hidden lg:block min-w-fit">
-                    { label }
-                </span>
-            </Link>
+            {
+                ( destiny && label ) && (
+                    <Link 
+                        href={destiny} 
+                        className="flex h-11 min-w-fit items-center gap-2 font-normal px-2 rounded-md bg-blue-500 text-white hover:bg-blue-600"
+                    >
+                        <MdAdd size={24} className="min-w-6 min-h-6"/>
+                        
+                        <span className="hidden lg:block min-w-fit">
+                            { label }
+                        </span>
+                    </Link>
+                ) 
+            }
         </div>
     )
 }

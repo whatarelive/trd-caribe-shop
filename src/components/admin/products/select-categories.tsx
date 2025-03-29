@@ -16,6 +16,8 @@ interface Props extends DetailedHTMLProps<SelectHTMLAttributes<HTMLSelectElement
  * Permite al usuario seleccionar una categoría de una lista predefinida.
  */
 export const SelectCategories: FC<Props> = ({ label, categories, errors, ...props }) => {
+    const Children = props.children;
+
     return (
         <div className="input-container">
             {/* Etiqueta del campo de selección */}
@@ -38,9 +40,19 @@ export const SelectCategories: FC<Props> = ({ label, categories, errors, ...prop
                     { ...props }
                 >
                     {/* Opción por defecto */}
-                    <option value="">
-                        Seleccione una categoría
-                    </option>
+                    {
+                        /* Si se encuentra en la pantalla de informacion del producto se pone 
+                        la categoría de ese producto como opción por defecto */ 
+                    }
+                    {
+                        Children ? (
+                            Children
+                        ) : (
+                            <option value="">
+                                Seleccione una categoría
+                            </option>
+                        )
+                    }
 
                     {/* Mapeo de las categorías disponibles */}
                     {
