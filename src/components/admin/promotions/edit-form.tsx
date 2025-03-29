@@ -87,18 +87,28 @@ export const EditPromotionForm: FC<Props> = ({ promotion }) => {
                 }
             </div>
 
-            <button 
-                type="submit" 
-                className="button-primary h-12 mt-4"
-                // disabled={isPending}
-            >
-                {/* {
-                    isPending 
-                        ? <span className="loader"></span> 
-                        : 'Crear promoción'
-                } */}
-                Guardar promoción
-            </button>
+            {/* Botones para actualizar o eliminar la promoción */}
+            <div className="flex justify-end flex-col md:flex-row gap-2 md:gap-4">
+                <button 
+                    type="submit" 
+                    className="button-primary grow h-12 mt-4"
+                    // disabled={isPending}
+                >
+                    {/* {
+                        isPending 
+                            ? <span className="loader"></span> 
+                            : 'Crear promoción'
+                    } */}
+                    Guardar promoción
+                </button>
+
+                <button 
+                    type="button" 
+                    className="grow border rounded-md border-neutral-400 text-neutral-400 hover:border-red-500 hover:text-red-500 font-medium cursor-pointer p-2 h-12 mt-4"
+                >
+                    Eliminar Promoción
+                </button>
+            </div>
         </form>
     )
 }
