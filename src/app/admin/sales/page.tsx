@@ -10,7 +10,10 @@ interface Props {
 }
 
 export default async function SalesPage({ searchParams }: Props) {
-    const { page, status } = await searchParams;
+    const { 
+        // page, 
+        status 
+    } = await searchParams;
 
     return (
         <section className="flex flex-col gap-6 w-full p-4 min-[375px]:p-8 xl:pr-16">

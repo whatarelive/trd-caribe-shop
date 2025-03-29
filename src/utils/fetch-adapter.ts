@@ -1,4 +1,3 @@
-import { config } from '../middleware';
 /**
  * Configuración para las peticiones HTTP
  * @interface RequestConfig

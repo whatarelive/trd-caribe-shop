@@ -1,13 +1,13 @@
 "use client";
 
-import { FC, useActionState, useRef, useState } from 'react';
+import { FC, useRef, useState } from 'react';
 import { IoCloudUploadOutline } from 'react-icons/io5';
-import { useFormError } from '@/lib/hooks/useFormError';
+// import { useFormError } from '@/lib/hooks/useFormError';
 import { TextInput } from '@/components/ui/input/input-text';
 import { ModalCreateCategorie } from '@/components/admin/categories/modal-create';
 import { ModalListCategorie } from '@/components/admin/categories/modal-list';
 import { SelectCategories } from '@/components/admin/products/select-categories';
-import type { CreateProductState, IProducts } from '@/interfaces/models/product.interface';
+import type { IProducts } from '@/interfaces/models/product.interface';
 import type { ICategories } from '@/interfaces/models/categorie.interface';
 
 interface Props {
@@ -16,7 +16,7 @@ interface Props {
 }
 
 export const EditProductForm: FC<Props> = ({ product, categories }) => {
-    const initialState: CreateProductState = { errors: {} };
+    // const initialState: CreateProductState = { errors: {} };
 
     const [image, setImage] = useState<string | undefined>(product.image);
     
@@ -32,14 +32,14 @@ export const EditProductForm: FC<Props> = ({ product, categories }) => {
         setImage(file ? file.name : undefined);
     }
 
-    const [ errorMessage, formAction, isPending ] = useActionState(
-        async (state: CreateProductState, formData: FormData) => {
-            return {
+    // const [ _errorMessage, formAction, isPending ] = useActionState(
+    //     async (_state: CreateProductState, _formData: FormData) => {
+    //         return {
 
-            };
-        }, 
-        initialState
-    );
+    //         };
+    //     }, 
+    //     initialState
+    // );
     
     // const { showErrors, handleFocus } = useFormError({ errors: errorMessage });
 
@@ -47,7 +47,10 @@ export const EditProductForm: FC<Props> = ({ product, categories }) => {
     const restCategories = categories.filter((categ) => categ.name !== product.categorie);
 
     return (
-        <form action={formAction} className="flex flex-col mt-6 w-full md:bg-gray-50 md:p-6 md:rounded-lg">
+        <form 
+            // action={formAction} 
+            className="flex flex-col mt-6 w-full md:bg-gray-50 md:p-6 md:rounded-lg"
+        >
             {/* Sección con las fechas de creación y actualización */}
             <div className="flex flex-col justify-between my-4 md:mt-0 md:flex-row">
                 <span>
@@ -194,13 +197,14 @@ export const EditProductForm: FC<Props> = ({ product, categories }) => {
                 <button 
                     type="submit" 
                     className="button-primary w-full h-12 mt-4"
-                    disabled={isPending}
+                    // disabled={isPending}
                 >
-                    {
+                    {/* {
                         isPending 
                             ? <span className="loader"></span> 
                             : 'Guardar producto'
-                    }
+                    } */}
+                    Guardar Producto
                 </button>
 
                 <button 
