@@ -33,7 +33,7 @@ export const NavList = () => {
                 <IoCardOutline size={24} />
             </LinkComponent>
 
-            <LinkComponent href="/admin/complaints-suggestions" label="Quejas y Sugerencias" isActive={pathname.includes("/admin/complaints-suggestions")}>
+            <LinkComponent href="/admin/complaints-suggestions" label="Comentarios" isActive={pathname.includes("/admin/complaints-suggestions")}>
                 <IoChatboxEllipsesOutline size={24}/>
             </LinkComponent>
 

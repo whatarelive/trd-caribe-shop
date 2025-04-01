@@ -29,7 +29,7 @@ export const ComplaintsCard: FC<Props> = ({ suggestion }) => {
                 <div className="inline-flex items-center gap-2">
                     <MdPersonOutline size={24}/>
 
-                    <h3 className="text-lg font-medium line-clamp-1">
+                    <h3 className="text-lg line-clamp-1">
                         { suggestion.user }
                     </h3>
                 </div>
@@ -43,7 +43,7 @@ export const ComplaintsCard: FC<Props> = ({ suggestion }) => {
                         }
                     )}
                 >
-                    { `${suggestion.active}` }
+                    { suggestion.active ? "Resuelta" : "No resuelta" }
                 </span>
             </div>
 
@@ -51,7 +51,7 @@ export const ComplaintsCard: FC<Props> = ({ suggestion }) => {
 
             <div className="flex justify-between">
                 <DataSection label="Creado:" value={suggestion.created}/>
-                <DataSection label="Modificado:" value={suggestion.upate.length === 0 ? "--/--/--" : suggestion.upate}/>
+                <DataSection label="Resuelto:" value={suggestion.upate.length === 0 ? "--/--/--" : suggestion.upate}/>
             </div>
 
             <p className="line-clamp-5 text-wrap">

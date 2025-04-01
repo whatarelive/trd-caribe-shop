@@ -1,10 +1,10 @@
 import clsx from "clsx";
 import Link from "next/link";
 import { MdDeleteOutline, MdOutlineInfo } from "react-icons/md";
-import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from "@/components/ui/table";
 import { Pagination } from "@/components/ui/pagination/pagination";
+import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from "@/components/ui/table";
+import { ComplaintsCard } from "@/components/admin/complaints-suggestions/complaints-card";
 import { suggestions } from "@/lib/data/suggestions";
-import { ComplaintsCard } from "./complaints-card";
 
 export const ComplaintsAndSuggestionsTable = () => {
     return (
@@ -36,7 +36,7 @@ export const ComplaintsAndSuggestionsTable = () => {
                             Fecha de Creación
                         </TableHead>
                         <TableHead className="max-w-12">
-                            Fecha de Modificación
+                            Fecha de Respuesta
                         </TableHead>
                         <TableHead className="max-w-12">
                             Opciones
@@ -68,7 +68,7 @@ export const ComplaintsAndSuggestionsTable = () => {
                                         }
                                     )}
                                 >
-                                    { `${suggestion.active}` }
+                                    { suggestion.active ? "Resuelta" : "No resuelta" }
                                 </span>
                             </TableCell>
 

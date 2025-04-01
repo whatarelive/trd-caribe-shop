@@ -8,17 +8,17 @@ export default function ComplaintsAndSuggestionsPage() {
     return (
         <section className="flex flex-col gap-6 w-full p-4 min-[375px]:p-8 xl:pr-16">
             <div>
-                <TitlePage title="Listado de Quejas y Sugerencias"/>
+                <TitlePage title="Listado de Comentarios"/>
 
                 <BreadcrumbsPage 
                     breadcrumbs={[
                         { label: "Inicio", destiny: "/admin" },
                     ]} 
-                    final="Quejas y Sugerencias"
+                    final="Comentarios"
                 />
             </div>
 
-            <ToolsSectionPage placeholder="Buscar queja o sugerencia" />
+            <ToolsSectionPage placeholder="Buscar comentario" />
             
             <Suspense fallback={<p>Cargando...</p>}>
                 <ComplaintsAndSuggestionsTable />   
