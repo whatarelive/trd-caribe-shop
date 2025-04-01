@@ -78,7 +78,7 @@ export const UsersTable = () => {
                                 <div className="inline-flex items-center gap-4">
                                     <button 
                                         className={clsx(
-                                            "p-2 rounded-md border border-neutral-500 hover:text-white",
+                                            "p-2 rounded-md border border-neutral-500 cursor-pointer hover:text-white",
                                             {
                                                 "hover:bg-red-400 hover:border-red-400": user.is_staff,
                                                 "hover:bg-green-400 hover:border-green-400": !user.is_staff 

@@ -26,12 +26,6 @@ export const TableBody: FC<Props> = ({ className, children }) => (
   </tbody>
 )
 
-export const TableFooter: FC<Props> = ({ className, children }) => (
-  <tfoot className={cn("border-t font-medium [&>tr]:last:border-b-0", className)}>
-    { children }
-  </tfoot>
-)
-
 export const TableRow: FC<Props> = ({ className, children }) => (
   <tr className={className}>
     { children }
@@ -48,10 +42,4 @@ export const TableCell: FC<Props> = ({ className, children }) => (
   <td className={cn("p-2 align-middle", className)}>
     { children }
   </td>
-)
-
-export const TableCaption: FC<Props> = ({ className, children }) => (
-  <caption className={cn("mt-4 text-sm", className)}>
-    { children }
-  </caption>
 )
