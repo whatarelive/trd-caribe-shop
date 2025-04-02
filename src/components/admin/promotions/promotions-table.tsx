@@ -21,7 +21,7 @@ export const PromotionsTable = () => {
             </ul>
 
             {/* Tabla de promociones para dispositivos de escritorio */}
-            <Table className="hidden lg:bg-gray-50 p-4 lg:table lg:table-fixed lg:border-spacing-6 lg:border-8 lg:border-gray-50">
+            <Table>
                 <TableHeader>
                     <TableRow>
                         <TableHead>

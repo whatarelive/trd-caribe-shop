@@ -19,7 +19,7 @@ export const UsersTable = () => {
             </ul>
 
             {/* Tabla de usuarios para dispositivos de escritorio */}
-            <Table className="hidden lg:bg-gray-50 p-4 lg:table lg:table-fixed lg:border-spacing-6 lg:border-8 lg:border-gray-50">
+            <Table>
                 <TableHeader>
                     <TableRow>
                         <TableHead>
@@ -41,7 +41,7 @@ export const UsersTable = () => {
                 </TableHeader>
                 <TableBody>
                     { users.map((user) => (
-                        <TableRow key={ user.id } className="lg:border-b-2 lg:border-gray-200 lg:bg-white">
+                        <TableRow key={ user.id } className="lg:bg-white lg:border-b-2 lg:border-gray-200">
                             <TableCell>
                                 <span className="line-clamp-1">
                                     { `${user.first_name} ${user.last_name}` }

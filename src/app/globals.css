@@ -25,6 +25,11 @@ body {
   @apply p-2 rounded-sm cursor-pointer font-semibold bg-blue-600 text-white hover:bg-blue-500
 }
 
+.button-primary-v2 {
+  @apply inline-flex items-center gap-1.5 p-2 rounded-md cursor-pointer font-semibold 
+  bg-gray-100 text-neutral-500 hover:text-white hover:bg-blue-500 transition-colors
+}
+
 .loader {
   width: 8px;
   height: 8px;

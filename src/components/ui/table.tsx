@@ -8,7 +8,8 @@ interface Props {
 
 export const Table: FC<Props> = ({ className, children }) => (
   <div className="lg:relative w-full overflow-none rounded-lg lg:bg-gray-50 lg:p-1">
-    <table className={cn("w-full caption-bottom text-sm", className)}>
+    <table className={cn(`w-full caption-bottom text-sm hidden lg:p-4 lg:bg-gray-50 lg:table 
+      lg:table-fixed lg:border-spacing-6 lg:border-8 lg:border-gray-50`, className)}>
       { children }
     </table>
   </div>
