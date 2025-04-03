@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { IoCardOutline, IoCartOutline, IoGridOutline, IoHomeOutline, IoPeopleOutline } from "react-icons/io5";
+import { IoCardOutline, IoCartOutline, IoChatboxEllipsesOutline, IoGridOutline, IoHomeOutline, IoPeopleOutline } from "react-icons/io5";
 import { LinkComponent } from '@/components/admin/nav/nav-links';
 
 /**
@@ -31,6 +31,10 @@ export const NavList = () => {
 
             <LinkComponent href="/admin/promotions" label="Promociones" isActive={pathname.includes("/admin/promotions")}>
                 <IoCardOutline size={24} />
+            </LinkComponent>
+
+            <LinkComponent href="/admin/complaints-suggestions" label="Comentarios" isActive={pathname.includes("/admin/complaints-suggestions")}>
+                <IoChatboxEllipsesOutline size={24}/>
             </LinkComponent>
 
             <LinkComponent href="/admin/users" label="Usuarios" isActive={pathname.includes("/admin/users")}>

@@ -54,6 +54,8 @@ export const authConfig: NextAuthConfig = {
                 token.refreshToken = user.refreshToken;
                 token.accessTokenExpires = Date.now() + 60 * 59 * 1000; // 59 minutos de vida
                 token.refreshTokenExpires = Date.now() + 23 * 60 * 60 * 1000; // 23 horas de vida
+            } else {
+                return token;
             }
 
             // Verificar si el token de refresco ha expirado

@@ -37,12 +37,6 @@ export async function logout() {
             isclose = true;
         }
 
-        // Si el codigo devuelto no es el esperado
-        if (resp.status !== 205) {
-            // Se lanza el error de cierre de sesión
-            throw new Error("Fallo el cierre de sesión");
-        }
-
     } catch (error) {
         // Se propaga el error a la ui, para el manejo en el cliente
         console.log(error);

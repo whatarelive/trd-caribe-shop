@@ -8,7 +8,8 @@ interface Props {
 
 export const Table: FC<Props> = ({ className, children }) => (
   <div className="lg:relative w-full overflow-none rounded-lg lg:bg-gray-50 lg:p-1">
-    <table className={cn("w-full caption-bottom text-sm", className)}>
+    <table className={cn(`w-full caption-bottom text-sm hidden lg:p-4 lg:bg-gray-50 lg:table 
+      lg:table-fixed lg:border-spacing-6 lg:border-8 lg:border-gray-50`, className)}>
       { children }
     </table>
   </div>
@@ -24,12 +25,6 @@ export const TableBody: FC<Props> = ({ className, children }) => (
   <tbody className={className}>
     { children }
   </tbody>
-)
-
-export const TableFooter: FC<Props> = ({ className, children }) => (
-  <tfoot className={cn("border-t font-medium [&>tr]:last:border-b-0", className)}>
-    { children }
-  </tfoot>
 )
 
 export const TableRow: FC<Props> = ({ className, children }) => (
@@ -48,10 +43,4 @@ export const TableCell: FC<Props> = ({ className, children }) => (
   <td className={cn("p-2 align-middle", className)}>
     { children }
   </td>
-)
-
-export const TableCaption: FC<Props> = ({ className, children }) => (
-  <caption className={cn("mt-4 text-sm", className)}>
-    { children }
-  </caption>
 )

@@ -1,11 +1,11 @@
-import clsx from "clsx";
 import Link from "next/link";
 import { MdInfoOutline } from "react-icons/md";
-import { SalesCard } from "@/components/admin/sales/sales-card";
 import { Pagination } from "@/components/ui/pagination/pagination";
 import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from "@/components/ui/table"
+import { SalesCard } from "@/components/admin/sales/sales-card";
+import { SaleMethod, SaleStatus } from "@/components/admin/sales/sales-utils";
+import { UserNameView } from "@/components/admin/users/users-utils";
 import { sales } from "@/lib/data/sales";
-import { SaleMethodPayment, SaleStatus } from "@/utils/enums";
 
 export const SalesTable = () => {
     return (
@@ -21,7 +21,7 @@ export const SalesTable = () => {
             </ul>
 
             {/* Tabla de ventas para dispositivos de escritorio */}
-            <Table className="hidden lg:bg-gray-50 p-4 lg:table lg:table-fixed lg:border-spacing-6 lg:border-8 lg:border-gray-50">
+            <Table>
                 <TableHeader>
                     <TableRow>
                         <TableHead>
@@ -42,42 +42,22 @@ export const SalesTable = () => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    { sales.map((sale) => (
-                        <TableRow key={ sale.id } className="lg:border-b-2 h-14 lg:border-gray-200 lg:bg-white">
+                    {sales.map(({ id, payment_method, status, total, user }) => (
+                        <TableRow key={id} className="lg:bg-white lg:border-b-2 lg:border-gray-200">
                             <TableCell>
-                                <span className="line-clamp-1">
-                                    { sale.user }
-                                </span>
+                                <UserNameView value={user}/>
                             </TableCell>
-                                
                             <TableCell>
-                                $ { sale.total }
+                                $ {total}
                             </TableCell>
-
                             <TableCell>
-                                <span className={clsx(
-                                    "p-1 text-sm rounded-md border", 
-                                    { 
-                                        "bg-blue-100 text-blue-500 border-blue-500": sale.status === "PAID",
-                                        "bg-neutral-100 text-neutral-500 border-neutral-500": sale.status === "PENDING",
-                                        "bg-yellow-100 text-yellow-500 border-y-amber-500": sale.status === "SHIPPED",
-                                        "bg-green-100 text-green-500 border-green-500" : sale.status === "DELIVERED", 
-                                        "bg-red-100 text-red-500 border-e-red-500" : sale.status === "CANCELED" 
-                                    }
-                                )}>
-                                    { SaleStatus[sale.status] }
-                                </span>
+                                <SaleStatus status={status}/>
                             </TableCell>
-
                             <TableCell>
-                                { SaleMethodPayment[sale.payment_method] }
+                                <SaleMethod method={payment_method}/>
                             </TableCell>    
-                            
                             <TableCell>
-                                <Link 
-                                    href={`/admin/sales/${sale.id}`} 
-                                    className="inline-flex items-center gap-2 font-medium p-2 rounded-md border border-neutral-300 hover:bg-blue-400 hover:text-white hover:border-blue-400"
-                                >
+                                <Link href={`/admin/sales/${id}`} className="button-primary-v2">
                                     <MdInfoOutline size={20}/>
                                     Detalles
                                 </Link>

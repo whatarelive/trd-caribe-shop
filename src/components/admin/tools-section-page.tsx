@@ -1,18 +1,23 @@
+import clsx from "clsx";
 import Link from "next/link";
-import type { FC } from "react";
 import { MdAdd } from "react-icons/md";
 import { SearchInput } from "@/components/ui/input/input-search";
+
+import type { FC } from "react";
 
 interface Props {
     placeholder: string;
     destiny?: string;
     label?: string;
+    children?: React.ReactNode;
 }
 
-export const ToolsSectionPage: FC<Props> = ({ placeholder, destiny, label }) => {
+export const ToolsSectionPage: FC<Props> = ({ placeholder, destiny, label, children }) => {
     return (
-        <div className="flex gap-2 lg:gap-4">
+        <div className={clsx("flex gap-2 lg:gap-4", { "flex-col md:flex-row" : children })}>
             <SearchInput placeholder={placeholder}/>
+
+            { children !== undefined && children }
 
             {
                 ( destiny && label ) && (
