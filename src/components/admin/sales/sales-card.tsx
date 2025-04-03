@@ -6,11 +6,7 @@ import { SaleMethod, SaleStatus } from "@/components/admin/sales/sales-utils";
 import type { FC } from "react";
 import type { ISales } from "@/interfaces/models/sales.interface";
 
-interface Props {
-    sale: ISales;
-}
-
-export const SalesCard: FC<Props> = ({ sale }) => {
+export const SalesCard: FC<{ sale: ISales }> = ({ sale }) => {
     return (
         <li className="p-4 bg-white rounded-md space-y-4">
             <div className="flex justify-between items-center">

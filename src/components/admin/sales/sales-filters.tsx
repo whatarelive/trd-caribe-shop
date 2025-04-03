@@ -45,3 +45,4 @@ export const SaleFilters = memo(() => {
         </div>
     )
 })
+SaleFilters.displayName = "SaleFilters"

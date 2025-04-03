@@ -20,7 +20,9 @@ export default async function SalesPage() {
             </div>
 
             <ToolsSectionPage placeholder="Buscar ventas">
-                <SaleFilters />
+                <Suspense fallback={<p>Cargando...</p>}>
+                    <SaleFilters />
+                </Suspense>
             </ToolsSectionPage>
             
             <Suspense fallback={<p>Cargando...</p>}>

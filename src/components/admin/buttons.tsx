@@ -20,3 +20,4 @@ export const ButtonDeleteItem: FC<Props> = memo(({ className, children }) => {
         </button>
     )
 })
+ButtonDeleteItem.displayName = "ButtonDeleteItem"
