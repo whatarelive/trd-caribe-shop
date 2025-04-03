@@ -1,8 +1,8 @@
-import clsx from "clsx";
-import { MdDeleteOutline, MdOutlinePublishedWithChanges } from "react-icons/md";
+import { ButtonDeleteItem } from "@/components/admin/buttons";
 import { Pagination } from "@/components/ui/pagination/pagination";
-import { UserCard } from "@/components/admin/users/user-card";
 import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from "@/components/ui/table"
+import { UserCard } from "@/components/admin/users/user-card";
+import { ButtonUserChangeRole, UsersRole } from "@/components/admin/users/users-utils";
 import { users } from "@/lib/data/users";
 
 export const UsersTable = () => {
@@ -40,59 +40,30 @@ export const UsersTable = () => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    { users.map((user) => (
-                        <TableRow key={ user.id } className="lg:bg-white lg:border-b-2 lg:border-gray-200">
+                    { users.map(({id, email, first_name, last_name, username, is_staff}) => (
+                        <TableRow key={id} className="lg:bg-white lg:border-b-2 lg:border-gray-200">
                             <TableCell>
                                 <span className="line-clamp-1">
-                                    { `${user.first_name} ${user.last_name}` }
+                                    {`${first_name} ${last_name}`}
                                 </span>
                             </TableCell>
-                                
                             <TableCell>
                                 <span className="line-clamp-1">
-                                    { user.username }
+                                    {username}
                                 </span>
                             </TableCell>
-
                             <TableCell>
                                 <span className="line-clamp-1">
-                                    { user.email }
+                                    {email}
                                 </span>
                             </TableCell>
-
                             <TableCell>
-                                <span 
-                                    className={clsx(
-                                        "p-1.5 rounded-md font-medium", 
-                                        { 
-                                            "bg-green-100 text-green-500" : user.is_staff, 
-                                            "bg-red-100 text-red-500" : !user.is_staff 
-                                        }
-                                    )}
-                                >
-                                    { user.is_staff ? "administrador" : "cliente" }
-                                </span>
-                            </TableCell>    
-                            
+                                <UsersRole isStaff={is_staff}/>
+                            </TableCell>                           
                             <TableCell>
                                 <div className="inline-flex items-center gap-4">
-                                    <button 
-                                        className={clsx(
-                                            "p-2 rounded-md border border-neutral-500 cursor-pointer hover:text-white",
-                                            {
-                                                "hover:bg-red-400 hover:border-red-400": user.is_staff,
-                                                "hover:bg-green-400 hover:border-green-400": !user.is_staff 
-                                            }
-                                        )}
-                                    >
-                                        <MdOutlinePublishedWithChanges size={20}/>
-                                    </button>
-
-                                    <button 
-                                        className="p-2 rounded-md border border-neutral-500 hover:bg-red-500 hover:text-white hover:border-red-500 cursor-pointer"
-                                    >
-                                        <MdDeleteOutline size={20}/>
-                                    </button>
+                                    <ButtonUserChangeRole isStaff={is_staff}/>
+                                    <ButtonDeleteItem/>
                                 </div>
                             </TableCell>
                         </TableRow>

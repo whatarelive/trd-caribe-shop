@@ -30,6 +30,11 @@ body {
   bg-gray-100 text-neutral-500 hover:text-white hover:bg-blue-500 transition-colors
 }
 
+.button-danger {
+  @apply p-2 rounded-md border border-neutral-500 hover:bg-red-500 hover:text-white 
+  hover:border-red-500 cursor-pointer
+}
+
 .loader {
   width: 8px;
   height: 8px;
