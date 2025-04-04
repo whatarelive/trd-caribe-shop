@@ -1,6 +1,7 @@
 "use client";
 
 import { FC, useRef, useState } from 'react';
+import { MdSaveAs } from 'react-icons/md';
 import { IoCloudUploadOutline } from 'react-icons/io5';
 // import { useFormError } from '@/lib/hooks/useFormError';
 import { TextInput } from '@/components/ui/input/input-text';
@@ -9,6 +10,7 @@ import { ModalListCategorie } from '@/components/admin/categories/modal-list';
 import { SelectCategories } from '@/components/admin/products/select-categories';
 import type { IProducts } from '@/interfaces/models/product.interface';
 import type { ICategories } from '@/interfaces/models/categorie.interface';
+import { ButtonDeleteItem } from '../buttons';
 
 interface Props {
     product: IProducts;
@@ -43,7 +45,7 @@ export const EditProductForm: FC<Props> = ({ product, categories }) => {
     
     // const { showErrors, handleFocus } = useFormError({ errors: errorMessage });
 
-    const productCategorie = categories.filter((categ) => categ.name === product.categorie).pop()!;
+    const productCategorie = categories.find((categ) => categ.name === product.categorie)!;
     const restCategories = categories.filter((categ) => categ.name !== product.categorie);
 
     return (
@@ -151,7 +153,7 @@ export const EditProductForm: FC<Props> = ({ product, categories }) => {
                             <ModalCreateCategorie/>
 
                             {/* Modal para listar las categorías */}
-                            <ModalListCategorie/>
+                            <ModalListCategorie categories={categories}/>
                         </div>
 
                         <TextInput 
@@ -193,10 +195,10 @@ export const EditProductForm: FC<Props> = ({ product, categories }) => {
             </div>
 
             {/* Botón para actualizar el prodcuto */}
-            <div className="flex justify-end flex-col md:flex-row gap-2 md:gap-4">
+            <div className="flex justify-end items-end flex-col md:flex-row gap-2 md:gap-4">
                 <button 
                     type="submit" 
-                    className="button-primary w-full h-12 mt-4"
+                    className="button-primary flex gap-1.5 justify-center items-center w-full h-12 mt-4"
                     // disabled={isPending}
                 >
                     {/* {
@@ -204,15 +206,13 @@ export const EditProductForm: FC<Props> = ({ product, categories }) => {
                             ? <span className="loader"></span> 
                             : 'Guardar producto'
                     } */}
+                    <MdSaveAs size={20}/>
                     Guardar Producto
                 </button>
 
-                <button 
-                    type="button" 
-                    className="border border-neutral-400 text-neutral-400 hover:border-red-500 hover:text-red-500 font-medium cursor-pointer w-full p-2 h-12 mt-4"
-                >
+                <ButtonDeleteItem className="flex w-full justify-center items-center gap-1.5 h-12">
                     Eliminar Producto
-                </button>
+                </ButtonDeleteItem>
             </div>
         </form>
     )

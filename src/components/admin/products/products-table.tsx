@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { MdOutlineEdit, MdDeleteOutline } from "react-icons/md";
+import { MdOutlineEdit } from "react-icons/md";
+import { ButtonDeleteItem } from '@/components/admin/buttons';
 import { Pagination } from '@/components/ui/pagination/pagination';
 import { ProductCard } from '@/components/admin/products/product-card';
 import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from "@/components/ui/table"
@@ -44,57 +45,46 @@ export const ProductsTable = () => {
                         <TableRow key={product.id} className="lg:border-b-2 lg:border-gray-200 lg:bg-white">
                             <TableCell className="w-60">
                                 <div className="flex items-center gap-4">
-                                        <picture>
-                                            <img 
-                                                src={product.image} 
-                                                alt={`Imagen del producto ${product.image}`}
-                                                width={64}
-                                                height={64}
-                                                loading="lazy"
-                                                className="rounded-xl min-w-16 h-16"
-                                            />
-                                        </picture>
-                    
-                                        <div className="flex flex-col justify-center">
-                                            <h3 className="font-medium line-clamp-1">
-                                                {product.name}
-                                            </h3>
-                    
-                                            <p className="text-wrap text-[13px] line-clamp-2 pr-12 text-neutral-500">
-                                                {product.description}
-                                            </p>
-                                        </div>
+                                    <picture>
+                                        <img 
+                                            src={product.image} 
+                                            alt={`Imagen del producto ${product.image}`}
+                                            width={64}
+                                            height={64}
+                                            loading="lazy"
+                                            className="rounded-xl min-w-16 h-16"
+                                        />
+                                    </picture>
+                
+                                    <div className="flex flex-col justify-center">
+                                        <h3 className="font-medium line-clamp-1">
+                                            {product.name}
+                                        </h3>
+                
+                                        <p className="text-wrap text-[13px] line-clamp-2 pr-12 text-neutral-500">
+                                            {product.description}
+                                        </p>
+                                    </div>
                                 </div>
                             </TableCell>
-                                
                             <TableCell>
                                 <span className="font-medium text-sm text-white bg-orange-400 py-1 px-2 rounded-sm max-w-40 w-fit line-clamp-1">
                                     { product.categorie }
                                 </span>
                             </TableCell>
-
                             <TableCell>
                                 { product.stock } unidades
                             </TableCell>
-
                             <TableCell className="font-medium">
                                 $ { product.price }
                             </TableCell>    
-                            
                             <TableCell>
                                 <div className="inline-flex items-center gap-4">
-                                    <Link 
-                                        href={`/admin/products/${product.id}`} 
-                                        className="p-2 rounded-md border border-neutral-500 hover:bg-blue-400 hover:text-white hover:border-blue-400"
-                                    >
+                                    <Link href={`/admin/products/${product.id}`} className="button-primary-v2">
                                         <MdOutlineEdit size={20}/>
                                     </Link>
 
-                                    <button 
-                                        className="p-2 rounded-md border border-neutral-500 hover:bg-red-500 hover:text-white hover:border-red-500 cursor-pointer"
-                                    >
-                                        <MdDeleteOutline size={20}/>
-                                    </button>
+                                    <ButtonDeleteItem/>
                                 </div>
                             </TableCell>
                         </TableRow>
