@@ -13,7 +13,11 @@ export const ButtonDeleteItem: FC<Props> = memo(({ className, children }) => {
     return (
         <button
             onClick={() => {}}
-            className={cn("button-danger", className)}
+            className={cn(
+                `p-2 rounded-md bg-gray-100 text-gray-400 hover:bg-red-500 hover:text-white hover:border-red-500 
+                transition-colors cursor-pointer`, 
+                className
+            )}
         >
             <MdDeleteOutline size={20}/>
             {children}

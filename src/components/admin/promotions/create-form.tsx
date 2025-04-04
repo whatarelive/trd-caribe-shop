@@ -49,7 +49,7 @@ export const CreatePromotionForm = () => {
 
             <div className="flex flex-col md:flex-row gap-4">
                 { 
-                    type !== "greater" && (
+                    type !== "less" && (
                         <TextInput 
                             label="Valor minimo" 
                             type="number"
@@ -64,7 +64,7 @@ export const CreatePromotionForm = () => {
                 }
 
                 {
-                    type !== "less" && (
+                    type !== "greater" && (
                         <TextInput 
                             label="Valor máximo" 
                             type="number" 
@@ -87,9 +87,9 @@ export const CreatePromotionForm = () => {
                 {/* {
                     isPending 
                         ? <span className="loader"></span> 
-                        : 'Crear promoción'
+                        : 'Crear Promoción'
                 } */}
-                Crear promoción
+                Crear Promoción
             </button>
         </form>
     )

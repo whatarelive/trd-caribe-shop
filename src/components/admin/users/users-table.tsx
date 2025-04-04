@@ -2,7 +2,7 @@ import { ButtonDeleteItem } from "@/components/admin/buttons";
 import { Pagination } from "@/components/ui/pagination/pagination";
 import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from "@/components/ui/table"
 import { UserCard } from "@/components/admin/users/user-card";
-import { ButtonUserChangeRole, UsersRole } from "@/components/admin/users/users-utils";
+import { ButtonUserChangeRole, UserNameView, UsersRole } from "@/components/admin/users/users-utils";
 import { users } from "@/lib/data/users";
 
 export const UsersTable = () => {
@@ -43,9 +43,7 @@ export const UsersTable = () => {
                     { users.map(({id, email, first_name, last_name, username, is_staff}) => (
                         <TableRow key={id} className="lg:bg-white lg:border-b-2 lg:border-gray-200">
                             <TableCell>
-                                <span className="line-clamp-1">
-                                    {`${first_name} ${last_name}`}
-                                </span>
+                                <UserNameView value={`${first_name} ${last_name}`}/>
                             </TableCell>
                             <TableCell>
                                 <span className="line-clamp-1">

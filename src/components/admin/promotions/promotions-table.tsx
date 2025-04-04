@@ -1,11 +1,11 @@
-import clsx from "clsx";
 import Link from "next/link";
-import { MdArrowDownward, MdArrowUpward, MdDeleteOutline, MdOutlineCompareArrows, MdOutlineEdit } from "react-icons/md";
+import { MdOutlineEdit } from "react-icons/md";
 import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from "@/components/ui/table";
-import { PromotionCard } from "@/components/admin/promotions/promotion-card";
 import { Pagination } from "@/components/ui/pagination/pagination";
+import { ButtonDeleteItem } from "@/components/admin/buttons";
+import { PromotionCard } from "@/components/admin/promotions/promotion-card";
+import { PromotionChoice } from "@/components/admin/promotions/promotions-utils";
 import { promotions } from "@/lib/data/promotions";
-import { PromotionChoice } from "@/utils/enums";
 
 export const PromotionsTable = () => {
     return (
@@ -45,59 +45,32 @@ export const PromotionsTable = () => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    { promotions.map((promo) => (
-                        <TableRow key={ promo.id } className="lg:border-b-2 lg:border-gray-200 lg:bg-white">
+                    { promotions.map(({ id, name, choice, porcentage, max_price, min_price }) => (
+                        <TableRow key={id} className="lg:border-b-2 lg:border-gray-200 lg:bg-white">
                             <TableCell>
                                 <span className="line-clamp-1">
-                                    { promo.name }
+                                    {name}
                                 </span>
                             </TableCell>
-                                
                             <TableCell>
-                                { promo.porcentage } %
+                                {porcentage} %
                             </TableCell>
-
                             <TableCell>
-                                <span 
-                                    className={clsx(
-                                        "inline-flex gap-2 items-center font-medium",
-                                        {
-                                            "text-red-500" : promo.choice === "less",
-                                            "text-green-500" : promo.choice === "greater",
-                                            "text-blue-500" : promo.choice === "between",
-                                        }
-                                    )}
-                                >              
-                                    { promo.choice === "greater" && <MdArrowUpward size={18}/> }
-                                    { promo.choice === "less" && <MdArrowDownward size={18}/> }
-                                    { promo.choice === "between" && <MdOutlineCompareArrows size={20}/> }
-
-                                    { PromotionChoice[promo.choice] }
-                                </span>
+                                <PromotionChoice choice={choice}/>
                             </TableCell>
-
                             <TableCell>
-                                { promo.min_price ? `$ ${promo.min_price}` : "-" }
-                            </TableCell>    
-                            
-                            <TableCell>
-                                { promo.max_price ? `$ ${promo.max_price}` : "-" }
+                                {min_price ? `$ ${min_price}` : "-"}
                             </TableCell>
-
+                            <TableCell>
+                                {max_price ? `$ ${max_price}` : "-"}
+                            </TableCell>
                             <TableCell>
                                 <div className="inline-flex items-center gap-4">
-                                    <Link 
-                                        href={`/admin/promotions/${promo.id}`} 
-                                        className="p-2 rounded-md border border-neutral-500 hover:bg-blue-400 hover:text-white hover:border-blue-400"
-                                    >
+                                    <Link href={`/admin/promotions/${id}`} className="button-primary-v2">
                                         <MdOutlineEdit size={20}/>
                                     </Link>
 
-                                    <button 
-                                        className="p-2 rounded-md border border-neutral-500 hover:bg-red-500 hover:text-white hover:border-red-500 cursor-pointer"
-                                    >
-                                        <MdDeleteOutline size={20}/>
-                                    </button>
+                                    <ButtonDeleteItem />
                                 </div>
                             </TableCell>
                         </TableRow>

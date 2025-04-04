@@ -55,7 +55,7 @@ export const DataSection: FC<DataSectionProps> = ({ label, value, className }) =
     return (
         <div className={cn("flex justify-between gap-2", className)}>
             <h4>{ label }</h4>
-            <b>$ { value }</b>
+            <b>{ value }</b>
         </div>
     )
 } 

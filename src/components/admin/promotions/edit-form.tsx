@@ -99,7 +99,7 @@ export const EditPromotionForm: FC<Props> = ({ promotion }) => {
                             ? <span className="loader"></span> 
                             : 'Crear promoción'
                     } */}
-                    Guardar promoción
+                    Guardar Promoción
                 </button>
 
                 <button 

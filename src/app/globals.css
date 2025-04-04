@@ -26,13 +26,12 @@ body {
 }
 
 .button-primary-v2 {
-  @apply inline-flex items-center gap-1.5 p-2 rounded-md cursor-pointer font-semibold 
-  bg-gray-100 text-neutral-500 hover:text-white hover:bg-blue-500 transition-colors
+  @apply inline-flex items-center gap-1.5 p-2 rounded-md cursor-pointer font-semibold text-gray-400 
+  bg-gray-100 hover:text-white hover:bg-blue-500 transition-colors
 }
 
-.button-danger {
-  @apply p-2 rounded-md border border-neutral-500 hover:bg-red-500 hover:text-white 
-  hover:border-red-500 cursor-pointer
+.button-primary-v3 {
+  @apply flex bg-blue-400 p-2 rounded-md gap-1.5 text-white font-semibold justify-center
 }
 
 .loader {
