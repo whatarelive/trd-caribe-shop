@@ -31,7 +31,7 @@ body {
 }
 
 .button-primary-v3 {
-  @apply flex bg-blue-400 p-2 rounded-md gap-1.5 text-white font-semibold justify-center active:bg-blue-500
+  @apply flex items-center bg-blue-400 p-2 rounded-md gap-1.5 text-white font-semibold justify-center active:bg-blue-500
 }
 
 .loader {

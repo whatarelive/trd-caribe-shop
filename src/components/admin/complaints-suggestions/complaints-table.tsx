@@ -1,9 +1,11 @@
-import clsx from "clsx";
 import Link from "next/link";
-import { MdDeleteOutline, MdOutlineInfo } from "react-icons/md";
+import { MdOutlineInfo } from "react-icons/md";
+import { ButtonDeleteItem } from "@/components/admin/buttons";
 import { Pagination } from "@/components/ui/pagination/pagination";
 import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from "@/components/ui/table";
+import { UserNameView } from "@/components/admin/users/users-utils";
 import { ComplaintsCard } from "@/components/admin/complaints-suggestions/complaints-card";
+import { ComplaintState } from "@/components/admin/complaints-suggestions/complaints-utils";
 import { suggestions } from "@/lib/data/suggestions";
 
 export const ComplaintsAndSuggestionsTable = () => {
@@ -23,77 +25,45 @@ export const ComplaintsAndSuggestionsTable = () => {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead className="max-w-16">
+                        <TableHead>
                             Usuario
                         </TableHead>
-                        <TableHead className="max-w-60">
-                            Comentario
-                        </TableHead>
-                        <TableHead className="max-w-12 px-6">
+                        <TableHead>
                             Estado
                         </TableHead>
-                        <TableHead className="max-w-12">
+                        <TableHead>
                             Fecha de Creación
                         </TableHead>
-                        <TableHead className="max-w-12">
+                        <TableHead>
                             Fecha de Respuesta
                         </TableHead>
-                        <TableHead className="max-w-12">
+                        <TableHead>
                             Opciones
                         </TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    { suggestions.map((suggestion) => (
-                        <TableRow key={ suggestion.id } className="lg:border-b-2 lg:border-gray-200 lg:bg-white">
+                    { suggestions.map(({id, active, created, upate, user}) => (
+                        <TableRow key={ id } className="lg:border-b-2 lg:border-gray-200 lg:bg-white">
                             <TableCell>
-                                <span className="line-clamp-1 text-wrap">
-                                    { suggestion.user }
-                                </span>
+                                <UserNameView value={user}/>
                             </TableCell>
-                                
+                            <TableCell className="">
+                               <ComplaintState active={active}/>
+                            </TableCell>
                             <TableCell>
-                                <span className="line-clamp-2">
-                                    { suggestion.text }
-                                </span>
-                            </TableCell>
-
-                            <TableCell className="px-6">
-                                <span 
-                                    className={clsx(
-                                        "border p-1.5 rounded-sm",
-                                        {
-                                            "bg-green-100 border-green-500 text-green-500" : suggestion.active,
-                                            "bg-red-100 border-red-500 text-red-500" : !suggestion.active,
-                                        }
-                                    )}
-                                >
-                                    { suggestion.active ? "Resuelta" : "No resuelta" }
-                                </span>
-                            </TableCell>
-
-                            <TableCell>
-                                { suggestion.created }
+                                { created }
                             </TableCell>    
-                            
                             <TableCell>
-                                { suggestion.upate.length === 0 ? "--/--/--" : suggestion.upate }
+                                { upate.length === 0 ? "--/--/--" : upate }
                             </TableCell>
-
                             <TableCell>
                                 <div className="inline-flex items-center gap-4">
-                                    <Link 
-                                        href={`/admin/complaints-suggestions/${suggestion.id}`} 
-                                        className="p-2 rounded-md border border-neutral-500 hover:bg-blue-400 hover:text-white hover:border-blue-400"
-                                    >
+                                    <Link href={`/admin/complaints-suggestions/${id}`} className="button-primary-v2">
                                         <MdOutlineInfo size={20}/>
                                     </Link>
 
-                                    <button 
-                                        className="p-2 rounded-md border border-neutral-500 hover:bg-red-500 hover:text-white hover:border-red-500 cursor-pointer"
-                                    >
-                                        <MdDeleteOutline size={20}/>
-                                    </button>
+                                    <ButtonDeleteItem/>
                                 </div>
                             </TableCell>
                         </TableRow>
