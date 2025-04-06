@@ -133,10 +133,10 @@ export const authConfig: NextAuthConfig = {
 
                 } else {
                     // Si es un intento de login, hacer la petición al endpoint de login
-                    const { data } = await shopApi.post<LoginPost, UserLogin>('/user/login/', { ...user });
+                    const { data, status } = await shopApi.post<LoginPost, UserLogin>('/user/login/', { ...user });
 
                     // Si no hay datos en la respuesta, retornar null
-                    if (!data) return null;
+                    if (!data || status === 400 || status === 401) return null;
                     
                     // Retornar los datos del usuario y sus tokens de acceso
                     return {

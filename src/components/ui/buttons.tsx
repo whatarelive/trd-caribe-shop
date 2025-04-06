@@ -45,8 +45,8 @@ export const ButtonOpenSidebar = () => {
     return (
         <button 
             onClick={() => setIsOpen(!isOpen)}
-            className={`lg:hidden inline-flex items-center justify-center p-2 rounded-lg bg-neutral-50 cursor-pointer 
-            hover:bg-neutral-100 transition-colors`}
+            className={`lg:hidden inline-flex items-center justify-center p-2 rounded-md cursor-pointer 
+            active:bg-gray-50 active:text-blue-500 transition-colors`}
         >
             <IoMenu size={28}/>
         </button>
