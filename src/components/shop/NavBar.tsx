@@ -31,7 +31,7 @@ export const NavBar = async () => {
                 </Link>
 
                 {
-                    !session?.isAuthenticated ? (
+                    session?.isAuthenticated ? (
                         <>
                             <Link href="/cart/" className="hover:bg-gray-50 hover:text-blue-400 rounded-md p-2">
                                 <MdOutlineShoppingCart size={24}/>
