@@ -3,6 +3,7 @@ import { auth } from "@/auth.config";
 import { BsPersonCircle } from "react-icons/bs";
 import { MdOutlineShoppingCart, MdSearch } from "react-icons/md";
 import { ButtonOpenSidebar } from "@/components/ui/buttons";
+import { CategoriesList } from "@/components/shop/nav/CategoriesList";
 
 export const NavBar = async () => {
     const session = await auth();
@@ -14,13 +15,13 @@ export const NavBar = async () => {
                     <h1>Tienda Caribe</h1>
                 </Link>
 
-                <nav className="hidden gap-2 lg:flex">
+                <nav className="hidden gap-2 lg:flex lg:items-center">
                     <Link href="/" className="hover:bg-gray-50 hover:text-blue-400 rounded-md p-1 px-3">
                         Inicio
                     </Link>
-                    <Link href="/categories/" className="hover:bg-gray-50 hover:text-blue-400 rounded-md p-1 px-3">
-                        Categorías
-                    </Link>
+
+                    <CategoriesList/>
+                    
                     <Link href="/complaints-suggestions/" className="hover:bg-gray-50 hover:text-blue-400 rounded-md p-1 px-3">
                         Comentarios
                     </Link>

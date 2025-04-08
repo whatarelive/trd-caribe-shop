@@ -1,5 +1,5 @@
 import { Footer } from "@/components/shop/Footer";
-import { NavBar } from "@/components/shop/NavBar";
+import { NavBar } from "@/components/shop/nav/NavBar";
 import type { ILayout } from "@/interfaces/components";
 
 export default function ShopLayout({ children }: ILayout) {

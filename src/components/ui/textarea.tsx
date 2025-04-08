@@ -1,5 +1,6 @@
-import { ITextArea } from "@/interfaces/components";
 import { cn } from "@/utils/tailwind-cn";
+import { ITextArea } from "@/interfaces/components";
+
 import type { FC } from "react";
 
 export const Textarea: FC<ITextArea> = ({ label, errors, className, ...props }) => {

@@ -1,9 +1,8 @@
-import Link from "next/link";
-import { Pagination } from "@/components/ui/pagination/pagination";
-import { suggestions } from "@/lib/data/suggestions";
-import { ComplaintsCard } from "@/components/shop/complaints-suggestions/complaints-card";
 import { Textarea } from "@/components/ui/textarea";
 import { TextInput } from "@/components/ui/input/input-text";
+import { Pagination } from "@/components/ui/pagination/pagination";
+import { ComplaintsCard } from "@/components/shop/complaints-suggestions/complaints-card";
+import { suggestions } from "@/lib/data/suggestions";
 
 export default function ComplaintsPage() {
     return (
@@ -61,7 +60,7 @@ export default function ComplaintsPage() {
     
                     <button 
                         type="submit" 
-                        className="button-primary w-full h-12 mt-4"
+                        className="button-primary w-full h-12 mt-10"
                         // disabled={isPending}
                     >
                         {/* {
