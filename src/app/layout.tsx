@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: ILayout) {
     return (
         <html lang="es">
-            <body className={`${fontTitle.className} antialiased relative`}>
+            <body className={`${fontTitle.className} antialiased`}>
                 {children}
             </body>
         </html>

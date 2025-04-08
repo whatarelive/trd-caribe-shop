@@ -2,11 +2,13 @@ import Link from "next/link";
 import { Pagination } from "@/components/ui/pagination/pagination";
 import { suggestions } from "@/lib/data/suggestions";
 import { ComplaintsCard } from "@/components/shop/complaints-suggestions/complaints-card";
+import { Textarea } from "@/components/ui/textarea";
+import { TextInput } from "@/components/ui/input/input-text";
 
 export default function ComplaintsPage() {
     return (
         <>
-            <section className="max-w-7xl mx-auto w-full mb-8 py-8 text-center">
+            <section className="max-w-7xl mx-auto w-full mb-4 py-8 text-center">
                 <h2 className="text-3xl font-bold">
                     Comentarios de nuestros clientes
                 </h2>
@@ -14,10 +16,6 @@ export default function ComplaintsPage() {
                 <p className="mt-2 mb-4 text-muted-foreground">
                     Descubre lo que opinan nuestros clientes sobre nuestros productos
                 </p>
-
-                <Link href="/complaints-suggestions/create" className="button-primary">
-                    Agregar Comentario
-                </Link>
             </section>
 
             {/* Sección Listado de comentarios */}
@@ -30,9 +28,50 @@ export default function ComplaintsPage() {
                     }
                 </ul>
 
-                <div className="mb-16 mt-12">
+                <div className="my-8">
                     <Pagination totalPages={6} />
                 </div>
+            </section>
+
+            <section className="mx-auto mb-16 mt-6 max-w-7xl bg-white rounded-md p-6 shadow-lg">
+                <h2 className="text-3xl font-bold">
+                    Haz tu comentario
+                </h2>
+
+                <p className="mb-4 text-muted-foreground">
+                    Danos una comentario como cliente fiel sobre nuestros productos
+                </p>
+
+                <form>
+                    <TextInput 
+                        label="Nombre" 
+                        type="text" 
+                        name="name" 
+                        placeholder="Ingrese su nombre completo"
+                        aria-describedby="username-error"
+                        // onFocus={handleFocus}
+                        // errors={showErrors ? errorMessage.errors?.name : undefined}
+                    />
+    
+                    <Textarea 
+                        label="Comentario"
+                        name="coment" 
+                        placeholder="Ingrese el contenido del comentario"
+                    />
+    
+                    <button 
+                        type="submit" 
+                        className="button-primary w-full h-12 mt-4"
+                        // disabled={isPending}
+                    >
+                        {/* {
+                            isPending 
+                                ? <span className="loader"></span> 
+                                : 'Crear Comentario'
+                        } */}
+                        Crear Comentario
+                    </button>
+                </form>
             </section>
         </>
     )

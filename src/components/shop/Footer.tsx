@@ -54,7 +54,7 @@ export const Footer = () => {
                         <h3 className="text-lg font-medium">Nos interesa tu opinión</h3>
 
                         <Link 
-                            href="/complaints-suggestions/create" 
+                            href="/complaints-suggestions" 
                             className="inline-flex bg-amber-400 px-4 py-2 mt-2 font-medium rounded-md hover:bg-amber-500"
                         >
                             Dejar comentario
