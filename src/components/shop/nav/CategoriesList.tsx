@@ -28,7 +28,7 @@ export const CategoriesList = () => {
                 {
                     categories.map((cat) => (
                         <li key={cat} className="hover:text-orange-400">
-                            <Link href={`/categories/${cat.toLowerCase()}`}>
+                            <Link href={`/${cat.toLowerCase()}`}>
                                 {cat}
                             </Link>
                         </li>

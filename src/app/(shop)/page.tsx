@@ -17,7 +17,7 @@ export default function HomePage() {
                         Productos destacados
                     </h3>
 
-                    <Link href="/categories/" className="inline-flex gap-1.5 items-center text-gray-500 hover:text-orange-500">
+                    <Link href="/alimentos" className="inline-flex gap-1.5 items-center text-gray-500 hover:text-orange-500">
                         <span>Ver Más</span>
                         <MdOutlineArrowForwardIos size={16}/>
                     </Link>
