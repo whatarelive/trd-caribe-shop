@@ -10,7 +10,7 @@ type ProductProps = Pick<IProducts, "id" | "name" | "categorie" | "description" 
 export const ProductCard: FC<{ product: ProductProps }> = ({ product }) => {
     return (
         <li className="max-w-72 h-fit gap-2 z-0 bg-white rounded-md shadow-md hover:cursor-pointer hover:shadow-lg">
-            <Link href={`/categories/${product.categorie.toLowerCase()}/product/${product.id}`}>
+            <Link href={`/${product.categorie.toLowerCase()}/product/${product.id}`}>
                 <picture>
                     <img 
                         src={product.image} 

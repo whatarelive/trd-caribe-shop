@@ -9,9 +9,9 @@ interface Props {
 export const Title: FC<Props> = ({ title, subtitle, className }) => {
     return (
         <section className={`mt-3 max-w-7xl mx-auto ${ className }`}>
-            <h1 className="antialiased text-3xl font-semibold">
+            <h2 className="antialiased text-3xl font-medium">
                 { title }
-            </h1>
+            </h2>
 
             {
                 subtitle && (

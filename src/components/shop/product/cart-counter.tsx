@@ -1,9 +1,10 @@
 "use client";
 
+import { cn } from "@/utils/tailwind-cn";
 import { FC, useState } from "react";
 import { MdShoppingCart } from "react-icons/md";
 
-export const CartCounter: FC<{ stock: number }> = ({ stock }) => {
+export const CartCounter: FC<{ stock: number, className?: string }> = ({ stock, className }) => {
     const [counter, setCounter] = useState(1);
 
     const increment = () => {
@@ -17,7 +18,7 @@ export const CartCounter: FC<{ stock: number }> = ({ stock }) => {
     }
 
     return (
-        <div className="flex p-3 pt-0 justify-between items-center">
+        <div className={cn("flex p-3 pt-0 justify-between items-center select-none", className)}>
             <div className="flex border border-gray-400 rounded-md">
                 <button
                     onClick={decrement} 

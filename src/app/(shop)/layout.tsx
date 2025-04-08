@@ -7,7 +7,7 @@ export default function ShopLayout({ children }: ILayout) {
         <>
             <NavBar/>
           
-            <main className="relative w-full min-h-screen mt-20 xl:gap-8 bg-gray-50 select-all">
+            <main className="w-full min-h-screen mt-20 xl:gap-8 bg-gray-50 select-all">
                 { children }
             </main>
             
