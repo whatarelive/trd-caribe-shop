@@ -39,3 +39,50 @@ export const products =[{
     stock: 15,
     price: 40,
 },]
+
+export const productsForShop = [
+    ...products,
+    {
+        id: 6,
+        image: "https://res.cloudinary.com/dkog2edwi/image/upload/q_auto,f_auto/v1734890328/pizzeton/products/buow4bhufgfygkwdgtve.jpg",
+        name: "Camiseta blanca",
+        description: "Diseñadas para favorecer la silueta masculina, nuestras camisetas de alto gramaje resn tus brazos y hombros y desvían la atención de la barriga. Eleva el nivel de tus camisetas con una camiseta que se ajusta a tu cuerpo.",
+        categorie: "Ropa",
+        stock: 12,
+        price: 20,
+        discount: "12",
+    }, {
+        id: 7,
+        image: "https://res.cloudinary.com/dkog2edwi/image/upload/q_auto,f_auto/v1734890328/pizzeton/products/buow4bhufgfygkwdgtve.jpg",
+        name: "Zapatos Adidas",
+        description: "Las zapatillas están hechas de cuero en la parte superior, sintético el interior y la suela de goma con un muy buen acabado y finiciones. ",
+        categorie: "Calzado",
+        stock: 40,
+        price: 60,
+    }, {
+        id: 8,
+        image: "https://res.cloudinary.com/dkog2edwi/image/upload/q_auto,f_auto/v1734890328/pizzeton/products/buow4bhufgfygkwdgtve.jpg",
+        name: "Papas fritas",
+        description: "Patatas, aceites Vegetales (maíz y girasol en proporciones variables), aroma a jamón y queso [suero de LECHE en polvo, sal, potenciadores del sabor (glutamato monosódico, guanilato e inosinato doródicos), azúcar aromas (contienen LECHE, SOJA), colorante (extracto de pimentón)]",
+        categorie: "Alimento",
+        stock: 110,
+        price: 8
+    }, {
+        id: 9,
+        image: "https://res.cloudinary.com/dkog2edwi/image/upload/q_auto,f_auto/v1734890328/pizzeton/products/buow4bhufgfygkwdgtve.jpg",
+        name: "Refresco Coca Cola",
+        description: "Nada como el sabor auténtico de una Coca-Cola Zero bien fría para hacer el momento todavía más especial. Con todo el sabor original de Coca-Cola, refresco sin azúcar y sin calorías. Coca-Cola Zero pack ahorro de 2 botellas de 2 litros, es el formato adecuado para las fiestas y comidas con los tuyos. Tómala fría con hielo y una rodaja de lima o limón para disfrutar de todo su sabor. Envase 100% reciclable.",
+        categorie: "Bebida",
+        stock: 200,
+        price: 12,
+    }, {
+        id: 10,
+        image: "https://res.cloudinary.com/dkog2edwi/image/upload/q_auto,f_auto/v1734890328/pizzeton/products/buow4bhufgfygkwdgtve.jpg",
+        name: "Batidora",
+        description: "Los clientes están satisfechos con la calidad de esta batidora, describiéndola como fuerte, práctica y fácil de operar.",
+        categorie: "Electrodomestico",
+        stock: 15,
+        price: 40,
+        discount: "12",
+    },
+]
