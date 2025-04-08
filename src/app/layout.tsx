@@ -9,10 +9,10 @@ export const metadata: Metadata = {
     description: "Tienda Virtual de TRD Caribe",
 };
 
-export default async function RootLayout({ children }: ILayout) {
+export default function RootLayout({ children }: ILayout) {
     return (
         <html lang="es">
-            <body className={`${fontTitle.className} antialiased`}>
+            <body className={`${fontTitle.className} antialiased relative`}>
                 {children}
             </body>
         </html>

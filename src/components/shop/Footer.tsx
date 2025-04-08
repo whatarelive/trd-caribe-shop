@@ -7,7 +7,7 @@ export const Footer = () => {
             <div className="max-w-7xl py-8 md:py-12 mx-auto">
                 <div className="grid grid-cols-1 gap-8 text-white md:grid-cols-2 lg:grid-cols-4">    
                     <div>
-                        <h3 className="text-3xl font-semibold">Tienda Caribe</h3>
+                        <h3 className="text-2xl font-semibold">Tienda Caribe</h3>
                         <p className="mt-2 text-sm text-gray-100">
                             Tu tienda online de confianza para encontrar los mejores productos al mejor precio.
                         </p>
@@ -54,7 +54,7 @@ export const Footer = () => {
                         <h3 className="text-lg font-medium">Nos interesa tu opinión</h3>
 
                         <Link 
-                            href="/complaints-suggestions" 
+                            href="/complaints-suggestions/create" 
                             className="inline-flex bg-amber-400 px-4 py-2 mt-2 font-medium rounded-md hover:bg-amber-500"
                         >
                             Dejar comentario
