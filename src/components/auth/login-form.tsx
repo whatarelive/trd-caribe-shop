@@ -1,68 +1,79 @@
 "use client";
 
-import { useActionState } from "react";
-import { MdOutlinePerson2, MdOutlineLock } from "react-icons/md";
-import { useFormError } from "@/lib/hooks/useFormError";
+import { redirect } from "next/navigation";
+import { useActionState, useState } from "react";
+import { User, Lock, Eye, EyeOff } from "lucide-react";
 import { autheticate } from "@/actions/auth/login";
-import { TextInput } from "@/components/ui/input/input-text";
-import { TextInputWithPassword } from "@/components/ui/input/input-password";
-import type { LoginState } from "@/interfaces/models/user.interface";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { showErrorToast, showSuccessToast } from "@/components/ui/sonner";
 
-/**
- * @description Componente de formulario del lado del cliente para el inicio de sesion de los usuarios.
- * @summary
- * - Validación de datos de entrada
- * - Estado del envío del formulario
- * - Visualización de errores
- * - Diseño responsivo
- */
+
 export const LoginForm = () => {
-    // Inicializa el estado del formulario con mensaje y errores vacíos
-    const initialState: LoginState = { errors: {} };
+    // Estado para controlar la visibilidad de la contraseña
+    const [viewPassword, setViewPassword] = useState(false);
+
     // Utiliza una acción del servidor para el envío del formulario y seguimiento del estado de carga
-    const [errorMessage, formAction, isPending] = useActionState(autheticate, initialState);
-    // Control de la visibilidad de los errores del formulario
-    const { showErrors, handleFocus } = useFormError({ errors: errorMessage.errors });
+    const [_state, formAction, isPending] = useActionState(
+        async (_prev: null | void, formData: FormData) => {
+            const { result, message } = await autheticate(formData);
+
+            if (result) {
+                showSuccessToast({ title: message });
+                redirect("/");
+            } 
+            else showErrorToast({ title: message });
+        }, 
+        null
+    );
+
+    // Icono que se muestra en el campo password
+    const IconView = viewPassword ? EyeOff : Eye;
 
     return (
         <form action={formAction} className="flex flex-col mt-6">
-            {/* Campo de nombre de usuario */}
-            <TextInput
-                label="Usuario"
-                id="username"
-                name="username"
-                type="text"
-                placeholder="Ingrese el nombre de usuario"
-                icon={MdOutlinePerson2}
-                aria-describedby="username-error"
-                onFocus={handleFocus}
-                errors={showErrors ? errorMessage.errors?.username : undefined}
-            />
+            <div className="space-y-2 mb-4">
+                <Label htmlFor="username" className="text-sm font-medium">
+                    Usuario
+                </Label>
+                <div className="relative">
+                    <User className="absolute left-3 top-2 h-5 w-5 text-muted-foreground" />
+                    <Input
+                        id="username"
+                        name="username"
+                        type="text"
+                        placeholder="Ingrese el nombre de usuario"
+                        className="pl-10"
+                        required
+                    />
+                </div>
+            </div>
            
-            {/* Campo de contraseña */}
-            <TextInputWithPassword
-                label="Contraseña"
-                id="password"
-                name="password"
-                placeholder="Ingrese su contraseña"
-                icon={MdOutlineLock}
-                aria-describedby="password-error"
-                onFocus={handleFocus}
-                errors={showErrors ? errorMessage.errors?.password : undefined}
-            />
+            <div className="space-y-2 mb-6">
+                <Label htmlFor="password" className="text-sm font-medium">
+                    Contraseña
+                </Label>
+                <div className="relative">
+                    <Lock className="absolute left-3 top-2 h-5 w-5 text-muted-foreground" />
+                    <Input
+                        id="password"
+                        name="password"
+                        type={viewPassword ? "text" : "password"}
+                        placeholder="••••••••"
+                        className="px-10"
+                        required
+                    />
+                    <IconView 
+                        className="absolute right-3 top-2 h-5 w-5 text-muted-foreground" 
+                        onClick={() => setViewPassword(!viewPassword)}
+                    />
+                </div>
+            </div>
 
-            {/* Botón de envío del formulario */}
-            <button 
-                type="submit" 
-                disabled={isPending} 
-                className="button-primary mt-4"
-            >
-                {
-                    isPending 
-                        ? <span className="loader"></span> 
-                        : 'Iniciar sesión'
-                }
-            </button>
+            <Button type="submit" disabled={isPending}>
+                { isPending ? "Iniciando sesión..." : 'Iniciar sesión' }
+            </Button>
         </form>
     )
 }

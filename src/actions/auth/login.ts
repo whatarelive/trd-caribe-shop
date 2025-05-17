@@ -1,10 +1,8 @@
-"use server"; // Indica que esta función se ejecuta en el servidor
+"use server";
 
 import z from "zod";
-import { redirect } from "next/navigation";
 import { AuthError } from "next-auth";
 import { signIn } from "@/auth.config";
-import type { LoginState } from "@/interfaces/models/user.interface";
 
 // Esquema de validación para el formulario de inicio de sesión
 const LoginSchema = z.object({
@@ -19,42 +17,40 @@ const LoginSchema = z.object({
 });
 
 /**
- * Verifica el usuario y realiza el inicio de sesión automático
- * @param _prevState - Estado anterior del formulario (no utilizado)
- * @param formData - Datos del formulario de inicio de sesión
- * @returns Objeto con errores si falla la validación o el inicio, o redirige si es exitoso
+ * Verifica el usuario y realiza el inicio de sesión automático.
+ * @param formData - Datos del formulario de inicio de sesión.
+ * @returns Objeto con el mensaje de error o confirmación.
  */
-export async function autheticate(_prevState: LoginState, formData: FormData) {
+export async function autheticate(formData: FormData) {
     // Convertir el FormData a un objeto plano para poder validarlo
     const fields = Object.fromEntries(formData.entries());
     
     // Validar los datos usando el schema apropiado
-    const { data, success, error } = LoginSchema.safeParse(fields);
+    const { data, success } = await LoginSchema.safeParseAsync(fields);
 
-    // Si la validación falla, retornar los errores específicos de cada campo
+    // Si la validación falla, retornar mensaje de error.
     if (!success) {
         return {
-            errors: error.flatten().fieldErrors,
+            result: false,
+            message: "Credenciales incorrectas",
         }
     }
 
     try {
-        // Inicio sesión con las credenciales
+        // Iniciar sesión con las credenciales
         await signIn("credentials", { ...data, redirect: false });
+
+        return {
+            result: true,
+            message: "Inicio de sesión exitoso",
+        };
         
     } catch (error) {
-        // Mensaje de error que se envia al usuario 
-        const message = error instanceof AuthError 
-        ? ["Fallo el inicio de sesión"] 
-        : ["Error de conexión"];    
-
         // Mensaje de error condificional cuando ocurre un problema en la petición
-        return { 
-            errors: { username: message, password: message } 
-        }
-    }
+        const message = error instanceof AuthError 
+            ? "Credenciales incorrectas"
+            : "Conexión fallida";
 
-    // Si se realiza la autentificación correctamente
-    // se redirecciona al usuario a la página principal 
-    redirect("/");
+        return { result: false, message };
+    }
 }
