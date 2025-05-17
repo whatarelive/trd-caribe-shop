@@ -1,6 +1,6 @@
 import { Textarea } from "@/components/ui/textarea";
 import { TextInput } from "@/components/ui/input/input-text";
-import { Pagination } from "@/components/ui/pagination/pagination";
+import { Pagination } from "@/components/ui/pagination";
 import { ComplaintsCard } from "@/components/shop/complaints-suggestions/complaints-card";
 import { suggestions } from "@/lib/data/suggestions";
 

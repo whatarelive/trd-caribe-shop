@@ -1,7 +1,7 @@
 import { fontText } from "@/config/fonts";
 import { Title } from "@/components/shop/Title";
 import { productsForShop } from "@/lib/data/products"
-import { BreadcrumbsPage } from "@/components/admin/breadcrumbs-page";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { CartCounter } from "@/components/shop/product/cart-counter";
 
 const product = productsForShop[0];
@@ -18,7 +18,7 @@ export default async function ProductPage({ params }: PageProps) {
             <section className="max-w-7xl mx-auto">
                 <Title title="Detalles del producto"/>
 
-                <BreadcrumbsPage 
+                <Breadcrumbs 
                     breadcrumbs={[
                         { label: "Inicio", destiny: "/" },
                         { label: `Categoría de ${categorie}`, destiny: `/${categorie}` }

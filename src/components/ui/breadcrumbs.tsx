@@ -12,7 +12,7 @@ interface Props {
     final: string;
 }
 
-export const BreadcrumbsPage: FC<Props> = ({ breadcrumbs, final }) => {
+export const Breadcrumbs: FC<Props> = ({ breadcrumbs, final }) => {
     return (
         <nav aria-label="breadcrumb">
             <ol className="flex flex-wrap items-center break-words text-sm">

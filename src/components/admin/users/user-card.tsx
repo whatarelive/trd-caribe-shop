@@ -1,8 +1,9 @@
-import { ButtonDeleteItem } from "@/components/admin/buttons";
-import { ButtonUserChangeRole, UsersRole } from "@/components/admin/users/users-utils";
-
 import type { FC } from "react";
+import { ButtonDeleteItem } from "@/components/admin/buttons";
+import { ButtonUserChangeRole } from "@/components/admin/users/users-utils";
+import { Badge } from "@/components/ui/badge";
 import type { IUser } from "@/interfaces/models/user.interface";
+
 
 export const UserCard:FC<{ user: IUser }> = ({ user }) => {
     return (
@@ -18,7 +19,13 @@ export const UserCard:FC<{ user: IUser }> = ({ user }) => {
             <hr className="text-gray-200"/>
 
             <div className="flex items-center justify-between gap-2">
-                <UsersRole isStaff={ user.is_staff }/>
+                <Badge 
+                    className="w-full h-full justify-center" 
+                    variant={user.is_staff ? "success" : "destructive"}
+                >
+                    { user.is_staff ? "administrador" : "cliente" }
+                </Badge>
+
                 <ButtonUserChangeRole isStaff={ user.is_staff }/>          
                 <ButtonDeleteItem />
             </div>            

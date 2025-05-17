@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { MdOutlineEdit } from "react-icons/md";
 import { ButtonDeleteItem } from '@/components/admin/buttons';
-import { Pagination } from '@/components/ui/pagination/pagination';
+import { Pagination } from '@/components/ui/pagination';
 import { ProductCard } from '@/components/admin/products/product-card';
 import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from "@/components/ui/table"
 import { products } from "@/lib/data/products";
@@ -93,7 +93,7 @@ export const ProductsTable = () => {
             </Table>
                         
             {/* Componente para la paginación de los productos */}
-            <Pagination totalPages={8} className="hidden md:flex"/>
+            <Pagination currentPage={1} totalPages={8} className="hidden md:flex"/>
         </>
     )
 }

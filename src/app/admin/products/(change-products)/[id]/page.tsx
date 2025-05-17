@@ -1,5 +1,5 @@
 import { TitlePage } from "@/components/admin/title-page";
-import { BreadcrumbsPage } from "@/components/admin/breadcrumbs-page";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { EditProductForm } from "@/components/admin/products/edit-form";
 import { IProducts } from "@/interfaces/models/product.interface";
 
@@ -25,7 +25,7 @@ export default function ProductInfoPage() {
             <div>
                 <TitlePage title="Editar Producto"/>
 
-                <BreadcrumbsPage 
+                <Breadcrumbs 
                     breadcrumbs={[
                         { label: "Inicio", destiny: "/admin" },
                         { label: "Productos", destiny: "/admin/products" },

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { MdOutlineInfo } from "react-icons/md";
 import { ButtonDeleteItem } from "@/components/admin/buttons";
-import { Pagination } from "@/components/ui/pagination/pagination";
+import { Pagination } from "@/components/ui/pagination";
 import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from "@/components/ui/table";
 import { UserNameView } from "@/components/admin/users/users-utils";
 import { ComplaintsCard } from "@/components/admin/complaints-suggestions/complaints-card";
@@ -72,7 +72,7 @@ export const ComplaintsAndSuggestionsTable = () => {
             </Table>
                         
             {/* Componente para la paginación de las quejas y sugerencias */}
-            <Pagination totalPages={8} className="hidden md:flex"/>
+            <Pagination currentPage={1} totalPages={8} className="hidden md:flex"/>
         </>
     )
 }

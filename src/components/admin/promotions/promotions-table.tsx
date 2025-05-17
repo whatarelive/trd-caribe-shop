@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { MdOutlineEdit } from "react-icons/md";
 import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from "@/components/ui/table";
-import { Pagination } from "@/components/ui/pagination/pagination";
+import { Pagination } from "@/components/ui/pagination";
 import { ButtonDeleteItem } from "@/components/admin/buttons";
 import { PromotionCard } from "@/components/admin/promotions/promotion-card";
 import { PromotionChoice } from "@/components/admin/promotions/promotions-utils";
@@ -79,7 +79,7 @@ export const PromotionsTable = () => {
             </Table>
                         
             {/* Componente para la paginación de los productos */}
-            <Pagination totalPages={8} className="hidden md:flex"/>
+            <Pagination currentPage={1} totalPages={8} className="hidden md:flex"/>
         </>
     )
 }

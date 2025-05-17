@@ -1,8 +1,8 @@
 import clsx from "clsx";
+import type { FC } from "react";
 import { PiUserCircleLight } from "react-icons/pi";
 import { MdOutlinePublishedWithChanges } from "react-icons/md";
 
-import type { FC } from "react";
 
 export const UserNameView:FC<{ value: string }> = ({ value }) => {
     return (
@@ -13,22 +13,6 @@ export const UserNameView:FC<{ value: string }> = ({ value }) => {
                 { value }
             </span>
         </div>
-    )
-}
-
-export const UsersRole:FC<{ isStaff: boolean }> = ({ isStaff }) => {
-    return (
-        <span 
-            className={clsx(
-                "flex grow justify-center p-1.5 rounded-md font-medium lg:inline-flex", 
-                { 
-                    "bg-green-100 text-green-500" : isStaff, 
-                    "bg-red-100 text-red-500" : !isStaff 
-                }
-            )}
-        >
-            { isStaff ? "administrador" : "cliente" }
-        </span>
     )
 }
 

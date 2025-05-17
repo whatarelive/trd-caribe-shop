@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { TitlePage } from "@/components/admin/title-page";
-import { BreadcrumbsPage } from "@/components/admin/breadcrumbs-page";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { ToolsSectionPage } from "@/components/admin/tools-section-page";
 import { PromotionsTable } from "@/components/admin/promotions/promotions-table";
 
@@ -10,7 +10,7 @@ export default function PromotionsPage() {
             <div>
                 <TitlePage title="Listado de Promociones"/>
 
-                <BreadcrumbsPage 
+                <Breadcrumbs 
                     breadcrumbs={[
                         { label: "Inicio", destiny: "/admin" },
                     ]} 
