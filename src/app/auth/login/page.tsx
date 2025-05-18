@@ -1,12 +1,22 @@
 import Link from "next/link";
+import Image from "next/image";
 import { LoginForm } from "@/components/auth/login-form";
+
 
 export default function LoginPage() {
     return (
         <section className="flex flex-col p-6 w-full max-w-[400px]">
             <div className="flex flex-col items-center">
-                <h2 className="bg-gradient-to-r from-primary via-cyan-400 to-cyan-500 
-                    bg-clip-text leading-none text-3xl font-bold text-transparent mt-4"
+                <Image 
+                    src="/images/logo.png" 
+                    alt="Logo de la empresa" 
+                    width={200} 
+                    height={100}
+                    priority
+                    className="ml-7"
+                />
+
+                <h2 className="text-3xl font-semibold mt-4"
                 >
                     Bienvenido de Nuevo
                 </h2>
@@ -20,7 +30,9 @@ export default function LoginPage() {
 
             <div className="text-center text-sm mt-4">
                 <span>¿No tienes una cuenta?</span>
+                
                 <br />
+
                 <Link href="/auth/register" className="text-primary hover:underline cursor-pointer">
                     Regístrate aquí
                 </Link>

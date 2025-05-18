@@ -1,11 +1,11 @@
-"use server"; // Indica que esta función se ejecuta en el servidor
+"use server"
 
 import z from "zod";
-import { redirect } from "next/navigation";
 import { AuthError } from "next-auth";
 import { signIn } from "@/auth.config";
 import { shopApi } from "@/lib/api/shop-api";
-import type { RegisterState, RequestRegister, UserRegister } from "@/interfaces/models/user.interface";
+import type { RequestRegister, UserRegister } from "@/interfaces/models/user.interface";
+
 
 // Esquema de validación para el formulario de registro del usuario.
 const RegisterSchema = z.object({
@@ -36,32 +36,32 @@ const RegisterSchema = z.object({
 
 /**
  * Crea un nuevo usuario y realiza el inicio de sesión automático
- * @param _prevState - Estado anterior del formulario (no utilizado)
  * @param formData - Datos del formulario de registro
- * @returns Objeto con errores si falla la validación o el registro, o redirige si es exitoso
+ * @returns Objeto con el mensaje de error o confirmación.
  */
-export async function createUser(_prevState: RegisterState, formData: FormData) {
+export async function createUser(formData: FormData) {
     // Convertir el FormData a un objeto plano para poder validarlo
     const fields = Object.fromEntries(formData.entries());
 
     // Validar los datos usando Zod schema para asegurar que cumplen con el formato requerido
-    const { success, data, error } = RegisterSchema.safeParse(fields);
+    const { success, data } = await RegisterSchema.safeParseAsync(fields);
 
-    // Si la validación falla, retornar los errores específicos de cada campo
+    // Si la validación falla, retornar mensaje de error
     if (!success) {
         return {
-            errors: error.flatten().fieldErrors,
+            result: false,
+            message: "Información incorrecta"
         }
     }
 
     // Extraer los datos validados para crear el usuario
-    const { first_name, last_name, email, username, password } = data;
+    const { passwordConfirm: _, ...rest } = data;
 
     try {
         // Intentar crear el usuario en el backend mediante una petición POST
         const { data: response, status } = await shopApi.post<UserRegister, RequestRegister>(
             "/user/register/", 
-            { first_name, last_name, email, username, password }
+            { ...rest }
         );
 
         // Verificar si la creación fue exitosa (código 201 Created)
@@ -71,20 +71,19 @@ export async function createUser(_prevState: RegisterState, formData: FormData) 
 
         // Si el registro es exitoso, iniciar sesión automáticamente con las credenciales
         await signIn("credentials", { ...response, redirect: false });
+
+        // Mensaje de confirmación
+        return {
+            result: true,
+            message: "Registro exitoso",
+        }
         
     } catch (error) {
-         // Mensaje de error que se envia al usuario 
+        // Mensaje de error que se envia al usuario 
         const message = error instanceof AuthError 
-        ? ["Fallo el inicio de sesión"] 
-        : ["Fallo el registro"];    
+            ? "Fallo el inicio de sesión" 
+            : "Fallo el registro";    
 
-        // Mensaje de error cuando ocurre un problema en la petición
-        return { 
-            errors: { email: message, password: message } 
-        }
+        return { result: false, message };
     }
-    
-    // Si se realiza la autentificación correctamente
-    // se redirecciona al usuario a la página principal 
-    redirect("/");
 }

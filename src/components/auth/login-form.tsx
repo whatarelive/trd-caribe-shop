@@ -1,9 +1,10 @@
 "use client";
 
 import { redirect } from "next/navigation";
-import { useActionState, useState } from "react";
-import { User, Lock, Eye, EyeOff } from "lucide-react";
+import { useActionState } from "react";
+import { User, Lock } from "lucide-react";
 import { autheticate } from "@/actions/auth/login";
+import { InputPassword } from "@/components/auth/input-password";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -11,9 +12,6 @@ import { showErrorToast, showSuccessToast } from "@/components/ui/sonner";
 
 
 export const LoginForm = () => {
-    // Estado para controlar la visibilidad de la contraseña
-    const [viewPassword, setViewPassword] = useState(false);
-
     // Utiliza una acción del servidor para el envío del formulario y seguimiento del estado de carga
     const [_state, formAction, isPending] = useActionState(
         async (_prev: null | void, formData: FormData) => {
@@ -27,9 +25,6 @@ export const LoginForm = () => {
         }, 
         null
     );
-
-    // Icono que se muestra en el campo password
-    const IconView = viewPassword ? EyeOff : Eye;
 
     return (
         <form action={formAction} className="flex flex-col mt-6">
@@ -56,17 +51,11 @@ export const LoginForm = () => {
                 </Label>
                 <div className="relative">
                     <Lock className="absolute left-3 top-2 h-5 w-5 text-muted-foreground" />
-                    <Input
+                    <InputPassword 
                         id="password"
                         name="password"
-                        type={viewPassword ? "text" : "password"}
-                        placeholder="••••••••"
-                        className="px-10"
-                        required
-                    />
-                    <IconView 
-                        className="absolute right-3 top-2 h-5 w-5 text-muted-foreground" 
-                        onClick={() => setViewPassword(!viewPassword)}
+                        placeholder="Ingrese la contraseña"
+                        required                    
                     />
                 </div>
             </div>
