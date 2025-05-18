@@ -1,10 +1,9 @@
 'use server'
 
 import { redirect } from "next/navigation";
+import { isAxiosError } from "axios";
+import { backend } from "@/config/api";
 import { auth, signOut } from "@/auth.config";
-import { shopApi } from "@/lib/api/shop-api";
-import type { ResquestLogout } from "@/interfaces/models/user.interface";
-import { revalidatePath } from "next/cache";
 
 /** 
  * @description Acción de servidor para manejar el cierre de la sesión,
@@ -17,40 +16,47 @@ export async function logout() {
 
     try {
         // Petición http al Backend
-        const resp = await shopApi.post<never, ResquestLogout>(
-            // url de la request 
+        await backend.post(
             "/user/logout/", 
-            // data de la request
             { refresh: session?.refreshToken },
-            // token de acceso para pasar la seguridad
-            {
+            { 
                 headers: {
-                    Authorization: `Bearer ${session?.accessToken}`
+                    Authorization: `Bearer ${session?.accessToken}`, 
                 }
             }
         );
 
-        // Si el codigo devuelto es 401 el token es invalido
-        if (resp.status === 401) {
-            // Se cierra la sesión
-            await signOut({ redirect: false });
-            isclose = true;
+        // Se cierra la sesión en el servidor del frontend
+        await signOut({ redirect: false });
+        isclose = true;
+    
+    } catch (error) {
+        // Si el error no es de axios se notifica
+        if (!isAxiosError(error)) {
+            return {
+                result: false,
+                message: "Fallo el cierre de sesión",
+            }
         }
 
-    } catch (error) {
-        // Se propaga el error a la ui, para el manejo en el cliente
-        console.log(error);
-        return;
+        // Si el codigo devuelto es 401 el token es invalido
+        if (error.response?.status === 401) {
+            // Se cierra la sesión de lado del servidor del frontend
+            await signOut({ redirect: false });
+            isclose = true;
+        } else {
+            // Mensaje de error si hay un fallo en la petición (statusCode !== 401)
+            return {
+                result: false,
+                message: "Error de conexión",
+            }
+        }
     }
 
-    if (isclose) {
-        revalidatePath("/");
-        return redirect("/");
-    }
-
-    // Si se realiza el cierre de sesión el backend correctamente
-    // se cierra la sesión en el Frontend y redirecciona al usuario a la página principal 
-    await signOut();
+    if (isclose) redirect("/");
     
-    return;
+    return {
+        result: true,
+        message: "Sesión cerrada",
+    };
 }

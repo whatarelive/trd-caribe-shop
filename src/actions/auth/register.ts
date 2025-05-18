@@ -3,35 +3,21 @@
 import z from "zod";
 import { AuthError } from "next-auth";
 import { signIn } from "@/auth.config";
-import { shopApi } from "@/lib/api/shop-api";
-import type { RequestRegister, UserRegister } from "@/interfaces/models/user.interface";
+import type { UserRegister } from "@/interfaces/models/user.interface";
+import { backend } from "@/config/api";
 
 
 // Esquema de validación para el formulario de registro del usuario.
 const RegisterSchema = z.object({
-    username: z.string()
-        .min(5, "El nombre de usuario es requerido")
-        .max(150, "El nombre de usuario debe tener 150 caracteres o menos")
-        .regex(/^[\w.@+-]+$/, "Solo se permiten letras, números y los caracteres @/./+/-/_"),
-    email: z.string()
-        .email("Dirección de correo electrónico inválida")
-        .max(254, "El correo electrónico debe tener 254 caracteres o menos"),
-    first_name: z.string()
-        .min(5, "El nombre es requerido")
-        .max(150, "El nombre debe tener 150 caracteres o menos"),
-    last_name: z.string()
-        .min(5, "El apellido es requerido")
-        .max(150, "El apellido debe tener 150 caracteres o menos"),
-    password: z.string()
-        .min(5, "La contraseña es requerida")
-        .max(128, "La contraseña debe tener 128 caracteres o menos")
-        .regex(/^[a-zA-Z0-9]+$/, "La contraseña solo puede contener letras y números"),
-    passwordConfirm: z.string()
-        .min(5, "La confirmación de contraseña es requerida")
+    username: z.string().min(5).max(150).regex(/^[\w.@+-]+$/),
+    email: z.string().email().max(254),
+    first_name: z.string().min(5).max(150),
+    last_name: z.string().min(5).max(150),
+    password: z.string().min(5).max(128).regex(/^[a-zA-Z0-9]+$/),
+    passwordConfirm: z.string().min(5),
 
 }).refine((data) => data.password === data.passwordConfirm, {
-    message: "Las contraseñas no coinciden",
-    path: ["passwordConfirm"]
+    path: ["passwordConfirm"],
 });
 
 /**
@@ -59,18 +45,13 @@ export async function createUser(formData: FormData) {
 
     try {
         // Intentar crear el usuario en el backend mediante una petición POST
-        const { data: response, status } = await shopApi.post<UserRegister, RequestRegister>(
-            "/user/register/", 
-            { ...rest }
-        );
+        const { data, status } = await backend.post<UserRegister>("/user/register/", { ...rest });
 
         // Verificar si la creación fue exitosa (código 201 Created)
-        if (status !== 201) {
-            throw new Error("Error al registrar el usuario");
-        } 
+        if (status !== 201) throw new Error("Error al registrar el usuario");
 
         // Si el registro es exitoso, iniciar sesión automáticamente con las credenciales
-        await signIn("credentials", { ...response, redirect: false });
+        await signIn("credentials", { ...data, redirect: false });
 
         // Mensaje de confirmación
         return {

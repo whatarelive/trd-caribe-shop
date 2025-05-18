@@ -1,6 +1,21 @@
 import "next-auth";
 import "next-auth/jwt";
 
+/** 
+  * @property {string} username - Nombre de usuario
+  * @property {string} email - Correo electronico del usuario
+  * @property {string} first_name - Nombre del usuario
+  * @property {string} last_name - Apellidos del usuario
+  * @property {boolean} isAdmin - Indica si el usuario es administrador
+*/ 
+interface UserInfo {
+  username?: string;
+  email?: string;
+  first_name?: string;
+  last_name?: string;
+  isAdmin?: boolean;
+}
+
 declare module "next-auth" {
   /**
    * Extiende la interfaz Session de NextAuth
@@ -13,22 +28,15 @@ declare module "next-auth" {
     accessToken?: string;
     refreshToken?: string;
     isAuthenticated?: boolean;
-    user?: {
-      username?: string;
-      isAdmin?: boolean;
-    };
+    user?: UserInfo;
   }
 
   /**
    * Extiende la interfaz User de NextAuth
-   * @property {string} username - Nombre de usuario
-   * @property {boolean} isAdmin - Indica si el usuario es administrador
    * @property {string} accessToken - Token de acceso JWT del usuario
    * @property {string} refreshToken - Token de refresco del usuario
    */
-  interface User {
-    username?: string;
-    isAdmin?: boolean;
+  interface User extends UserInfo {
     accessToken?: string;
     refreshToken?: string;
   }
@@ -37,16 +45,12 @@ declare module "next-auth" {
 declare module "next-auth/jwt" {
   /**
    * Extiende la interfaz JWT de NextAuth
-   * @property {string} username - Nombre de usuario
-   * @property {boolean} isAdmin - Indica si el usuario es administrador
    * @property {string} accessToken - Token de acceso JWT
    * @property {number} accessTokenExpires - Timestamp de expiración del token de acceso
    * @property {string} refreshToken - Token de refresco
    * @property {number} refreshTokenExpires - Timestamp de expiración del token de refresco
    */
-  interface JWT {
-    username?: string;
-    isAdmin?: boolean;
+  interface JWT extends UserInfo {
     accessToken?: string;
     accessTokenExpires?: number;
     refreshToken?: string;

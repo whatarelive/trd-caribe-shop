@@ -6,14 +6,8 @@ import { signIn } from "@/auth.config";
 
 // Esquema de validación para el formulario de inicio de sesión
 const LoginSchema = z.object({
-    username: z.string()
-        .min(5, "El nombre de usuario es requerido")
-        .max(150, "El nombre de usuario debe tener 150 caracteres o menos")
-        .regex(/^[\w.@+-]+$/, "Solo se permiten letras, números y los caracteres @/./+/-/_"),
-    password: z.string()
-        .min(5, "La contraseña es requerida")
-        .max(128, "La contraseña debe tener 128 caracteres o menos")
-        .regex(/^[a-zA-Z0-9]+$/, "La contraseña solo puede contener letras y números")
+    username: z.string().min(5).max(150).regex(/^[\w.@+-]+$/),
+    password: z.string().min(5).max(128).regex(/^[a-zA-Z0-9]+$/),
 });
 
 /**
