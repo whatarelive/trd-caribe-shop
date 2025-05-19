@@ -4,7 +4,7 @@ import Link from "next/link";
 import clsx from "clsx";
 import { memo, type FC } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { cn } from "@/utils/tailwind-cn";
+import { cn } from "@/lib/utils";
 import { usePagination } from "@/lib/hooks/usePagination";
 import type { NumberProps, ArrowProps, PaginationProps } from "@/interfaces/components";
 

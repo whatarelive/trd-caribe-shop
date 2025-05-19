@@ -1,4 +1,4 @@
-import { cn } from "@/utils/tailwind-cn";
+import { cn } from "@/lib/utils";
 import { MdOutlineAddCard } from "react-icons/md";
 
 import type { FC } from "react";

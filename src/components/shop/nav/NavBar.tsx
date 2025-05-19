@@ -2,7 +2,6 @@ import Link from "next/link";
 import { auth } from "@/auth.config";
 import { BsPersonCircle } from "react-icons/bs";
 import { MdOutlineShoppingCart, MdSearch } from "react-icons/md";
-import { ButtonOpenSidebar } from "@/components/ui/buttons";
 import { CategoriesList } from "@/components/shop/nav/CategoriesList";
 
 export const NavBar = async () => {
@@ -50,7 +49,7 @@ export const NavBar = async () => {
                     } 
                 </div>
 
-                <ButtonOpenSidebar/>
+                {/* <ButtonOpenSidebar/> */}
             </div>
         </header>
     )

@@ -2,7 +2,7 @@
 
 import { type FC, memo } from "react";
 import { MdDeleteOutline } from "react-icons/md";
-import { cn } from "@/utils/tailwind-cn";
+import { cn } from "@/lib/utils";
 
 interface Props {
     className?: string;

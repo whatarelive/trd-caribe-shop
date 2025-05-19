@@ -1,9 +1,9 @@
 import clsx from "clsx";
 import Link from "next/link";
+import type { FC } from "react";
 import { MdAdd } from "react-icons/md";
 import { SearchInput } from "@/components/ui/input/input-search";
 
-import type { FC } from "react";
 
 interface Props {
     placeholder: string;

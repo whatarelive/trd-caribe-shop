@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/utils/tailwind-cn";
+import { cn } from "@/lib/utils";
 import { FC, useState } from "react";
 import { MdShoppingCart } from "react-icons/md";
 

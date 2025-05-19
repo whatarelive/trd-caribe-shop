@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { FC } from "react";
-import { MdChevronRight } from "react-icons/md";
+import { ChevronRight } from "lucide-react";
 
 interface Breadcrumb {
     label: string;
@@ -29,7 +29,7 @@ export const Breadcrumbs: FC<Props> = ({ breadcrumbs, final }) => {
                             </li>
 
                             <li role="presentation" aria-hidden="true" className="text-neutral-500">
-                                <MdChevronRight size={20} />
+                                <ChevronRight size={20} />
                             </li>
                         </div>
                     ))

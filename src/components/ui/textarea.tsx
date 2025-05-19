@@ -1,4 +1,4 @@
-import { cn } from "@/utils/tailwind-cn";
+import { cn } from "@/lib/utils";
 import { ITextArea } from "@/interfaces/components";
 
 import type { FC } from "react";
