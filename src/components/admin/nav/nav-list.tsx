@@ -1,48 +1,38 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { IoCardOutline, IoCartOutline, IoChatboxEllipsesOutline, IoGridOutline, IoHomeOutline, IoPeopleOutline } from "react-icons/io5";
-import { LinkComponent } from '@/components/admin/nav/nav-links';
+import { CreditCard, House, MessageSquareText, Package, ShoppingCart, Users } from "lucide-react";
+import { LinkComponent } from "@/components/admin/nav/nav-links";
 
-/**
- * Este componente renderiza una barra de navegación vertical con enlaces a las diferentes
- * secciones del panel de administración. Incluye iconos y etiquetas para cada enlace,
- * y resalta visualmente la sección activa basándose en la ruta actual.
- * 
- * Secciones disponibles:
- * - Inicio: Panel principal de administración
- * - Productos: Gestión de productos
- * - Promociones: Gestión de promociones y ofertas
- * - Usuarios: Administración de usuarios
- * - Ventas: Registro y gestión de ventas
- */
+// Renderiza una barra de navegación vertical con enlaces a las diferentes secciones 
 export const NavList = () => {
     const pathname = usePathname();
 
     return (
-        <nav className="flex flex-col w-64 gap-2">
-            <LinkComponent href="/admin" label="Inicio" isActive={pathname === "/admin"}>
-                <IoHomeOutline size={24} />
+        <nav className="flex flex-col w-full max-w-64 gap-2">
+            <LinkComponent href="/admin" isActive={pathname === "/admin"}>
+                <House size={24} />
+                Inicio
             </LinkComponent>
-
-            <LinkComponent href="/admin/products" label="Productos" isActive={pathname.includes("/admin/products")}>
-                <IoGridOutline size={24} />
+            <LinkComponent href="/admin/products" isActive={pathname.includes("/admin/products")}>
+                <Package size={24} />
+                Productos
             </LinkComponent>      
-
-            <LinkComponent href="/admin/promotions" label="Promociones" isActive={pathname.includes("/admin/promotions")}>
-                <IoCardOutline size={24} />
+            <LinkComponent href="/admin/promotions" isActive={pathname.includes("/admin/promotions")}>
+                <CreditCard size={24} />
+                Promociones
             </LinkComponent>
-
-            <LinkComponent href="/admin/complaints-suggestions" label="Comentarios" isActive={pathname.includes("/admin/complaints-suggestions")}>
-                <IoChatboxEllipsesOutline size={24}/>
+            <LinkComponent href="/admin/complaints-suggestions" isActive={pathname.includes("/admin/complaints-suggestions")}>
+                <MessageSquareText size={24}/>
+                Comentarios
             </LinkComponent>
-
-            <LinkComponent href="/admin/users" label="Usuarios" isActive={pathname.includes("/admin/users")}>
-                <IoPeopleOutline size={24} />                        
+            <LinkComponent href="/admin/users" isActive={pathname.includes("/admin/users")}>
+                <Users size={24} />           
+                Usuarios             
             </LinkComponent>
-
-            <LinkComponent href="/admin/sales" label="Ventas" isActive={pathname.includes("/admin/sales")}>
-                <IoCartOutline size={24} />                        
+            <LinkComponent href="/admin/sales" isActive={pathname.includes("/admin/sales")}>
+                <ShoppingCart size={24} />    
+                Ventas                    
             </LinkComponent>
         </nav>
     )

@@ -1,6 +1,5 @@
 'use server'
 
-import { redirect } from "next/navigation";
 import { isAxiosError } from "axios";
 import { backend } from "@/config/api";
 import { auth, signOut } from "@/auth.config";
@@ -12,7 +11,6 @@ import { auth, signOut } from "@/auth.config";
 export async function logout() {
     // Se recupera la sesión actual
     const session = await auth();
-    let isclose: boolean = false;
 
     try {
         // Petición http al Backend
@@ -28,7 +26,6 @@ export async function logout() {
 
         // Se cierra la sesión en el servidor del frontend
         await signOut({ redirect: false });
-        isclose = true;
     
     } catch (error) {
         // Si el error no es de axios se notifica
@@ -43,7 +40,6 @@ export async function logout() {
         if (error.response?.status === 401) {
             // Se cierra la sesión de lado del servidor del frontend
             await signOut({ redirect: false });
-            isclose = true;
         } else {
             // Mensaje de error si hay un fallo en la petición (statusCode !== 401)
             return {
@@ -53,8 +49,6 @@ export async function logout() {
         }
     }
 
-    if (isclose) redirect("/");
-    
     return {
         result: true,
         message: "Sesión cerrada",
