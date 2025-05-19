@@ -6,7 +6,7 @@ import { ButtonLogout } from "@/components/admin/nav/button-logout";
 // Barra lateral de navegación.
 export const SideBar = () => {
     return (
-        <section className="hidden xl:flex xl:flex-col xl:gap-2 p-4">
+        <section className="hidden xl:flex xl:flex-col xl:gap-2 p-4 min-w-64">
             <div className="flex flex-col px-4 py-8 items-center justify-center rounded-md bg-blue-600">
                 <div className="flex gap-3 py-1 border-b border-white">
                     <LayoutDashboard size={30} className="text-white"/>

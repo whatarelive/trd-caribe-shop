@@ -1,14 +1,18 @@
-import { shopApi } from "@/lib/api/shop-api";
+"use server"
 
-export async function getCategories() {
-    try {
-        const { data } = await shopApi.get("/store/categories/");
+import { unstable_cache } from "next/cache";
+import { backend } from "@/config/api";
+import { CategoriesResponse } from "@/interfaces/models/categorie.interface";
 
-        return data;
 
-    } catch (error) {
-        console.log("Error al recuperar las categorías", error);
-        
-        return null;
-    }
-}
+export const getCategories = unstable_cache(
+    async () => {
+        const { data } = await backend.get<CategoriesResponse>("/store/categories/");
+        return { data: data.results };
+    },
+
+    // Clave única para esta consulta.
+    ["all-categories"],
+    // Opciones de caché con etiquetas.
+    { tags: ["categories-data"] },    
+);
