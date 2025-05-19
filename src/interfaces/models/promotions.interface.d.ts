@@ -8,3 +8,10 @@ export interface IPromotions {
     min_price?: string;
     max_price?: string;
 }
+
+export type PromotionsResponse = {
+    count: number;
+    next: string | null;
+    previous: string | null;
+    results: IPromotions[];
+}
