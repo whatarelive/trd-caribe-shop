@@ -1,14 +1,9 @@
 "use server";
 
-import z from "zod";
 import { AuthError } from "next-auth";
 import { signIn } from "@/auth.config";
+import { LoginSchema } from "@/actions/auth/validation/user-schema";
 
-// Esquema de validación para el formulario de inicio de sesión
-const LoginSchema = z.object({
-    username: z.string().min(5).max(150).regex(/^[\w.@+-]+$/),
-    password: z.string().min(5).max(128).regex(/^[a-zA-Z0-9]+$/),
-});
 
 /**
  * Verifica el usuario y realiza el inicio de sesión automático.

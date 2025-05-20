@@ -8,13 +8,19 @@ export interface IUser {
     is_staff: boolean;
 }
 
+export type UserResponse = {
+    count: number;
+    next: string | null;
+    previous: string | null;
+    results: IUser[];
+}
+
 // Tipo de dato que se va obtener cuando se halla hecho Inicio de sesión 
 export type UserLogin = {
     password: string;
 } & Pick<IUser, "username">;
 
-// Tipo de dato que se va obtener cuando se halla hecho primero un Registro 
-// y luego un Inicio de sesión 
+// Tipo de dato que se va obtener cuando se halla hecho primero un Registro y luego un Inicio de sesión 
 export type UserRegister = {
     readonly token: {
         access: string;

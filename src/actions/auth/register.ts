@@ -1,24 +1,11 @@
 "use server"
 
-import z from "zod";
 import { AuthError } from "next-auth";
 import { signIn } from "@/auth.config";
-import type { UserRegister } from "@/interfaces/models/user.interface";
 import { backend } from "@/config/api";
+import { RegisterSchema } from "@/actions/auth/validation/user-schema";
+import type { UserRegister } from "@/interfaces/models/user.interface";
 
-
-// Esquema de validación para el formulario de registro del usuario.
-const RegisterSchema = z.object({
-    username: z.string().min(5).max(150).regex(/^[\w.@+-]+$/),
-    email: z.string().email().max(254),
-    first_name: z.string().min(5).max(150),
-    last_name: z.string().min(5).max(150),
-    password: z.string().min(5).max(128).regex(/^[a-zA-Z0-9]+$/),
-    passwordConfirm: z.string().min(5),
-
-}).refine((data) => data.password === data.passwordConfirm, {
-    path: ["passwordConfirm"],
-});
 
 /**
  * Crea un nuevo usuario y realiza el inicio de sesión automático
