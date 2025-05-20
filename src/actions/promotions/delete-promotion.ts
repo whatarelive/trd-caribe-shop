@@ -1,6 +1,6 @@
 "use server"
 
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { auth } from "@/auth.config";
 import { backend } from "@/config/api";
 
@@ -10,7 +10,7 @@ export async function deletePromotion(id: number) {
 
     try {
         if (!session || !session.user || !session.user.isAdmin) {
-            throw new Error("Usuario no Autorizado", { cause: "Unatorized User 401" });
+            throw new Error("Usuario no Autorizado", { cause: "Unauthorized_Access" });
         }
 
         await backend.delete(`/store/discounts/delete/${id}/`, {
@@ -20,14 +20,14 @@ export async function deletePromotion(id: number) {
         });
         
     } catch (error) {
-        const message = (error as Error).cause !== "Unatorized User 401" 
+        const message = (error as Error).cause !== "Unauthorized_Access" 
             ? "Fallo la eliminación de la promoción"
             : (error as Error).message;
 
         return { result: false, message };
     }
 
-    revalidatePath("/admin/promotions");
+    revalidateTag("promotions-data");
 
     return {
         result: true,

@@ -18,7 +18,7 @@ export async function getSaleInfo(id: number) {
         const response = await fetch(`${API_URL}/sales/detail/${id}`, {
             headers: {
                 'Content-type': 'application/json',
-                'Autorization': `Bearer ${session?.accessToken}`
+                'Autorization': `Bearer ${session.accessToken}`
             },
             cache: "no-store",
             next: {
@@ -34,7 +34,7 @@ export async function getSaleInfo(id: number) {
     } catch (error) {
         return {
             error: (error as Error).cause !== "Unauthorized_Access" 
-                ? "Fallo la carga de los detalles de la venta" 
+                ? "Fallo la carga de la venta" 
                 : (error as Error).message,
         }
     }

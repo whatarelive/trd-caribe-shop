@@ -10,23 +10,26 @@ interface Props {
 }
 
 export async function getUsers({ page, limit, search }: Props) {
-    const url = search ? `&search=${search}` : "";
     const session = await auth();
-
+    
     try {
         if (!session || !session.user || !session.user.isAdmin) {
-            throw new Error("Usuario no Autorizado", { cause: "Unatorized User 401" });
+            throw new Error("Usuario no Autorizado", { cause: "Unauthorized_Access" });
         }
 
-        const response = await fetch(`/user/users?limit=${limit}&offset=${page}${url}`, {
+        const url = search ? `&search=${search}` : "";
+        const offset = (page - 1) * limit;
+
+        const response = await fetch(`/user/users?limit=${limit}&offset=${offset}${url}`, {
             method: "GET",
             headers: {
                 "Content-type": "application/json",
                 "Authorization": `Bearer ${session.accessToken}`,
             },
-            cache: "force-cache",
+            cache: "no-store",
             next: {
-                revalidate: 60 * 15,
+                revalidate: 900,
+                tags: ["users-data"],
             }
         });
 
@@ -39,7 +42,7 @@ export async function getUsers({ page, limit, search }: Props) {
 
     } catch (error) {
         return {
-            error: (error as Error).cause !== "Unatorized User 401" 
+            error: (error as Error).cause !== "Unauthorized_Access" 
                 ? "Fallo la carga de los usuarios" 
                 : (error as Error).message,
         }

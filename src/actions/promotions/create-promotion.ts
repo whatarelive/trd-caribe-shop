@@ -1,6 +1,6 @@
 "use server"
 
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { auth } from "@/auth.config";
 import { backend } from "@/config/api";
 import { PromotionsCreateSchema } from "@/actions/promotions/validation/promotions-schema";
@@ -22,7 +22,7 @@ export async function CreatePromotion(formData: FormData) {
 
     try {
         if (!session || !session.user || !session.user.isAdmin) {
-            throw new Error("Usuario no Autorizado", { cause: "Unatorized User 401" });
+            throw new Error("Usuario no Autorizado", { cause: "Unauthorized_Access" });
         }
 
         await backend.post("/store/discounts/create/", { ...data }, {
@@ -32,14 +32,14 @@ export async function CreatePromotion(formData: FormData) {
         });
         
     } catch (error) {
-        const message = (error as Error).cause !== "Unatorized User 401"  
+        const message = (error as Error).cause !== "Unauthorized_Access"  
             ? "Fallo la creación de la promoción"
             : (error as Error).message;  
         
         return { result: false, message };
     }
 
-    revalidatePath("/admin/promotions/");
+    revalidateTag("promotions-data");
 
     return {
         result: true,
