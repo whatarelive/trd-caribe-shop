@@ -18,11 +18,6 @@ export async function getPromotionInfo(id: number) {
                 'Content-type': 'application/json',
                 'Autorization': `Bearer ${session.accessToken}`
             },
-            cache: "no-store",
-            next: {
-                revalidate: 86400, // 24 horas en cache
-                tags: [`promotion-detail-${id}`],
-            }
         });
 
         const data: IPromotions = await response.json();

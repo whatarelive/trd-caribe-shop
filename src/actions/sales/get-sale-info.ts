@@ -5,8 +5,6 @@ import { API_URL } from "@/config/constants";
 import type { ISalesDetail } from "@/interfaces/models/sales.interface";
 
 
-// TODO: Implementar cache de la petición según el rol del usuario.
-// TODO: Implementar auto-limpieza del cache con lru-cache.
 export async function getSaleInfo(id: number) {
     const session = await auth();
 
@@ -20,11 +18,6 @@ export async function getSaleInfo(id: number) {
                 'Content-type': 'application/json',
                 'Autorization': `Bearer ${session.accessToken}`
             },
-            cache: "no-store",
-            next: {
-                revalidate: 86400, // 24 horas en cache
-                tags: [`sale-detail-${id}`],
-            }
         });
     
         const data: ISalesDetail = await response.json();
