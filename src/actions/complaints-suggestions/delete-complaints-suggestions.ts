@@ -13,12 +13,10 @@ export async function deleteComplaints(id: number) {
         if (typeof id !== "number" || id <= 0) throw new Error("ID invalido");
         if (!session || !session.accessToken) throw new Error("Usuario no Autorizado");
 
-        const { status } = await backend.delete(`/store/complaints-suggestions/${id}/`, {
+        await backend.delete(`/store/complaints-suggestions/${id}/`, {
             headers: { Authorization: `Bearer ${session.accessToken}` },
         });
 
-        if (status < 200 || status >= 300) throw new Error("Error del servidor");
-          
         revalidateTag("complaints-data");
 
         return {

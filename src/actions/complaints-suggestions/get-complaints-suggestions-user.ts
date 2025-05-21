@@ -23,12 +23,10 @@ export async function getComplaintsUser({ limit, page, search }: Props) {
             ...(search && { search }),
         };
 
-        const { data, status } = await backend.get<ComplaintsResponse>(`/store/complaints-suggestions/user`, {
+        const { data } = await backend.get<ComplaintsResponse>(`/store/complaints-suggestions/user`, {
             params: searchParams,
             headers: { Authorization: `Bearer ${session.accessToken}` },
         });
-
-        if (status < 200 || status >= 300) throw new Error("Error en el servidor");
 
         return {
             result: true,

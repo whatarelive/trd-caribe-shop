@@ -18,11 +18,9 @@ export async function createComplaints(formData: FormData) {
     
         if (!success) throw new Error("Datos incorrectos");
         
-        const { status } = await backend.post("/store/complaints-suggestions/create/", data, {
+        await backend.post("/store/complaints-suggestions/create/", data, {
             headers: { Authorization: `Bearer ${session.accessToken}` },
         });
-
-        if (status !== 201) throw new Error("Error del servidor");
 
         revalidateTag("complaints-data");
 

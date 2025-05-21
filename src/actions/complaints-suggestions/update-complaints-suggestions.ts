@@ -19,11 +19,9 @@ export async function updateComplaints(id: number, formData: FormData) {
     
         if (!success) throw new Error("Datos incorrectos");
         
-        const { status } = await backend.put(`/store/complaints-suggestions/${id}/`, data, {
+        await backend.put(`/store/complaints-suggestions/${id}/`, data, {
             headers: { Authorization: `Bearer ${session.accessToken}` },
         });
-
-        if (status < 200 || status >= 300) throw new Error("Error del servidor");
 
         revalidateTag("complaints-data");
 
