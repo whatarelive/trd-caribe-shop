@@ -1,7 +1,8 @@
-"use server"
+'use server'
 
+import { isAxiosError } from "axios";
 import { auth } from "@/auth.config"
-import { API_URL } from "@/config/constants";
+import { backend } from "@/config/api";
 import type { IPromotions } from "@/interfaces/models/promotions.interface";
 
 
@@ -9,26 +10,25 @@ export async function getPromotionInfo(id: number) {
     const session = await auth();
 
     try {
-        if (!session || !session.user || !session.user.isAdmin) {
-            throw new Error("Usuario no Autorizado", { cause: "Unauthorized_Access" });
+        if (typeof id !== "number" || id <= 0) throw new Error("ID invalido");
+        if (!session || !session.accessToken || !session.user?.isAdmin) {
+            throw new Error("Usuario no Autorizado");
         }
 
-        const response = await fetch(`${API_URL}/store/discounts/${id}/`, {
-            headers: {
-                'Content-type': 'application/json',
-                'Autorization': `Bearer ${session.accessToken}`
-            },
+        const { data } = await backend.get<IPromotions>(`/store/discounts/${id}/`, {
+            headers: { Authorization: `Bearer ${session.accessToken}` },
         });
 
-        const data: IPromotions = await response.json();
-
-        return { data };
+        return { result: true, data };
         
     } catch (error) {
-        return {
-            error: (error as Error).cause !== "Unauthorized_Access" 
-                ? "Fallo la carga de la promoción" 
-                : (error as Error).cause,
-        }
+        console.error("Error en GetPromotions", error);
+
+        let message = "Error desconocido";
+
+        if (error instanceof Error) message = error.message; 
+        if (isAxiosError(error)) message = "Fallo la carga de la promoción";
+        
+        return { result: false, error: message };
     }
 }
