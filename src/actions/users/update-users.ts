@@ -1,81 +1,42 @@
-"use server"
+'use server'
 
 import { revalidateTag } from "next/cache";
+import { isAxiosError } from "axios";
 import { auth } from "@/auth.config";
 import { backend } from "@/config/api";
 import { UpdateSchema } from "@/actions/auth/validation/user-schema";
 
 
 export async function updateUser(formData: FormData) {
-    const fields = Object.fromEntries(formData.entries());
+    const session = await auth();
+    
+    try {
+        if (!session || !session.accessToken) throw new Error("Usuario no Autorizado");
+        
+        const fields = Object.fromEntries(formData.entries());
+        const validation = await UpdateSchema.safeParseAsync(fields);
+    
+        if (!validation.success) throw new Error("Información incorrecta");
+        
+        await backend.put(`/user/update/`, validation.data, {
+            headers: { Authorization: `Bearer ${session.accessToken}` },
+        });
 
-    const { data, success } = await UpdateSchema.safeParseAsync(fields);
-
-    if (!success) {
+        revalidateTag("users-data");
+        
         return {
-            result: false,
-            message: "Información incorrecta"
+            result: true,
+            message: "Perfil actualizado",
         };
-    }
-
-    const session = await auth();
-
-    try {
-        if (!session || !session.user) {
-            throw new Error("Usuario no Autorizado", { cause: "Unauthorized_Access" });
-        }
-        
-        await backend.put(`/user/update/`, { ...data }, {
-            headers: {
-                Authorization: `Bearer ${session.accessToken}`,
-            },
-        });
-
         
     } catch (error) {
-        const message = (error as Error).cause !== "Unauthorized_Access" 
-        ? "Fallo la actualización del perfil"
-        : (error as Error).message;
-        
+        console.error("Error en UpdateUser", error);
+
+        let message = "Error desconocido";
+
+        if (error instanceof Error) message = error.message;
+        if (isAxiosError(error)) message = "Fallo la actualización del perfil";
+
         return { result: false, message };
-    }
-    
-    revalidateTag("users-data");
-    
-    return {
-        result: true,
-        message: "Perfil actualizado exitosamente",
-    }
-}
-
-
-
-export async function updateUserRole(id: number) {
-    const session = await auth();
-
-    try {
-        if (!session || !session.user || !session.user.isAdmin) {
-            throw new Error("Usuario no Autorizado", { cause: "Unauthorized_Access" });
-        }
-        
-        await backend.post(`/user/update-role/${id}`, {
-            headers: {
-                Authorization: `Bearer ${session.accessToken}`,
-            },
-        });
-   
-    } catch (error) {
-        const message = (error as Error).cause !== "Unauthorized_Access" 
-        ? "Fallo la actualización del rol"
-        : (error as Error).message;
-        
-        return { result: false, message };
-    }
-
-    revalidateTag("users-data");
-
-    return {
-        result: true,
-        message: "Rol del usuario actualizado",
     }
 }
