@@ -8,10 +8,11 @@ import { UpdateComplaintsSchema } from "./validation/complaints-suggestions-sche
 
 
 export async function updateComplaints(id: number, formData: FormData) {
-    const session = await auth();
-    
     try {
         if (typeof id !== "number" || id <= 0) throw new Error("ID invalido");
+        
+        const session = await auth();
+        
         if (!session || !session.accessToken) throw new Error("Usuario no Autorizado");
         
         const fields = Object.fromEntries(formData.entries());

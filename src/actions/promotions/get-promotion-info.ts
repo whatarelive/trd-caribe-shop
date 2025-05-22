@@ -7,10 +7,11 @@ import type { IPromotions } from "@/interfaces/models/promotions.interface";
 
 
 export async function getPromotionInfo(id: number) {
-    const session = await auth();
-
     try {
         if (typeof id !== "number" || id <= 0) throw new Error("ID invalido");
+        
+        const session = await auth();
+
         if (!session || !session.accessToken || !session.user?.isAdmin) {
             throw new Error("Usuario no Autorizado");
         }
