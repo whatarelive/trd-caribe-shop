@@ -1,4 +1,4 @@
-"use server"
+'use server'
 
 import { auth } from "@/auth.config";
 import type { SalesResponse } from "@/interfaces/models/sales.interface";
@@ -14,37 +14,43 @@ export async function getSales({ page, limit, search }: Props) {
     
     try {
         if (!session || !session.accessToken || !session.user?.isAdmin) {
-            throw new Error("Usuario no Autorizado", { cause: "Unauthorized_Access" });
+            throw new Error("Usuario no Autorizado");
         }
 
-        const url = search ? `&search=${search}` : "";
-        const offset = (page - 1) * limit;
+        const params = new URLSearchParams({
+            limit: limit.toString(),
+            offset: ((page - 1) * limit).toString(),
+            ...(search && { search }),
+        });
 
-        const response = await fetch(`/sales/list?limit=${limit}&offset=${offset}${url}`, {
+        const response = await fetch(`/sales/list?${params}`, {
             method: "GET",
             headers: {
-                "Content-type": "application/json",
                 "Authorization": `Bearer ${session.accessToken}`,
             },
-            cache: "no-store",
+            cache: "force-cache",
             next: {
                 revalidate: 900,
                 tags: ["sales-data"],
             }
         });
 
+        if (!response.ok) throw new Error("Error en el servidor");
+        
         const data: SalesResponse = await response.json();
 
         return {
+            result: true,
             count: data.count,
-            results: data.results,
+            data: data.results,
         };
 
     } catch (error) {
+        console.error("Error en GetSales", error);
+        
         return {
-            error: (error as Error).cause !== "Unauthorized_Access" 
-                ? "Fallo la carga de las ventas" 
-                : (error as Error).message,
+            result: false,
+            error: (error instanceof Error) ? error.message : "Fallo la carga de las ventas",
         }
     }
 }
