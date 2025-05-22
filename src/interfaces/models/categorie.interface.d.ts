@@ -4,3 +4,10 @@ export interface ICategories {
     created: string;
     updated: string;
 }
+
+export type CategoriesResponse = {
+    count: number;
+    next: string | null;
+    previous: string | null;
+    results: ICategories[];
+}

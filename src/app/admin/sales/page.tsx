@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { TitlePage } from "@/components/admin/title-page";
-import { BreadcrumbsPage } from "@/components/admin/breadcrumbs-page";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { ToolsSectionPage } from "@/components/admin/tools-section-page";
 import { SalesTable } from "@/components/admin/sales/sales-table";
 import { SaleFilters } from "@/components/admin/sales/sales-filters";
@@ -11,7 +11,7 @@ export default async function SalesPage() {
             <div>
                 <TitlePage title="Listado de Ventas"/>
 
-                <BreadcrumbsPage 
+                <Breadcrumbs 
                     breadcrumbs={[
                         { label: "Inicio", destiny: "/admin" },
                     ]} 

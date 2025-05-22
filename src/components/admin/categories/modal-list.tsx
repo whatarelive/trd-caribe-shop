@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { FC, useState } from "react";
 import { MdDeleteOutline, MdList } from "react-icons/md";
 import { Modal } from "@/components/ui/modal";
-import { categories } from "@/lib/data/categories";
+import { ICategories } from "@/interfaces/models/categorie.interface";
 
-export const ModalListCategorie = () => {
+export const ModalListCategorie: FC<{ categories: ICategories[] }> = ({ categories }) => {
     const [view, setView] = useState(false);
 
     return (
@@ -24,14 +24,12 @@ export const ModalListCategorie = () => {
                         {
                             categories.map((categ) => (
                                 <li key={categ.id} className="flex justify-between">
-                                    <span className="font-medium">
-                                        { categ.name }
-                                    </span>
+                                    <span>{ categ.name }</span>
 
                                     <button 
-                                        className="p-2 rounded-md border border-neutral-500 hover:bg-red-500 hover:text-white hover:border-red-500 cursor-pointer"
+                                        className="p-2 rounded-md bg-gray-100 text-gray-400 hover:bg-red-500 hover:text-white hover:border-red-500 cursor-pointer"
                                     >
-                                        <MdDeleteOutline size={20}/>
+                                        <MdDeleteOutline size={16}/>
                                     </button>
                                 </li>
                             ))

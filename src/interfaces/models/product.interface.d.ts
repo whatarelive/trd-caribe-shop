@@ -13,16 +13,9 @@ export interface IProducts {
     image_id: string;
 }
 
-export type CreateProductState = {
-    errors?: {
-        name?: string[];
-        description?: string[];
-        categorie?: string[];
-        price?: string[]; 
-        stock?: string[];
-    };
+export interface ProductResponse {
+    count: number;
+    next: string | null;
+    previous: string | null;
+    results: IProducts[];
 }
-
-export type RequestProduct = {
-    categorie: number;
-} & Pick<IProducts, "description" | "image" | "name" | "price" | "stock">

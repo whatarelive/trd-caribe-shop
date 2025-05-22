@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { TitlePage } from "@/components/admin/title-page";
 import { ToolsSectionPage } from "@/components/admin/tools-section-page";
 import { ProductsTable } from "@/components/admin/products/products-table";
-import { BreadcrumbsPage } from "@/components/admin/breadcrumbs-page";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 
 export default function ProductsPage() {
     return (
@@ -10,7 +10,7 @@ export default function ProductsPage() {
             <div>
                 <TitlePage title="Listado de Productos"/>
 
-                <BreadcrumbsPage 
+                <Breadcrumbs 
                     breadcrumbs={[
                         { label: "Inicio", destiny: "/admin" },
                     ]} 

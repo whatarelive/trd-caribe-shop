@@ -24,7 +24,7 @@ export const SalesCard: FC<{ sale: ISales }> = ({ sale }) => {
                 <SaleMethod method={sale.payment_method}/>
             </div>
 
-            <Link href={`/admin/sales/${sale.id}`} className="button-primary-v2 w-full">
+            <Link href={`/admin/sales/${sale.id}`} className="button-primary-v3 lg:button-primary-v2">
                 <MdInfoOutline size={20}/>
                 Detalles
             </Link>

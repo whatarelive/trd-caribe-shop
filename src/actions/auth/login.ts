@@ -1,60 +1,43 @@
-"use server"; // Indica que esta función se ejecuta en el servidor
+'use server'
 
-import z from "zod";
-import { redirect } from "next/navigation";
 import { AuthError } from "next-auth";
 import { signIn } from "@/auth.config";
-import type { LoginState } from "@/interfaces/models/user.interface";
+import { LoginSchema } from "@/actions/auth/validation/user-schema";
 
-// Esquema de validación para el formulario de inicio de sesión
-const LoginSchema = z.object({
-    username: z.string()
-        .min(5, "El nombre de usuario es requerido")
-        .max(150, "El nombre de usuario debe tener 150 caracteres o menos")
-        .regex(/^[\w.@+-]+$/, "Solo se permiten letras, números y los caracteres @/./+/-/_"),
-    password: z.string()
-        .min(5, "La contraseña es requerida")
-        .max(128, "La contraseña debe tener 128 caracteres o menos")
-        .regex(/^[a-zA-Z0-9]+$/, "La contraseña solo puede contener letras y números")
-});
 
 /**
- * Verifica el usuario y realiza el inicio de sesión automático
- * @param _prevState - Estado anterior del formulario (no utilizado)
- * @param formData - Datos del formulario de inicio de sesión
- * @returns Objeto con errores si falla la validación o el inicio, o redirige si es exitoso
+ * Verifica el usuario y realiza el inicio de sesión automático.
+ * @param formData - Datos del formulario de inicio de sesión.
+ * @returns Objeto con el mensaje de error o confirmación.
  */
-export async function autheticate(_prevState: LoginState, formData: FormData) {
+export async function autheticate(formData: FormData) {
     // Convertir el FormData a un objeto plano para poder validarlo
     const fields = Object.fromEntries(formData.entries());
-    
-    // Validar los datos usando el schema apropiado
-    const { data, success, error } = LoginSchema.safeParse(fields);
 
-    // Si la validación falla, retornar los errores específicos de cada campo
-    if (!success) {
-        return {
-            errors: error.flatten().fieldErrors,
-        }
-    }
+    // Validar los datos usando el schema apropiado
+    const validation = await LoginSchema.safeParseAsync(fields);
 
     try {
-        // Inicio sesión con las credenciales
-        await signIn("credentials", { ...data, redirect: false });
+        // Si la validación falla, retornar mensaje de error.
+        if (!validation.success) throw new Error("Información incorrectas");
+
+        // Iniciar sesión con las credenciales
+        await signIn("credentials", { ...validation.data, redirect: false });
+
+        return {
+            result: true,
+            message: "Inicio de sesión exitoso",
+        };
         
     } catch (error) {
-        // Mensaje de error que se envia al usuario 
-        const message = error instanceof AuthError 
-        ? ["Fallo el inicio de sesión"] 
-        : ["Error de conexión"];    
+        console.error("Error en Authenticate", error);
+
+        let message = "Error desconocido";
 
         // Mensaje de error condificional cuando ocurre un problema en la petición
-        return { 
-            errors: { username: message, password: message } 
-        }
-    }
+        if (error instanceof Error) message = error.message;
+        if (error instanceof AuthError) message = "Credenciales incorrectas";
 
-    // Si se realiza la autentificación correctamente
-    // se redirecciona al usuario a la página principal 
-    redirect("/");
+        return { result: false, message };
+    }
 }

@@ -47,7 +47,7 @@ export const CreateProductForm: FC<Props> = ({ categories }) => {
                 <ModalCreateCategorie/>
 
                 {/* Modal para listar las categorías */}
-                <ModalListCategorie/>
+                <ModalListCategorie categories={categories}/>
             </div>
 
             <TextInput 
@@ -94,7 +94,7 @@ export const CreateProductForm: FC<Props> = ({ categories }) => {
                 {
                     isPending 
                         ? <span className="loader"></span> 
-                        : 'Crear producto'
+                        : 'Crear Producto'
                 }
             </button>
         </form>

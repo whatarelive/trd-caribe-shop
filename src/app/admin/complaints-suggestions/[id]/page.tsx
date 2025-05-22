@@ -1,5 +1,5 @@
 import { TitlePage } from "@/components/admin/title-page";
-import { BreadcrumbsPage } from "@/components/admin/breadcrumbs-page";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { ComplaintsDetail } from "@/components/admin/complaints-suggestions/complaints-detail";
 
 export default function ComplaintsAndSuggestionsInfoPage() {
@@ -9,7 +9,7 @@ export default function ComplaintsAndSuggestionsInfoPage() {
             <div>
                 <TitlePage title="Detalles del Comentario"/>
 
-                <BreadcrumbsPage 
+                <Breadcrumbs 
                     breadcrumbs={[
                         { label: "Inicio", destiny: "/admin" },
                         { label: "Comentarios", destiny: "/admin/complaints-suggestions" },

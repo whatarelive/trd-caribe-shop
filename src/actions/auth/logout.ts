@@ -1,10 +1,8 @@
 'use server'
 
-import { redirect } from "next/navigation";
+import { isAxiosError } from "axios";
+import { backend } from "@/config/api";
 import { auth, signOut } from "@/auth.config";
-import { shopApi } from "@/lib/api/shop-api";
-import type { ResquestLogout } from "@/interfaces/models/user.interface";
-import { revalidatePath } from "next/cache";
 
 /** 
  * @description Acción de servidor para manejar el cierre de la sesión,
@@ -13,44 +11,43 @@ import { revalidatePath } from "next/cache";
 export async function logout() {
     // Se recupera la sesión actual
     const session = await auth();
-    let isclose: boolean = false;
 
     try {
-        // Petición http al Backend
-        const resp = await shopApi.post<never, ResquestLogout>(
-            // url de la request 
-            "/user/logout/", 
-            // data de la request
-            { refresh: session?.refreshToken },
-            // token de acceso para pasar la seguridad
-            {
-                headers: {
-                    Authorization: `Bearer ${session?.accessToken}`
-                }
-            }
-        );
+        // Se comprueba la validez de la sesión del usuario
+        if (!session || !session.accessToken) throw new Error("Usuario no autorizado");
 
-        // Si el codigo devuelto es 401 el token es invalido
-        if (resp.status === 401) {
-            // Se cierra la sesión
+        // Petición http al Backend
+        await backend.post("/user/logout/", { refresh: session.refreshToken }, { 
+            headers: { Authorization: `Bearer ${session.accessToken}` },
+        });
+
+        // Se cierra la sesión en el servidor del frontend
+        await signOut({ redirect: false });
+    
+        return {
+            result: true,
+            message: "Sesión cerrada",
+        };
+    
+    } catch (error) {
+        // Si el codigo devuelto es 401 el token es invalido y se cierra la sesión automaticamente
+        if (isAxiosError(error) && error.response?.status === 401) {
+            // Se cierra la sesión de lado del servidor del frontend
             await signOut({ redirect: false });
-            isclose = true;
+            
+            return {
+                result: true,
+                message: "Sesión cerrada",
+            };
         }
 
-    } catch (error) {
-        // Se propaga el error a la ui, para el manejo en el cliente
-        console.log(error);
-        return;
-    }
+        console.error("Error en Logout", error);
 
-    if (isclose) {
-        revalidatePath("/");
-        return redirect("/");
+        let message = "Error desconocido";
+        
+        if (error instanceof Error) message = error.message;
+        if (isAxiosError(error) && error.response?.status !== 401) message = "Fallo el cierre de sesión";
+        
+        return { result: false, message };
     }
-
-    // Si se realiza el cierre de sesión el backend correctamente
-    // se cierra la sesión en el Frontend y redirecciona al usuario a la página principal 
-    await signOut();
-    
-    return;
 }

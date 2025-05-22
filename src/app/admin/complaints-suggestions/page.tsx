@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { TitlePage } from "@/components/admin/title-page";
-import { BreadcrumbsPage } from "@/components/admin/breadcrumbs-page";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { ToolsSectionPage } from "@/components/admin/tools-section-page";
 import { ComplaintsAndSuggestionsTable } from "@/components/admin/complaints-suggestions/complaints-table";
 
@@ -10,7 +10,7 @@ export default function ComplaintsAndSuggestionsPage() {
             <div>
                 <TitlePage title="Listado de Comentarios"/>
 
-                <BreadcrumbsPage 
+                <Breadcrumbs 
                     breadcrumbs={[
                         { label: "Inicio", destiny: "/admin" },
                     ]} 

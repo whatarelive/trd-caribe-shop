@@ -4,7 +4,7 @@ import { authConfig, auth as Session } from "@/auth.config";
 
 // Define las rutas de autenticación y las rutas públicas.
 const authRoutes = ['/auth/login', '/auth/register'];
-const publicRoutes = ['/', ...authRoutes];
+const privateRoutes = ['/cart', '/user'];
 
 // Configura el middleware de autenticación usando NextAuth.
 const { auth: middleware } = NextAuth(authConfig);
@@ -29,7 +29,7 @@ export default middleware( async({ nextUrl, auth }) => {
     }
 
     // Protección de rutas privadas.
-    if (!publicRoutes.includes(nextUrl.pathname) && !isLoggedIn) {
+    if (privateRoutes.includes(nextUrl.pathname) && !isLoggedIn) {
         return NextResponse.redirect(new URL("/auth/login", nextUrl));
     }
 

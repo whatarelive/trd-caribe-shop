@@ -22,19 +22,19 @@ export const SaleProductCard: FC<Props> = ({ product }) => {
             <div className="flex flex-col gap-2 justify-between lg:flex-row lg:gap-0">
                 <DataSection 
                     label="Precio x Unidad:" 
-                    value={product.price} 
+                    value={`$ ${product.price}`} 
                     className="lg:justify-start lg:inline-flex"
                 />
 
                 <DataSection 
                     label="Descuento x Unidad:" 
-                    value={product.discount} 
+                    value={`$ ${product.discount}`} 
                     className="lg:justify-start lg:inline-flex"
                 />
                 
                 <DataSection 
                     label="Precio Total:" 
-                    value={product.charged_price} 
+                    value={`$ ${product.charged_price}`} 
                     className="lg:justify-start lg:inline-flex"
                 />
             </div>

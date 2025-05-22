@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { TitlePage } from "@/components/admin/title-page";
-import { BreadcrumbsPage } from "@/components/admin/breadcrumbs-page";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { getCategories } from "@/actions/categories/get-categories";
 import { CreateProductForm } from "@/components/admin/products/create-form";
 
@@ -22,7 +22,7 @@ export default async function ProductCreatePage() {
             <div>
                 <TitlePage title="Creación de Productos"/>
 
-                <BreadcrumbsPage 
+                <Breadcrumbs 
                     breadcrumbs={[
                         { label: "Inicio", destiny: "/admin" },
                         { label: "Productos", destiny: "/admin/products" },

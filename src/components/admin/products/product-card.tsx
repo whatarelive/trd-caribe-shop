@@ -1,15 +1,14 @@
 import Link from "next/link";
+import { MdOutlineEdit } from "react-icons/md";
+import { ButtonDeleteItem } from "@/components/admin/buttons";
 import type { FC } from "react";
-import { MdDeleteOutline, MdOutlineEdit } from "react-icons/md";
 import type { IProducts } from "@/interfaces/models/product.interface";
 
-interface Props {
-    product: Pick<IProducts, "id" | "name" | "categorie" | "description" | "price" | "stock">;
-}
+type ProductProps = Pick<IProducts, "id" | "name" | "categorie" | "description" | "price" | "stock">;
 
-export const ProductCard: FC<Props> = ({ product }) => {
+export const ProductCard: FC<{ product: ProductProps }> = ({ product }) => {
     return (
-         <li className="flex flex-col gap-2 p-2 border border-gray-300 rounded-md">
+         <li className="flex flex-col gap-2 p-2 bg-white rounded-md">
             <div className="flex items-center justify-between gap-2">
                 <h3 className="font-medium line-clamp-2 max-w-3/5">
                     {product.name}
@@ -20,7 +19,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
                 </span>
             </div>
             
-            <div className="bg-gray-300 h-px rounded-full"/>
+            <hr className="text-gray-300"/>
 
             <div className="flex justify-start gap-4">
                 <span className="text-sm font-medium">
@@ -37,23 +36,14 @@ export const ProductCard: FC<Props> = ({ product }) => {
             </p>
 
             <div className="flex gap-2">
-                <Link 
-                    href={`/admin/products/${product.id}`} 
-                    className="flex w-full items-center justify-center gap-2 h-11 p-2 rounded-md 
-                    text-base font-semibold bg-blue-500 text-white cursor-pointer"
-                >
+                <Link href={`/admin/products/${product.id}`} className="button-primary-v3 grow">
                     <MdOutlineEdit size={24}/>
                     Editar
                 </Link>
 
-                <button 
-                    className="flex w-full items-center justify-center gap-2 h-11 p-2 rounded-md 
-                    text-base font-semibold border-2 border-gray-300 text-gray-400 hover:border-red-500 
-                    hover:text-red-500 cursor-pointer"
-                >
-                    <MdDeleteOutline size={24}/>
+                <ButtonDeleteItem className="flex grow items-center justify-center gap-1.5 border bg-white">
                     Eliminar
-                </button>
+                </ButtonDeleteItem>
             </div>
         </li>
     )

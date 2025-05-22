@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { TitlePage } from "@/components/admin/title-page";
-import { BreadcrumbsPage } from "@/components/admin/breadcrumbs-page";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { SaleDetail } from "@/components/admin/sales/sale-detail";
 
 export default function SalesInfoPage() {
@@ -10,7 +10,7 @@ export default function SalesInfoPage() {
             <div>
                 <TitlePage title="Detalles de la Venta"/>
 
-                <BreadcrumbsPage 
+                <Breadcrumbs 
                     breadcrumbs={[
                         { label: "Inicio", destiny: "/admin" },
                         { label: "Ventas", destiny: "/admin/sales" },

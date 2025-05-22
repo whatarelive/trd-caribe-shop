@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { MdInfoOutline } from "react-icons/md";
-import { Pagination } from "@/components/ui/pagination/pagination";
+import { Pagination } from "@/components/ui/pagination";
 import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from "@/components/ui/table"
 import { SalesCard } from "@/components/admin/sales/sales-card";
 import { SaleMethod, SaleStatus } from "@/components/admin/sales/sales-utils";
@@ -68,7 +68,7 @@ export const SalesTable = () => {
             </Table>
                         
             {/* Componente para la paginación de los productos */}
-            <Pagination totalPages={8} className="hidden md:flex"/>
+            <Pagination currentPage={1} totalPages={8} className="hidden md:flex"/>
         </>
     )
 }

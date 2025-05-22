@@ -1,25 +1,13 @@
 import NextAuth, { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { shopApi } from "@/lib/api/shop-api";
+import { backend } from "@/config/api";
 import { isRegisterUser } from "@/lib/guards/user-type-guards";
-import type { UserLogin, UserRegister } from "@/interfaces/models/user.interface";
+import type { ResponseLogin, UserLogin, UserRegister } from "@/interfaces/models/user.interface";
 
 // Tipo de dato de la respuesta de la petición de refresh del token.
 type ResponseToken = {
     readonly access: string; // Token de accseso
     readonly refresh: string; // Token de refresh
-}
-
-// Tipo de dato de la petición de refresh del token
-type RequestToken = {
-    readonly refresh: string | undefined; // Token de refresh
-}
-
-// Tipo de dato de la petición de login del usuario.
-type LoginPost = {
-    readonly is_staff: boolean; // rol del usuario
-    readonly access: string; // token de acceso
-    readonly refresh: string; // token de refresh
 }
 
 // Declaración de la configuración de autentificación
@@ -49,6 +37,9 @@ export const authConfig: NextAuthConfig = {
             // Si hay un usuario, agrega los tokens de acceso y de refresco al token JWT
             if (user) {
                 token.username = user.username;
+                token.email = user.email;
+                token.first_name = user.first_name,
+                token.last_name = user.last_name,
                 token.isAdmin = user.isAdmin;
                 token.accessToken = user.accessToken;
                 token.refreshToken = user.refreshToken;
@@ -69,9 +60,9 @@ export const authConfig: NextAuthConfig = {
             if (token.refreshTokenExpires && token.accessTokenExpires && Date.now() > token.accessTokenExpires) {
                 try {
                     // Intenta renovar el token de acceso usando el token de refresco
-                    const { data } = await shopApi.post<ResponseToken, RequestToken>(
+                    const { data } = await backend.post<ResponseToken>(
                         "/user/login/refresh/", 
-                        { refresh: token.refreshToken }
+                        { refresh: token.refreshToken },
                     );
 
                     if (!data) throw new Error("Error al renovar el token");
@@ -102,6 +93,9 @@ export const authConfig: NextAuthConfig = {
 
             // Agrega la información del usuario a la sesión
             session.user.username = token.username;
+            session.user.email = token.email!;
+            session.user.first_name = token.first_name;
+            session.user.last_name = token.last_name;
             session.user.isAdmin = token.isAdmin;
             
             // Se establece el estado de la autentificación
@@ -126,6 +120,9 @@ export const authConfig: NextAuthConfig = {
                     // Si es un usuario registrado, retornar los tokens y datos del usuario
                     return {
                         username: user.username,
+                        email: user.email,
+                        first_name: user.first_name,
+                        last_name: user.last_name,
                         isAdmin: false,
                         accessToken: user.token.access,
                         refreshToken: user.token.refresh
@@ -133,14 +130,20 @@ export const authConfig: NextAuthConfig = {
 
                 } else {
                     // Si es un intento de login, hacer la petición al endpoint de login
-                    const { data } = await shopApi.post<LoginPost, UserLogin>('/user/login/', { ...user });
+                    const { data, status } = await backend.post<ResponseLogin>(
+                        "/user/login/", 
+                        { ...user }
+                    );
 
                     // Si no hay datos en la respuesta, retornar null
-                    if (!data) return null;
+                    if (!data || status === 400 || status === 401) return null;
                     
                     // Retornar los datos del usuario y sus tokens de acceso
                     return {
-                        username: user.username,
+                        username: data.username,
+                        email: data.email,
+                        first_name: data.first_name,
+                        last_name: data.last_name,
                         isAdmin: data.is_staff,
                         accessToken: data.access,
                         refreshToken: data.refresh

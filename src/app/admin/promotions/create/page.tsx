@@ -1,5 +1,5 @@
 import { TitlePage } from "@/components/admin/title-page";
-import { BreadcrumbsPage } from "@/components/admin/breadcrumbs-page";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { CreatePromotionForm } from "@/components/admin/promotions/create-form";
 
 export default function PromotionCreatePage() {
@@ -9,7 +9,7 @@ export default function PromotionCreatePage() {
             <div>
                 <TitlePage title="Creación de Promociones"/>
 
-                <BreadcrumbsPage 
+                <Breadcrumbs 
                     breadcrumbs={[
                         { label: "Inicio", destiny: "/admin" },
                         { label: "Promociones", destiny: "/admin/promotions" },

@@ -1,9 +1,10 @@
 import { ButtonDeleteItem } from "@/components/admin/buttons";
-import { Pagination } from "@/components/ui/pagination/pagination";
+import { Pagination } from "@/components/ui/pagination";
 import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from "@/components/ui/table"
 import { UserCard } from "@/components/admin/users/user-card";
-import { ButtonUserChangeRole, UsersRole } from "@/components/admin/users/users-utils";
+import { ButtonUserChangeRole, UserNameView } from "@/components/admin/users/users-utils";
 import { users } from "@/lib/data/users";
+import { Badge } from "@/components/ui/badge";
 
 export const UsersTable = () => {
     return (
@@ -43,9 +44,7 @@ export const UsersTable = () => {
                     { users.map(({id, email, first_name, last_name, username, is_staff}) => (
                         <TableRow key={id} className="lg:bg-white lg:border-b-2 lg:border-gray-200">
                             <TableCell>
-                                <span className="line-clamp-1">
-                                    {`${first_name} ${last_name}`}
-                                </span>
+                                <UserNameView value={`${first_name} ${last_name}`}/>
                             </TableCell>
                             <TableCell>
                                 <span className="line-clamp-1">
@@ -58,7 +57,9 @@ export const UsersTable = () => {
                                 </span>
                             </TableCell>
                             <TableCell>
-                                <UsersRole isStaff={is_staff}/>
+                                <Badge variant={is_staff ? "success" : "destructive"}>
+                                    { is_staff ? "administrador" : "cliente" }
+                                </Badge>
                             </TableCell>                           
                             <TableCell>
                                 <div className="inline-flex items-center gap-4">
@@ -72,7 +73,7 @@ export const UsersTable = () => {
             </Table>
                         
             {/* Componente para la paginación de los productos */}
-            <Pagination totalPages={8} className="hidden md:flex"/>
+            <Pagination currentPage={1} totalPages={8} className="hidden md:flex"/>
         </>
     )
 }

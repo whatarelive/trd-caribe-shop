@@ -1,120 +1,128 @@
-"use client";
+"use client"
 
+import { redirect } from "next/navigation";
 import { useActionState } from "react";
-import { MdOutlineLock, MdOutlinePerson2, MdOutlineLockClock, MdOutlineEmail } from "react-icons/md";
-import { useFormError } from "@/lib/hooks/useFormError";
+import { Lock, LockKeyhole, Mail, User } from "lucide-react";
 import { createUser } from "@/actions/auth/register";
-import { TextInput } from "@/components/ui/input/input-text";
-import { TextInputWithPassword } from "@/components/ui/input/input-password";
-import type { RegisterState } from "@/interfaces/models/user.interface";
+import { InputPassword } from "@/components/auth/input-password";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { showErrorToast, showSuccessToast } from "@/components/ui/sonner";
 
-/**
- * @description Componente de formulario del lado del cliente para registro de usuarios que maneja:
- * @summary
- * - Validación de datos de entrada
- * - Estado del envío del formulario
- * - Visualización de errores
- * - Diseño responsivo
- */
+
 export const RegisterForm = () => {
-    // Inicializa el estado del formulario con mensaje y errores vacíos
-    const initialState: RegisterState = { errors: {} };
     // Utiliza una acción del servidor para el envío del formulario y seguimiento del estado de carga
-    const [errorMessage, formAction, isPending] = useActionState(createUser, initialState);
-    // Control de la visibilidad de los errores del formulario
-    const { showErrors, handleFocus } = useFormError({ errors: errorMessage.errors });
+    const [_state, formAction, isPending] = useActionState(
+        async (_prev: null | void, formData: FormData) => {
+            const { result, message } = await createUser(formData);
+
+            if (result) {
+                showSuccessToast({ title: message });
+                redirect("/");
+            } 
+            else showErrorToast({ title: message });
+        }, 
+        null
+    );
 
     return (
         <form action={formAction} className="flex flex-col mt-6">
-            {/* Sección de Información Personal - Cuadrícula Responsiva */}
             <div className="flex flex-col md:flex-row md:gap-3">
-                {/* Campo de Nombre */}
-                <TextInput
-                    label="Nombre"
-                    id="first_name"
-                    name="first_name"
-                    type="text"
-                    placeholder="Ingrese el nombre"
-                    aria-describedby="first_name-error"
-                    onFocus={handleFocus}
-                    errors={showErrors ? errorMessage.errors?.first_name : undefined}
-                />
+                <div className="space-y-2 mb-4 grow">
+                    <Label htmlFor="first_name" className="text-sm font-medium">
+                        Nombre
+                    </Label>
+                    <Input
+                        id="first_name"
+                        name="first_name"
+                        type="text"
+                        placeholder="Ingrese el nombre"
+                        required
+                    />
+                </div>
 
-                {/* Campo de Apellidos */}
-                <TextInput
-                    label="Apellidos"
-                    id="last_name"
-                    name="last_name"
-                    type="text"
-                    placeholder="Ingrese los apellidos"
-                    aria-describedby="last_name-error"
-                    onFocus={handleFocus}
-                    errors={showErrors ? errorMessage.errors?.last_name : undefined}
-                />
+                <div className="space-y-2 mb-4 grow">
+                    <Label htmlFor="last_name" className="text-sm font-medium">
+                        Apellidos
+                    </Label>
+                    <Input
+                        id="last_name"
+                        name="last_name"
+                        type="text"
+                        placeholder="Ingrese los apellidos"
+                        required
+                    />
+                </div>
             </div>
 
-            {/* Campo de Usuario con Ícono de Persona */}
-            <TextInput
-                label="Usuario"
-                id="username"
-                name="username"
-                type="text"
-                placeholder="Ingrese el nombre de usuario"
-                icon={MdOutlinePerson2}
-                aria-describedby="username-error"
-                onFocus={handleFocus}
-                errors={showErrors ? errorMessage.errors?.username : undefined}
-            />
+            <div className="space-y-2 mb-4">
+                <Label htmlFor="username" className="text-sm font-medium">
+                    Usuario
+                </Label>
+                <div className="relative">
+                    <User className="absolute left-3 top-2 h-5 w-5 text-muted-foreground" />
+                    <Input
+                        id="username"
+                        name="username"
+                        type="text"
+                        placeholder="Ingrese el nombre de usuario"
+                        className="pl-10"
+                        required
+                    />
+                </div>
+            </div>
 
-            {/* Campo de Correo con Ícono de Email */}
-            <TextInput
-                label="Correo"
-                id="email"
-                name="email"
-                type="email"
-                placeholder="Ingrese su correo electronico"
-                icon={MdOutlineEmail}
-                aria-describedby="email-error"
-                onFocus={handleFocus}
-                errors={showErrors ? errorMessage.errors?.email : undefined}
-            />
+            <div className="space-y-2 mb-4">
+                <Label htmlFor="email" className="text-sm font-medium">
+                    Correo
+                </Label>
+                <div className="relative">
+                    <Mail className="absolute left-3 top-2 h-5 w-5 text-muted-foreground" />
+                    <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        placeholder="Ingrese el correo electronico"
+                        className="pl-10"
+                        required
+                    />
+                </div>
+            </div>
 
-            {/* Campo de Contraseña con Ícono de Candado */}
-            <TextInputWithPassword
-                label="Contraseña"
-                id="password"
-                name="password"
-                placeholder="Ingrese su contraseña"
-                icon={MdOutlineLock}
-                aria-describedby="password-error"
-                onFocus={handleFocus}
-                errors={showErrors ? errorMessage.errors?.password : undefined}
-            />
+            <div className="space-y-2 mb-6">
+                <Label htmlFor="password" className="text-sm font-medium">
+                    Contraseña
+                </Label>
+                <div className="relative">
+                    <Lock className="absolute left-3 top-2 h-5 w-5 text-muted-foreground" />
+                    <InputPassword 
+                        id="password"
+                        name="password"
+                        placeholder="Ingrese la contraseña"
+                        required                    
+                    />
+                </div>
+            </div>
 
-            {/* Campo de Confirmación de Contraseña con Ícono de Candado y Reloj */}
-            <TextInputWithPassword
-                label="Confirmar Contraseña"
-                id="passwordConfirm"
-                name="passwordConfirm"
-                placeholder="Confirme la contraseña"
-                icon={MdOutlineLockClock}
-                aria-describedby="passwordConfirm-error"
-                onFocus={handleFocus}
-                errors={showErrors ? errorMessage.errors?.passwordConfirm : undefined}
-            />
+            <div className="space-y-2 mb-6">
+                <Label htmlFor="passwordConfirm" className="text-sm font-medium">
+                    Confirmar Contraseña
+                </Label>
+                <div className="relative">
+                    <LockKeyhole className="absolute left-3 top-2 h-5 w-5 text-muted-foreground" />
+                    <InputPassword 
+                        id="passwordConfirm"
+                        name="passwordConfirm"
+                        placeholder="Confirme la contraseña"
+                        required                    
+                    />
+                </div>
+            </div>
 
-            {/* Botón de Envío con Estado de Carga */}
-            <button 
-                type="submit" 
-                className="button-primary mt-4"
-                disabled={isPending}
-            >
-                {
-                    isPending 
-                        ? <span className="loader"></span> 
-                        : 'Registrar Cuenta'
-                }
-            </button>
+            <Button type="submit" disabled={isPending}>
+                { isPending ? "Registrando..." : "Registrar Cuenta" }
+            </Button>
         </form>
     )
 }
