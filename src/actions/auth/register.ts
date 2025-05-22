@@ -1,6 +1,7 @@
-"use server"
+'use server'
 
 import { AuthError } from "next-auth";
+import { isAxiosError } from "axios";
 import { signIn } from "@/auth.config";
 import { backend } from "@/config/api";
 import { RegisterSchema } from "@/actions/auth/validation/user-schema";
@@ -17,25 +18,17 @@ export async function createUser(formData: FormData) {
     const fields = Object.fromEntries(formData.entries());
 
     // Validar los datos usando Zod schema para asegurar que cumplen con el formato requerido
-    const { success, data } = await RegisterSchema.safeParseAsync(fields);
-
-    // Si la validación falla, retornar mensaje de error
-    if (!success) {
-        return {
-            result: false,
-            message: "Información incorrecta"
-        }
-    }
-
-    // Extraer los datos validados para crear el usuario
-    const { passwordConfirm: _, ...rest } = data;
-
+    const validation = await RegisterSchema.safeParseAsync(fields);
+    
     try {
-        // Intentar crear el usuario en el backend mediante una petición POST
-        const { data, status } = await backend.post<UserRegister>("/user/register/", { ...rest });
+        // Si la validación falla, retornar mensaje de error
+        if (!validation.success) throw new Error("Información incorrecta");
+    
+        // Extraer los datos validados para crear el usuario
+        const { passwordConfirm: _, ...rest } = validation.data;
 
-        // Verificar si la creación fue exitosa (código 201 Created)
-        if (status !== 201) throw new Error("Error al registrar el usuario");
+        // Intentar crear el usuario en el backend mediante una petición POST
+        const { data } = await backend.post<UserRegister>("/user/register/", { ...rest });
 
         // Si el registro es exitoso, iniciar sesión automáticamente con las credenciales
         await signIn("credentials", { ...data, redirect: false });
@@ -47,10 +40,14 @@ export async function createUser(formData: FormData) {
         }
         
     } catch (error) {
-        // Mensaje de error que se envia al usuario 
-        const message = error instanceof AuthError 
-            ? "Fallo el inicio de sesión" 
-            : "Fallo el registro";    
+        console.error("Error en CreateUser", error);
+
+        let message = "Error desconocido";
+
+        // Mensaje de error condificional cuando ocurre un problema en la petición
+        if (error instanceof Error) message = error.message;
+        if (isAxiosError(error)) message = "Fallo el registro"        
+        if (error instanceof AuthError) message = "Fallo el inicio de sesión";
 
         return { result: false, message };
     }

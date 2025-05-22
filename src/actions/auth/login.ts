@@ -1,4 +1,4 @@
-"use server";
+'use server'
 
 import { AuthError } from "next-auth";
 import { signIn } from "@/auth.config";
@@ -13,21 +13,16 @@ import { LoginSchema } from "@/actions/auth/validation/user-schema";
 export async function autheticate(formData: FormData) {
     // Convertir el FormData a un objeto plano para poder validarlo
     const fields = Object.fromEntries(formData.entries());
-    
-    // Validar los datos usando el schema apropiado
-    const { data, success } = await LoginSchema.safeParseAsync(fields);
 
-    // Si la validación falla, retornar mensaje de error.
-    if (!success) {
-        return {
-            result: false,
-            message: "Credenciales incorrectas",
-        }
-    }
+    // Validar los datos usando el schema apropiado
+    const validation = await LoginSchema.safeParseAsync(fields);
 
     try {
+        // Si la validación falla, retornar mensaje de error.
+        if (!validation.success) throw new Error("Información incorrectas");
+
         // Iniciar sesión con las credenciales
-        await signIn("credentials", { ...data, redirect: false });
+        await signIn("credentials", { ...validation.data, redirect: false });
 
         return {
             result: true,
@@ -35,10 +30,13 @@ export async function autheticate(formData: FormData) {
         };
         
     } catch (error) {
+        console.error("Error en Authenticate", error);
+
+        let message = "Error desconocido";
+
         // Mensaje de error condificional cuando ocurre un problema en la petición
-        const message = error instanceof AuthError 
-            ? "Credenciales incorrectas"
-            : "Conexión fallida";
+        if (error instanceof Error) message = error.message;
+        if (error instanceof AuthError) message = "Credenciales incorrectas";
 
         return { result: false, message };
     }
