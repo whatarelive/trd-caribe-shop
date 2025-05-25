@@ -1,8 +1,8 @@
-"use client";
+'use client'
 
 import clsx from "clsx";
 import { useState } from "react";
-import { ChevronRight, LayoutDashboard,  } from "lucide-react";
+import { ChevronRight, LayoutDashboard } from "lucide-react";
 import { NavList } from "@/components/admin/nav/nav-list";
 import { ButtonLogout } from "@/components/admin/nav/button-logout";
 

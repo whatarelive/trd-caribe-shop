@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import { redirect } from "next/navigation";
 import { useCallback } from "react";
@@ -24,8 +24,8 @@ export const ButtonLogout = () => {
         <Button 
             onClick={handleClick} 
             variant="destructive"
-            className="relative py-2 px-4 rounded-md cursor-pointer text-black bg-gray-50 hover:bg-red-100 
-            hover:text-red-500 active:bg-red-100 active:text-red-500 transition-colors max-sm:mx-4 max-sm:shadow-none"
+            className="relative py-2 px-4 rounded-md cursor-pointer text-black bg-gray-50 shadow-md hover:bg-red-100 
+            hover:text-red-500 active:bg-red-100 active:text-red-500 transition-colors max-sm:mx-4 max-xl:shadow-none"
         >
             <LogOut size={24}/>
             Cerrar Sesión
