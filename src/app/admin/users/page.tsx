@@ -1,8 +1,8 @@
 import { Suspense } from "react";
 import { TitlePage } from "@/components/admin/title-page";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
-import { ToolsSectionPage } from "@/components/admin/tools-section-page";
 import { UsersTable } from "@/components/admin/users/users-table";
+import { InputSearch } from "@/components/global/InputSearch";
 
 export default function UsersPage() {
     return (
@@ -18,8 +18,8 @@ export default function UsersPage() {
                 />
             </div>
 
-            <ToolsSectionPage placeholder="Buscar usuarios"/>
-            
+            <InputSearch placeholder="Buscar usuarios"/>
+
             <Suspense fallback={<p>Cargando...</p>}>
                 <UsersTable />   
             </Suspense>

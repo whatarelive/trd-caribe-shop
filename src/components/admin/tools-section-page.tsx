@@ -2,7 +2,7 @@ import clsx from "clsx";
 import Link from "next/link";
 import type { FC } from "react";
 import { MdAdd } from "react-icons/md";
-import { SearchInput } from "@/components/ui/input/input-search";
+import { InputSearch } from "@/components/global/InputSearch";
 
 
 interface Props {
@@ -15,7 +15,7 @@ interface Props {
 export const ToolsSectionPage: FC<Props> = ({ placeholder, destiny, label, children }) => {
     return (
         <div className={clsx("flex gap-2 lg:gap-4", { "flex-col md:flex-row" : children })}>
-            <SearchInput placeholder={placeholder}/>
+            <InputSearch placeholder={placeholder}/>
 
             { children !== undefined && children }
 
