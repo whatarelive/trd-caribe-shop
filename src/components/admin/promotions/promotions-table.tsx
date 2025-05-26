@@ -1,13 +1,12 @@
-import Link from "next/link";
-import { MdOutlineEdit } from "react-icons/md";
-import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from "@/components/ui/table";
-import { Pagination } from "@/components/ui/pagination";
-import { ButtonDeleteItem } from "@/components/admin/buttons";
 import { PromotionCard } from "@/components/admin/promotions/promotion-card";
 import { PromotionChoice } from "@/components/admin/promotions/promotions-utils";
+import { ButtonDeleteItem } from "@/components/admin/buttons";
+import { Pagination } from "@/components/ui/pagination";
+import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from "@/components/ui/table";
 import { promotions } from "@/lib/data/promotions";
 
-export const PromotionsTable = () => {
+
+export async function PromotionsTable() {
     return (
         <>
             {/* Listado de promociones para dispositivos moviles */}
@@ -65,13 +64,7 @@ export const PromotionsTable = () => {
                                 {max_price ? `$ ${max_price}` : "-"}
                             </TableCell>
                             <TableCell>
-                                <div className="inline-flex items-center gap-4">
-                                    <Link href={`/admin/promotions/${id}`} className="button-primary-v2">
-                                        <MdOutlineEdit size={20}/>
-                                    </Link>
-
-                                    <ButtonDeleteItem />
-                                </div>
+                                <ButtonDeleteItem />
                             </TableCell>
                         </TableRow>
                     ))}
@@ -79,7 +72,7 @@ export const PromotionsTable = () => {
             </Table>
                         
             {/* Componente para la paginación de los productos */}
-            <Pagination currentPage={1} totalPages={8} className="hidden md:flex"/>
+            <Pagination currentPage={1} count={1} limit={1} className="hidden md:flex"/>
         </>
     )
 }

@@ -1,96 +1,116 @@
-"use client";
+'use client'
 
-// import { useActionState } from 'react';
-// import { useFormError } from '@/lib/hooks/useFormError';
-import { TextInput } from '@/components/ui/input/input-text';
-import { SelectPromotionType } from './select-promotion-type';
-import { useState } from 'react';
-import { PromotionsChoice } from '@/interfaces/models/promotions.interface';
+import { useActionState, useState } from "react";
+import { Plus } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogTrigger, DialogHeader, DialogContent, DialogFooter, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
 
-export const CreatePromotionForm = () => {
-    // const initialState: CreateProductState = { errors: {} };
-    // const [errorMessage, formAction, isPending] = useActionState(createProduct, initialState);
-    // const { showErrors, handleFocus } = useFormError({ errors: errorMessage });
 
-    const [type, setType] = useState<PromotionsChoice>("between");
+export function CreatePromotionForm() {
+    const [open, setOpen] = useState(false);
+    const [type, setType] = useState<string>("between");
+
+    const [_state, formAction, isPending] = useActionState(
+        async (_prev: void | null, formData: FormData) => {
+
+        }, 
+        null
+    );
 
     return (
-        <form 
-            // action={formAction} 
-            className="flex flex-col mt-6 w-full md:bg-gray-50 md:p-6 md:rounded-lg"
-        >
-            <TextInput 
-                label="Nombre de la promoción" 
-                type="text" 
-                name="name" 
-                placeholder="Ingrese el nombre de promoción"
-                aria-describedby="name-error"
-                // onFocus={handleFocus}
-                // errors={showErrors ? errorMessage.errors?.name : undefined}
-            />
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+                <Button className="h-11">
+                    <Plus size={24}/>
+                    Crear Promoción
+                </Button>
+            </DialogTrigger>
 
-            <div className="flex flex-col md:flex-row gap-4">
-                <TextInput 
-                    label="Porciento de descuento" 
-                    type="text"
-                    name="porcentage"
-                    placeholder="Ingrese el porciento de descuento"
-                    aria-describedby="porcentage-error"
-                    // onFocus={handleFocus}
-                    // errors={showErrors ? errorMessage.errors?.description : undefined}
-                />
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Crear Promoción</DialogTitle>
+                    <DialogDescription>
+                        Ingrese los datos para crear una nueva promoción para los productos
+                    </DialogDescription>
+                </DialogHeader>
 
-                <SelectPromotionType 
-                    label="Tipo de Promoción"  
-                    value={type} 
-                    onChange={(e) => setType(e.target.value as PromotionsChoice)}
-                />
-            </div>
-
-            <div className="flex flex-col md:flex-row gap-4">
-                { 
-                    type !== "less" && (
-                        <TextInput 
-                            label="Valor minimo" 
-                            type="number"
-                            name="min_value"
-                            min={0} 
-                            placeholder="Ingrese el valor minimo"
-                            aria-describedby="min_value-error"
-                            // onFocus={handleFocus}
-                            // errors={showErrors ? errorMessage.errors?.stock : undefined}
+                <form action={formAction} className="mt-3">
+                    <div className="space-y-2 mb-4">
+                        <Label htmlFor="name">Nombre de la promoción</Label>
+                        <Input
+                            id="name" 
+                            type="text" 
+                            name="name" 
+                            placeholder="Ingrese el nombre de promoción"
                         />
-                    )
-                }
-
-                {
-                    type !== "greater" && (
-                        <TextInput 
-                            label="Valor máximo" 
-                            type="number" 
-                            name="max_value"
-                            min={0} 
-                            placeholder="Ingrese el valor máximo"
-                            aria-describedby="max_value-error"
-                            // onFocus={handleFocus}
-                            // errors={showErrors ? errorMessage.errors?.price : undefined}
+                    </div>
+                    <div className="space-y-2 mb-4">
+                        <Label htmlFor="porcentage">Porciento de descuento</Label>
+                        <Input
+                            id="porcentage" 
+                            type="text" 
+                            name="porcentage" 
+                            placeholder="Ingrese el porciento de descuento"
                         />
-                    )
-                }
-            </div>
+                    </div>
+                    <div className="space-y-2 mb-4">
+                        <Label htmlFor="type">Tipo de Promoción</Label>
+                        <Select name="type" defaultValue={type} onValueChange={setType}>
+                            <SelectTrigger className="w-full bg-transparent">
+                                <SelectValue placeholder="Seleccionar tipo" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="between">Entre</SelectItem>
+                                <SelectItem value="greater">Mayor que</SelectItem>
+                                <SelectItem value="less">Menor que</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div className="flex flex-col md:flex-row gap-x-4">
+                        { 
+                            type !== "less" && (
+                                <div className="space-y-2 mb-4 grow">
+                                    <Label htmlFor="min_value">Valor minimo</Label>
+                                    <Input
+                                        id="min_value" 
+                                        type="number"
+                                        min={0} 
+                                        name="min_value" 
+                                        placeholder="Ingrese el valor minimo"
+                                    />
+                                </div>
+                            )
+                        }
+                        {
+                            type !== "greater" && (
+                                <div className="space-y-2 mb-4 grow">
+                                    <Label htmlFor="max_value">Valor máximo</Label>
+                                    <Input
+                                        id="max_value" 
+                                        type="number"
+                                        min={0} 
+                                        name="max_value" 
+                                        placeholder="Ingrese el valor máximo"
+                                    />
+                                </div>
+                            )
+                        }
+                    </div>
 
-            <button 
-                type="submit" 
-                className="button-primary h-12 mt-4"
-                // disabled={isPending}
-            >
-                {/* {
-                    isPending 
-                        ? <span className="loader"></span> 
-                        : 'Crear Promoción'
-                } */}
-                Crear Promoción
-            </button>
-        </form>
+                    <DialogFooter className="flex flex-col md:flex-row mt-4">
+                        <Button type="submit" disabled={isPending}>
+                            { isPending ? "Guardando..." : 'Crear Promoción' }
+                        </Button>
+
+                        <DialogClose variant="outline">
+                            Cancelar
+                        </DialogClose>
+                    </DialogFooter>
+                </form>
+            </DialogContent>
+        </Dialog>
     )
 }
