@@ -1,25 +1,19 @@
 import type { ComponentProps, DetailedHTMLProps, InputHTMLAttributes } from "react";
-import type { IconType } from "react-icons";
 
 export interface ILayout {
     readonly children: React.ReactNode;
 };
 
-export interface ITextInput extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
-    label: string; 
-    icon?: IconType;
-    errors?: string[];
-};
-
-export interface ITextArea extends ComponentProps<"textarea"> {
-    label: string; 
-    errors?: string[];
+export interface IPage {
+    params: Promise<{ id: string }>
+    searchParams: Promise<{ [key: string]: string | undefined }>
 }
 
 // Props del componente Pagination
 export interface PaginationProps {
     currentPage: number;
-    totalPages: number;
+    count: number;
+    limit: number;
     className?: string;
 }
 

@@ -1,6 +1,7 @@
 'use server'
 
 import { auth } from "@/auth.config";
+import { API_URL } from "@/config/constants";
 import type { UserResponse } from "@/interfaces/models/user.interface";
 
 interface Props {
@@ -23,7 +24,7 @@ export async function getUsers({ page, limit, search }: Props) {
             ...(search && { search }),
         });
 
-        const response = await fetch(`/user/users?${params}`, {
+        const response = await fetch(`${API_URL}/user/users?${params}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${session.accessToken}`,

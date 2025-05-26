@@ -22,7 +22,7 @@ export const InputSearch: FC<Props> = memo(({ placeholder }) => {
         else params.delete("search");
 
         replace(`${pathname}?${params.toString()}`);
-    }, 500);
+    }, 1000);
 
     return (
         <div className="relative w-full">
@@ -31,7 +31,7 @@ export const InputSearch: FC<Props> = memo(({ placeholder }) => {
                 type="search"
                 defaultValue={searchParams.get("search")?.toString() ?? ""}
                 onChange={({ target }) => handleChange(target.value)}
-                className="w-full h-11 pl-10" 
+                className="w-full md:max-w-96 h-11 bg-transparent pl-10" 
                 placeholder={placeholder}
             />            
         </div>

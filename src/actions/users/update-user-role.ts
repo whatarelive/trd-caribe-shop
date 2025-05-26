@@ -6,7 +6,7 @@ import { auth } from "@/auth.config";
 import { backend } from "@/config/api";
 
 
-export async function updateUserRole(id: number) {
+export async function updateUserRole(id: number, username: string) {
     try {
         if (typeof id !== "number" || id <= 0) throw new Error("ID invalido");
         
@@ -15,8 +15,12 @@ export async function updateUserRole(id: number) {
         if (!session || !session.accessToken || !session.user?.isAdmin) {
             throw new Error("Usuario no Autorizado");
         }
-        
-        await backend.post(`/user/update-role/${id}`, {
+
+        if (username === session.user.username) {
+            throw new Error("No puedes cambiar el rol de tu usuario");
+        }
+
+        await backend.patch(`/user/change-role/${id}`, { username }, {
             headers: { Authorization: `Bearer ${session.accessToken}` },
         });
     

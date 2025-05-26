@@ -1,17 +1,35 @@
-import { ButtonDeleteItem } from "@/components/admin/buttons";
-import { Pagination } from "@/components/ui/pagination";
-import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from "@/components/ui/table"
+import { RotateCcwKey, Shield, Users } from "lucide-react";
+import { getUsers } from "@/actions/users/get-users";
+import { updateUserRole } from "@/actions/users/update-user-role";
+import { AlertModal } from "@/components/global/AlertModal";
+import { ErrorSection } from "@/components/global/ErrorSection";
 import { UserCard } from "@/components/admin/users/user-card";
-import { ButtonUserChangeRole, UserNameView } from "@/components/admin/users/users-utils";
-import { users } from "@/lib/data/users";
 import { Badge } from "@/components/ui/badge";
+import { Avatar } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Pagination } from "@/components/ui/pagination";
+import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell, TableCaption } from "@/components/ui/table";
 
-export const UsersTable = () => {
+interface Props {
+    search?: string;
+    page: number;
+    limit: number;
+}
+
+export async function UsersTable({ page, limit, search }: Props) {
+    // Se carga el listado de usuarios desde el Backend según los filtros activos.
+    const users = await getUsers({ page, limit, search });
+    
+    // Mensajes de en la UI según el error que ocurra.
+    if (users.count === 0 && search && search.length !== 0) return <ErrorSection variant="search"/>
+    if (users.count === 0 && !search) return <ErrorSection variant="data"/>
+    if (!users.result || !users.count) return <ErrorSection variant="error"/>
+    
     return (
         <>
             {/* Listado de usuarios para dispositivos moviles */}
-            <ul className="flex flex-col gap-2 bg-gray-50 p-2 lg:hidden">
-                {users.map((user) => (
+            <ul className="flex flex-col gap-5 lg:hidden">
+                {users.data.map((user) => (
                     <UserCard
                         key={user.id} 
                         user={user}
@@ -21,30 +39,39 @@ export const UsersTable = () => {
 
             {/* Tabla de usuarios para dispositivos de escritorio */}
             <Table>
+                <TableCaption>
+                    Se mostraron <b>{ limit > users.count ? users.count : limit }</b> usuarios de <b>{users.count}</b> en total 
+                </TableCaption>
                 <TableHeader>
                     <TableRow>
                         <TableHead>
                             Nombre y Apellidos
                         </TableHead>
-                        <TableHead>
+                        <TableHead className="w-20">
                             Usuario
                         </TableHead>
                         <TableHead>
                             Correo electrónico
                         </TableHead>
-                        <TableHead>
+                        <TableHead className="w-16">
                             Nivel de Permisos
                         </TableHead>
-                        <TableHead>
+                        <TableHead className="w-16">
                             Opciones
                         </TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    { users.map(({id, email, first_name, last_name, username, is_staff}) => (
-                        <TableRow key={id} className="lg:bg-white lg:border-b-2 lg:border-gray-200">
+                    { users.data.map(({id, email, first_name, last_name, username, is_staff}) => (
+                        <TableRow key={id} className="lg:bg-white lg:border-b-1 lg:border-gray-200">
                             <TableCell>
-                                <UserNameView value={`${first_name} ${last_name}`}/>
+                                <div className="inline-flex gap-2 items-center">
+                                    <Avatar>{first_name.slice(0, 2)}</Avatar>
+                            
+                                    <span className="line-clamp-1">
+                                        { `${first_name} ${last_name}` }
+                                    </span>
+                                </div>
                             </TableCell>
                             <TableCell>
                                 <span className="line-clamp-1">
@@ -57,15 +84,33 @@ export const UsersTable = () => {
                                 </span>
                             </TableCell>
                             <TableCell>
-                                <Badge variant={is_staff ? "success" : "destructive"}>
-                                    { is_staff ? "administrador" : "cliente" }
+                                <Badge 
+                                    className="inline-flex gap-1 items-center" 
+                                    variant={is_staff ? "success" : "destructive"}
+                                >
+                                    {is_staff ? (
+                                        <>
+                                            <Shield className="h-3 w-3" />
+                                            Administrador
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Users className="h-3 w-3" />
+                                            Cliente
+                                        </>
+                                    )}
                                 </Badge>
                             </TableCell>                           
                             <TableCell>
-                                <div className="inline-flex items-center gap-4">
-                                    <ButtonUserChangeRole isStaff={is_staff}/>
-                                    <ButtonDeleteItem/>
-                                </div>
+                                <AlertModal
+                                    title="Cambio de Rol" 
+                                    message={`Desesa cambiar el rol de ${is_staff ? "administrador" : "cliente"} al usuario ${username}`} 
+                                    action={updateUserRole.bind(null, id, username)} 
+                                >
+                                    <Button type="button" variant="outline" size="icon">
+                                        <RotateCcwKey size={24}/>
+                                    </Button>
+                                </AlertModal>
                             </TableCell>
                         </TableRow>
                     ))}
@@ -73,7 +118,12 @@ export const UsersTable = () => {
             </Table>
                         
             {/* Componente para la paginación de los productos */}
-            <Pagination currentPage={1} totalPages={8} className="hidden md:flex"/>
+            <Pagination 
+                limit={limit}
+                currentPage={page} 
+                count={users.count}
+                className="hidden md:flex"
+            />
         </>
     )
 }

@@ -55,7 +55,7 @@ export const DialogTitle: FC<ComponentProps<typeof Primitive.Title>> = ({ classN
     return (
         <Primitive.Title
             data-slot="dialog-title"
-            className={cn("text-lg leading-none font-semibold", className)}
+            className={cn("text-lg leading-none text-start font-semibold", className)}
             {...props}
         />
     )
@@ -65,7 +65,7 @@ export const DialogDescription: FC<ComponentProps<typeof Primitive.Description>>
     return (
         <Primitive.Description
             data-slot="dialog-description"
-            className={cn("text-muted-foreground text-sm", className)}
+            className={cn("text-muted-foreground text-start text-sm", className)}
             {...props}
         />
     )
