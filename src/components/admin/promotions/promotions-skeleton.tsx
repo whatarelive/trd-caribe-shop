@@ -1,16 +1,16 @@
 import { PaginationSkeleton } from "@/components/admin/pagination-skeleton";
-import { UserCardSkeleton } from "@/components/admin/users/user-card-skeleton";
+import { PromotionCardSkeleton } from "@/components/admin/promotions/promotion-card-skeleton";
 import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell, TableCaption } from "@/components/ui/table";
 
 
-export function UsersSkeleton({ rows }: { rows: number }) {
+export function PromotionsSkeleton({ rows }: { rows: number }) {
     const array = Array.from({ length: rows });
 
     return (
         <div className="space-y-4">
             {/* Skeleton para vista mobile */}
             <ul className="flex flex-col gap-5 lg:hidden">
-                {array.map((_, index) => <UserCardSkeleton key={index} />)}
+                {array.map((_, index) => <PromotionCardSkeleton key={index} />)}
             </ul>
 
             {/* Skeleton para vista desktop */}
@@ -20,27 +20,31 @@ export function UsersSkeleton({ rows }: { rows: number }) {
                 </TableCaption>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Nombre y Apellidos</TableHead>
-                        <TableHead className="w-20">Usuario</TableHead>
-                        <TableHead>Correo electrónico</TableHead>
-                        <TableHead className="w-16">Nivel de Permisos</TableHead>
-                        <TableHead className="w-16">Opciones</TableHead>
+                        <TableHead>Promoción</TableHead>
+                        <TableHead>Porciento</TableHead>
+                        <TableHead>Tipo</TableHead>
+                        <TableHead>Precio Minimo</TableHead>
+                        <TableHead>Precio Máximo</TableHead>
+                        <TableHead>Opciones</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {array.map((_, index) => (
                         <TableRow key={index} className="lg:bg-white lg:border-b-1 lg:border-gray-200">
                             <TableCell>
-                                <span className="skeleton h-5 w-32" />
+                                <span className="skeleton h-5 w-24" />
                             </TableCell>
                             <TableCell>
                                 <span className="skeleton h-5 w-16" />
                             </TableCell>
                             <TableCell>
-                                <span className="skeleton h-5 w-40" />
+                                <span className="skeleton h-5 w-20" />
                             </TableCell>
                             <TableCell>
-                                <span className="skeleton h-5 w-20 rounded-md" />
+                                <span className="skeleton h-5 w-16" />
+                            </TableCell>
+                            <TableCell>
+                                <span className="skeleton h-5 w-16" />
                             </TableCell>
                             <TableCell>
                                 <span className="skeleton h-9 w-9 rounded-md" />

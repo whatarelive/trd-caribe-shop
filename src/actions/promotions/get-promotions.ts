@@ -1,15 +1,12 @@
 'use server'
 
 import { auth } from "@/auth.config";
+import { API_URL } from "@/config/constants";
+import type { IFilters } from "@/interfaces/components";
 import type { PromotionsResponse } from "@/interfaces/models/promotions.interface";
 
-interface Props {
-    page: number;
-    limit: number;
-    search?: string;
-}
 
-export async function getPromotions({ page, limit, search }: Props) {
+export async function getPromotions({ page, limit, search }: IFilters) {
     const session = await auth();
     
     try {
@@ -23,7 +20,7 @@ export async function getPromotions({ page, limit, search }: Props) {
             ...(search && { search }),
         });
 
-        const response = await fetch(`/store/discounts?${params}`, {
+        const response = await fetch(`${API_URL}/store/discounts?${params}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${session.accessToken}`,
@@ -42,7 +39,7 @@ export async function getPromotions({ page, limit, search }: Props) {
         return {
             result: true,
             count: data.count,
-            results: data.results,
+            data: data.results,
         };
 
     } catch (error) {

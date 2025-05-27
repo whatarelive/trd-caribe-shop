@@ -2,11 +2,14 @@
 
 import { useActionState, useState } from "react";
 import { Plus } from "lucide-react";
+import { createPromotion } from "@/actions/promotions/create-promotion";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from '@/components/ui/button';
+import { showErrorToast, showSuccessToast } from "@/components/ui/sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogTrigger, DialogHeader, DialogContent, DialogFooter, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
+
+import * as Modal from "@/components/ui/dialog";
 
 
 export function CreatePromotionForm() {
@@ -15,27 +18,34 @@ export function CreatePromotionForm() {
 
     const [_state, formAction, isPending] = useActionState(
         async (_prev: void | null, formData: FormData) => {
+            const { result, message } = await createPromotion(formData);
 
+            if (result) showSuccessToast({ title: message });
+            else showErrorToast({ title: message });
+            
+            setOpen(false);
         }, 
         null
     );
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
+        <Modal.Dialog open={open} onOpenChange={setOpen}>
+            <Modal.DialogTrigger asChild>
                 <Button className="h-11">
                     <Plus size={24}/>
                     Crear Promoción
                 </Button>
-            </DialogTrigger>
+            </Modal.DialogTrigger>
 
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Crear Promoción</DialogTitle>
-                    <DialogDescription>
+            <Modal.DialogContent>
+                <Modal.DialogHeader>
+                    <Modal.DialogTitle>
+                        Crear Promoción
+                    </Modal.DialogTitle>
+                    <Modal.DialogDescription>
                         Ingrese los datos para crear una nueva promoción para los productos
-                    </DialogDescription>
-                </DialogHeader>
+                    </Modal.DialogDescription>
+                </Modal.DialogHeader>
 
                 <form action={formAction} className="mt-3">
                     <div className="space-y-2 mb-4">
@@ -48,17 +58,17 @@ export function CreatePromotionForm() {
                         />
                     </div>
                     <div className="space-y-2 mb-4">
-                        <Label htmlFor="porcentage">Porciento de descuento</Label>
+                        <Label htmlFor="percentage">Porciento de descuento</Label>
                         <Input
-                            id="porcentage" 
+                            id="percentage" 
                             type="text" 
-                            name="porcentage" 
+                            name="percentage" 
                             placeholder="Ingrese el porciento de descuento"
                         />
                     </div>
                     <div className="space-y-2 mb-4">
-                        <Label htmlFor="type">Tipo de Promoción</Label>
-                        <Select name="type" defaultValue={type} onValueChange={setType}>
+                        <Label htmlFor="choice">Tipo de Promoción</Label>
+                        <Select name="choice" defaultValue={type} onValueChange={setType}>
                             <SelectTrigger className="w-full bg-transparent">
                                 <SelectValue placeholder="Seleccionar tipo" />
                             </SelectTrigger>
@@ -70,47 +80,40 @@ export function CreatePromotionForm() {
                         </Select>
                     </div>
                     <div className="flex flex-col md:flex-row gap-x-4">
-                        { 
-                            type !== "less" && (
-                                <div className="space-y-2 mb-4 grow">
-                                    <Label htmlFor="min_value">Valor minimo</Label>
-                                    <Input
-                                        id="min_value" 
-                                        type="number"
-                                        min={0} 
-                                        name="min_value" 
-                                        placeholder="Ingrese el valor minimo"
-                                    />
-                                </div>
-                            )
-                        }
-                        {
-                            type !== "greater" && (
-                                <div className="space-y-2 mb-4 grow">
-                                    <Label htmlFor="max_value">Valor máximo</Label>
-                                    <Input
-                                        id="max_value" 
-                                        type="number"
-                                        min={0} 
-                                        name="max_value" 
-                                        placeholder="Ingrese el valor máximo"
-                                    />
-                                </div>
-                            )
-                        }
+                        <div className={`space-y-2 mb-4 grow ${ type === "greater" ? "hidden" : "block" }`}>
+                            <Label htmlFor="min_price">Valor minimo</Label>
+                            <Input
+                                id="min_price" 
+                                type="number"
+                                min={0}
+                                name="min_price" 
+                                placeholder="Ingrese el valor minimo"
+                            />
+                        </div>
+                
+                        <div className={`space-y-2 mb-4 grow ${ type === "less" ? "hidden" : "block" }`}>
+                            <Label htmlFor="max_price">Valor máximo</Label>
+                            <Input
+                                id="max_price" 
+                                type="number"
+                                min={0} 
+                                name="max_price" 
+                                placeholder="Ingrese el valor máximo"
+                            />
+                        </div>
                     </div>
 
-                    <DialogFooter className="flex flex-col md:flex-row mt-4">
+                    <Modal.DialogFooter className="flex flex-col md:flex-row mt-4">
                         <Button type="submit" disabled={isPending}>
                             { isPending ? "Guardando..." : 'Crear Promoción' }
                         </Button>
 
-                        <DialogClose variant="outline">
+                        <Modal.DialogClose variant="outline">
                             Cancelar
-                        </DialogClose>
-                    </DialogFooter>
+                        </Modal.DialogClose>
+                    </Modal.DialogFooter>
                 </form>
-            </DialogContent>
-        </Dialog>
+            </Modal.DialogContent>
+        </Modal.Dialog>
     )
 }

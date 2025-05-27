@@ -2,15 +2,11 @@
 
 import { auth } from "@/auth.config";
 import { API_URL } from "@/config/constants";
+import type { IFilters } from "@/interfaces/components";
 import type { UserResponse } from "@/interfaces/models/user.interface";
 
-interface Props {
-    page: number;
-    limit: number;
-    search?: string;
-}
 
-export async function getUsers({ page, limit, search }: Props) {
+export async function getUsers({ page, limit, search }: IFilters) {
     const session = await auth();
     
     try {

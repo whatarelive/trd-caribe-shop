@@ -9,6 +9,12 @@ export interface IPage {
     searchParams: Promise<{ [key: string]: string | undefined }>
 }
 
+export interface IFilters {
+    search?: string;
+    page: number;
+    limit: number;
+}
+
 // Props del componente Pagination
 export interface PaginationProps {
     currentPage: number;

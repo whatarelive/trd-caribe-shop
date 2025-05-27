@@ -34,7 +34,10 @@ export default async function UsersPage({ searchParams }: IPage) {
                     <SelectLimit label="usuario" />
                 </div>
 
-                <Suspense key={search + currentPage} fallback={<UsersSkeleton rows={currentLimit}/>}>
+                <Suspense 
+                    key={search + currentPage + limit} 
+                    fallback={<UsersSkeleton rows={currentLimit}/>}
+                >
                     <UsersTable search={search} page={currentPage} limit={currentLimit}/>   
                 </Suspense>
             </div>

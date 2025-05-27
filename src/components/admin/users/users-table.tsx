@@ -9,21 +9,22 @@ import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Pagination } from "@/components/ui/pagination";
 import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell, TableCaption } from "@/components/ui/table";
+import type { IFilters } from "@/interfaces/components";
 
-interface Props {
-    search?: string;
-    page: number;
-    limit: number;
-}
 
-export async function UsersTable({ page, limit, search }: Props) {
+export async function UsersTable({ page, limit, search }: IFilters) {
     // Se carga el listado de usuarios desde el Backend según los filtros activos.
     const users = await getUsers({ page, limit, search });
     
     // Mensajes de en la UI según el error que ocurra.
-    if (users.count === 0 && search && search.length !== 0) return <ErrorSection variant="search"/>
-    if (users.count === 0 && !search) return <ErrorSection variant="data"/>
-    if (!users.result || !users.count) return <ErrorSection variant="error"/>
+    if (users.count === 0 && search && search.length !== 0) 
+        return <ErrorSection variant="search"/>
+    
+    if (users.count === 0 && !search) 
+        return <ErrorSection variant="data"/>
+    
+    if (!users.result || !users.count) 
+        return <ErrorSection variant="error"/>
     
     return (
         <>
@@ -40,7 +41,8 @@ export async function UsersTable({ page, limit, search }: Props) {
             {/* Tabla de usuarios para dispositivos de escritorio */}
             <Table>
                 <TableCaption>
-                    Se mostraron <b>{ limit > users.count ? users.count : limit }</b> usuarios de <b>{users.count}</b> en total 
+                    Se mostraron <b>{ limit > users.count ? users.count : limit } </b> 
+                    usuarios de <b>{users.count}</b> en total 
                 </TableCaption>
                 <TableHeader>
                     <TableRow>

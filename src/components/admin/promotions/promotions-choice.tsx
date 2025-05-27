@@ -1,16 +1,14 @@
 import clsx from "clsx";
-import { MdArrowDownward, MdArrowUpward, MdOutlineCompareArrows } from "react-icons/md";
-
-import type { FC } from "react";
+import { ArrowDown, ArrowLeftRight, ArrowUp } from "lucide-react";
 import type { PromotionsChoice } from "@/interfaces/models/promotions.interface";
 
-const Choices = {
+const CHOICES = {
     greater: "Mayor que", 
     less: "Menor que", 
     between: "Entre",
 }
 
-export const PromotionChoice: FC<{ choice: PromotionsChoice }> = ({ choice }) => {
+export function PromotionChoice({ choice }: { choice: PromotionsChoice }) {
     return (
         <span 
             className={clsx(
@@ -22,11 +20,11 @@ export const PromotionChoice: FC<{ choice: PromotionsChoice }> = ({ choice }) =>
                 }
             )}
         >              
-            { choice === "greater" && <MdArrowUpward size={18}/> }
-            { choice === "less" && <MdArrowDownward size={18}/> }
-            { choice === "between" && <MdOutlineCompareArrows size={20}/> }
+            { choice === "greater" && <ArrowUp size={18}/> }
+            { choice === "less" && <ArrowDown size={18}/> }
+            { choice === "between" && <ArrowLeftRight size={20}/> }
 
-            { Choices[choice] }
+            { CHOICES[choice] }
         </span>
     )
 }
