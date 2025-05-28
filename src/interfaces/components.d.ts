@@ -11,6 +11,7 @@ export interface IPage {
 
 export interface IFilters {
     search?: string;
+    ordering?: string;
     page: number;
     limit: number;
 }

@@ -1,69 +1,77 @@
-import Link from "next/link";
-import { MdOutlineInfo } from "react-icons/md";
-import { ButtonDeleteItem } from "@/components/admin/buttons";
+import { getComplaints } from "@/actions/complaints-suggestions/get-complaints-suggestions";
+import { format } from "@/lib/format-date";
+import { Badge } from "@/components/ui/badge";
+import { Avatar } from "@/components/ui/avatar";
 import { Pagination } from "@/components/ui/pagination";
-import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from "@/components/ui/table";
-import { UserNameView } from "@/components/admin/users/users-utils";
+import { ErrorSection } from "@/components/global/ErrorSection";
 import { ComplaintsCard } from "@/components/admin/complaints-suggestions/complaints-card";
-import { ComplaintState } from "@/components/admin/complaints-suggestions/complaints-utils";
-import { suggestions } from "@/lib/data/suggestions";
+import { TextCommentDialog } from "@/components/admin/complaints-suggestions/text-comment-dialog";
+import { CreateResponseForm } from "@/components/admin/complaints-suggestions/create-response-form";
+import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell, TableCaption } from "@/components/ui/table";
+import type { IFilters } from "@/interfaces/components";
 
-export const ComplaintsAndSuggestionsTable = () => {
+const columns = ["Usuario", "Estado", "Fecha de Creación", "Fecha de Respuesta", "Opciones"];
+
+export async function ComplaintsTable({ limit, page, search, ordering }: IFilters) {
+    // Se carga el listado de comentarios desde el Backend según los filtros activos.
+    const complaints = await getComplaints({ limit, page, search, ordering });
+
+    // Mensajes de en la UI según el error que ocurra.
+    if (complaints.count === 0 && search && search.length !== 0)
+        return <ErrorSection variant="search"/>
+
+    if (complaints.count === 0 && !search)
+        return <ErrorSection variant="data"/>
+    
+    if (!complaints.result || !complaints.count) 
+        return <ErrorSection variant="error"/>
+
     return (
         <>
             {/* Listado de quejas y sugerencias para dispositivos moviles */}
-            <ul className="flex flex-col gap-2 bg-gray-50 p-2 lg:hidden">
-                {suggestions.map((suggestion) => (
-                    <ComplaintsCard
-                        key={suggestion.id}
-                        suggestion={suggestion}
-                    />
+            <ul className="flex flex-col gap-5 lg:hidden">
+                {complaints.data.map((complaint) => (
+                    <ComplaintsCard key={complaint.id} complaint={complaint}/>
                 ))}
             </ul>
 
             {/* Tabla de quejas y sugerencias para dispositivos de escritorio */}
             <Table>
+                <TableCaption>
+                    Se mostraron <b>{ limit > complaints.count ? complaints.count : limit } </b> 
+                    comentarios de <b>{complaints.count}</b> en total 
+                </TableCaption>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>
-                            Usuario
-                        </TableHead>
-                        <TableHead>
-                            Estado
-                        </TableHead>
-                        <TableHead>
-                            Fecha de Creación
-                        </TableHead>
-                        <TableHead>
-                            Fecha de Respuesta
-                        </TableHead>
-                        <TableHead>
-                            Opciones
-                        </TableHead>
+                        {columns.map((column, index) => (
+                            <TableHead key={index}>{column}</TableHead>
+                        ))}
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    { suggestions.map(({id, active, created, upate, user}) => (
-                        <TableRow key={ id } className="lg:border-b-2 lg:border-gray-200 lg:bg-white">
+                    {complaints.data.map(({id, text, active, created, upate, user}) => (
+                        <TableRow key={id} className="lg:border-b-1 lg:border-gray-200 lg:bg-white">
                             <TableCell>
-                                <UserNameView value={user}/>
-                            </TableCell>
-                            <TableCell className="">
-                               <ComplaintState active={active}/>
+                                <div className="inline-flex gap-2 items-center">
+                                    <Avatar>{user.slice(0, 2)}</Avatar>                            
+                                    <span className="line-clamp-1">{user}</span>
+                                </div>
                             </TableCell>
                             <TableCell>
-                                { created }
+                                <Badge variant={active ? "destructive" : "success"}>
+                                    {active ? "No resuelta" : "Resuelta"}
+                                </Badge>
+                            </TableCell>
+                            <TableCell>
+                                {format(created)}
                             </TableCell>    
                             <TableCell>
-                                { upate.length === 0 ? "--/--/--" : upate }
+                                {active ? "-- / -- / --" : format(upate)}
                             </TableCell>
                             <TableCell>
-                                <div className="inline-flex items-center gap-4">
-                                    <Link href={`/admin/complaints-suggestions/${id}`} className="button-primary-v2">
-                                        <MdOutlineInfo size={20}/>
-                                    </Link>
-
-                                    <ButtonDeleteItem/>
+                                <div className="inline-flex gap-2">
+                                    <TextCommentDialog text={text} user={user} />
+                                    <CreateResponseForm user={user} />
                                 </div>
                             </TableCell>
                         </TableRow>
@@ -72,7 +80,12 @@ export const ComplaintsAndSuggestionsTable = () => {
             </Table>
                         
             {/* Componente para la paginación de las quejas y sugerencias */}
-            <Pagination currentPage={1} totalPages={8} className="hidden md:flex"/>
+            <Pagination 
+                limit={limit} 
+                currentPage={page} 
+                count={complaints.count} 
+                className="hidden md:flex"
+            />
         </>
     )
 }

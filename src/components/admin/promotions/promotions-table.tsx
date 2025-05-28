@@ -10,9 +10,7 @@ import { Pagination } from "@/components/ui/pagination";
 import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell, TableCaption } from "@/components/ui/table";
 import type { IFilters } from "@/interfaces/components";
 
-
 const columns = ["Promoción", "Porciento", "Tipo", "Precio Minimo", "Precio Máximo", "Opciones"];
-
 
 export async function PromotionsTable({ limit, page, search }: IFilters) {
     // Se carga el listado de promociones desde el Backend según los filtros activos.

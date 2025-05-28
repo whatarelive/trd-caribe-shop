@@ -4,21 +4,23 @@ import { revalidateTag } from "next/cache";
 import { isAxiosError } from "axios";
 import { auth } from "@/auth.config";
 import { backend } from "@/config/api";
-import { CreateComplaintsSchema } from "./validation/complaints-suggestions-schema";
+import { CreateResponseSchema } from "./validation/complaints-suggestions-schema";
 
 
-export async function createComplaints(formData: FormData) {
+export async function createResponseComplaints(formData: FormData) {
     const session = await auth();
     
     try {
-        if (!session || !session.accessToken) throw new Error("Usuario no Autorizado");
-        
+        if (!session || !session.accessToken || !session.user?.isAdmin) {
+            throw new Error("Usuario no Autorizado");
+        }
+
         const fields = Object.fromEntries(formData.entries());
-        const { data, success } = await CreateComplaintsSchema.safeParseAsync(fields);
+        const { data, success } = await CreateResponseSchema.safeParseAsync(fields);
     
         if (!success) throw new Error("Datos incorrectos");
         
-        await backend.post("/store/complaints-suggestions/create/", { ...data, active: true }, {
+        await backend.post("/store/complaints-suggestions/response/", data, {
             headers: { Authorization: `Bearer ${session.accessToken}` },
         });
 
@@ -26,16 +28,16 @@ export async function createComplaints(formData: FormData) {
 
         return {
             result: true,
-            message: "Comentario publicado"
+            message: "Respuesta del comentario enviada"
         }
 
     } catch (error) {
-        console.error("Error en CreateComplaints", error);
+        console.error("Error en CreateResponseComplaints", error);
 
         let message = "Error desconocido";
 
         if (error instanceof Error) message = error.message;
-        if (isAxiosError(error)) message = "Fallo la publicación del comentario";
+        if (isAxiosError(error)) message = "Fallo el envio de la respuesta del comentario";
 
         return { result: false, message };
     }

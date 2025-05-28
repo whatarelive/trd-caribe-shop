@@ -17,9 +17,7 @@ export default async function PromotionsPage({ searchParams }: IPage) {
     return (
         <section className="flex flex-col gap-6 w-full p-4 min-[375px]:p-8 xl:pr-16 bg-white md:bg-transparent">
             <div>
-                <h1 className="text-2xl lg:text-2xl font-semibold text-neutral-500">
-                    Listado de Usuarios
-                </h1>
+                <h1 className="title-page">Listado de Promociones</h1>
 
                 <Breadcrumbs 
                     breadcrumbs={[

@@ -11,6 +11,10 @@ body {
   @apply animate-pulse flex rounded-md bg-neutral-200
 }
 
+.title-page {
+  @apply text-2xl lg:text-2xl font-semibold text-neutral-500
+}
+
 @keyframes shadowExpandX {
   0% {
     box-shadow: 0 0, 0 0;
