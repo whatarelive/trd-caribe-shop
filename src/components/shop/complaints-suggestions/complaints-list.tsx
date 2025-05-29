@@ -5,7 +5,7 @@ import { Pagination } from "@/components/ui/pagination";
 
 
 export async function ComplaintsList({ page }: { page: number }) {
-    const complaints = await getComplaints({ page, limit: 8 });
+    const complaints = await getComplaints({ page, limit: 8, ordering: "-created" });
 
     if (!complaints.result || !complaints.count || complaints.error) {
         return (
