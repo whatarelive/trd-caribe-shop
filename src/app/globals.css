@@ -7,6 +7,12 @@ body {
   user-select: none;
 }
 
+.template-page {
+  display: grid;
+  min-height: 100dvh;
+  grid-template-rows: 1fr auto;
+}
+
 .skeleton {
   @apply animate-pulse flex rounded-md bg-neutral-200
 }
