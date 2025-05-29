@@ -6,7 +6,7 @@ import type { IFilters } from "@/interfaces/components";
 import type { UserResponse } from "@/interfaces/models/user.interface";
 
 
-export async function getUsers({ page, limit, search }: IFilters) {
+export async function getUsers({ page, limit, search, ordering }: IFilters) {
     const session = await auth();
     
     try {
@@ -18,6 +18,7 @@ export async function getUsers({ page, limit, search }: IFilters) {
             limit: limit.toString(),
             offset: ((page - 1) * limit).toString(),
             ...(search && { search }),
+            ...(ordering && { ordering }),
         });
 
         const response = await fetch(`${API_URL}/user/users?${params}`, {

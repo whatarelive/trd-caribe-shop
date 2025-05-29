@@ -10,11 +10,11 @@ import { Pagination } from "@/components/ui/pagination";
 import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell, TableCaption } from "@/components/ui/table";
 import type { IFilters } from "@/interfaces/components";
 
-const columns = ["Promoción", "Porciento", "Tipo", "Precio Minimo", "Precio Máximo", "Opciones"];
+const columns = ["Promoción", "Tipo", "Variante", "Valor", "Precio Minimo", "Precio Máximo", "Opciones"];
 
-export async function PromotionsTable({ limit, page, search }: IFilters) {
+export async function PromotionsTable({ limit, page, search, ordering }: IFilters) {
     // Se carga el listado de promociones desde el Backend según los filtros activos.
-    const promotions = await getPromotions({ limit, page, search });
+    const promotions = await getPromotions({ limit, page, search, ordering });
 
     // Mensajes de en la UI según el error que ocurra.
     if (promotions.count === 0 && search && search.length !== 0)
@@ -49,7 +49,7 @@ export async function PromotionsTable({ limit, page, search }: IFilters) {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    { promotions.data.map(({ id, name, choice, percentage, max_price, min_price }) => (
+                    { promotions.data.map(({ id, name, tipo, choice, valor, max_price, min_price }) => (
                         <TableRow key={id} className="lg:border-b-1 lg:border-gray-200 lg:bg-white">
                             <TableCell>
                                 <span className="line-clamp-1">
@@ -57,10 +57,13 @@ export async function PromotionsTable({ limit, page, search }: IFilters) {
                                 </span>
                             </TableCell>
                             <TableCell>
-                                {percentage} %
+                                { tipo === "percentage" ? "porcentage" : "fija" }
                             </TableCell>
                             <TableCell>
                                 <PromotionChoice choice={choice}/>
+                            </TableCell>
+                            <TableCell>
+                                {valor} %
                             </TableCell>
                             <TableCell>
                                 {min_price !== "0.00" ? `$ ${min_price}` : "-"}

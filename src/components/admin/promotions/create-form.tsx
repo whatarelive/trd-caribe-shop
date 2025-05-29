@@ -58,19 +58,31 @@ export function CreatePromotionForm() {
                         />
                     </div>
                     <div className="space-y-2 mb-4">
-                        <Label htmlFor="percentage">Porciento de descuento</Label>
+                        <Label htmlFor="valor">Valor de descuento</Label>
                         <Input
-                            id="percentage" 
+                            id="valor" 
                             type="text" 
-                            name="percentage" 
-                            placeholder="Ingrese el porciento de descuento"
+                            name="valor" 
+                            placeholder="Ingrese el valor de descuento"
                         />
                     </div>
                     <div className="space-y-2 mb-4">
-                        <Label htmlFor="choice">Tipo de Promoción</Label>
+                        <Label htmlFor="tipo">Tipo de Promoción</Label>
+                        <Select name="tipo">
+                            <SelectTrigger className="w-full bg-transparent">
+                                <SelectValue placeholder="Seleccionar Tipo" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="percentage">Porcentage</SelectItem>
+                                <SelectItem value="fixed">Fija</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div className="space-y-2 mb-4">
+                        <Label htmlFor="choice">Variante de Promoción</Label>
                         <Select name="choice" defaultValue={type} onValueChange={setType}>
                             <SelectTrigger className="w-full bg-transparent">
-                                <SelectValue placeholder="Seleccionar tipo" />
+                                <SelectValue placeholder="Seleccionar Variante" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="between">Entre</SelectItem>
@@ -80,7 +92,7 @@ export function CreatePromotionForm() {
                         </Select>
                     </div>
                     <div className="flex flex-col md:flex-row gap-x-4">
-                        <div className={`space-y-2 mb-4 grow ${ type === "greater" ? "hidden" : "block" }`}>
+                        <div className={`space-y-2 mb-4 grow ${ type === "less" ? "hidden" : "block" }`}>
                             <Label htmlFor="min_price">Valor minimo</Label>
                             <Input
                                 id="min_price" 
@@ -91,7 +103,7 @@ export function CreatePromotionForm() {
                             />
                         </div>
                 
-                        <div className={`space-y-2 mb-4 grow ${ type === "less" ? "hidden" : "block" }`}>
+                        <div className={`space-y-2 mb-4 grow ${ type === "greater" ? "hidden" : "block" }`}>
                             <Label htmlFor="max_price">Valor máximo</Label>
                             <Input
                                 id="max_price" 

@@ -12,9 +12,9 @@ import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell, TableCap
 import type { IFilters } from "@/interfaces/components";
 
 
-export async function UsersTable({ page, limit, search }: IFilters) {
+export async function UsersTable({ page, limit, search, ordering }: IFilters) {
     // Se carga el listado de usuarios desde el Backend según los filtros activos.
-    const users = await getUsers({ page, limit, search });
+    const users = await getUsers({ page, limit, search, ordering });
     
     // Mensajes de en la UI según el error que ocurra.
     if (users.count === 0 && search && search.length !== 0) 

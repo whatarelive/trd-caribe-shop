@@ -21,8 +21,9 @@ export function PromotionsSkeleton({ rows }: { rows: number }) {
                 <TableHeader>
                     <TableRow>
                         <TableHead>Promoción</TableHead>
-                        <TableHead>Porciento</TableHead>
+                        <TableHead>Variante</TableHead>
                         <TableHead>Tipo</TableHead>
+                        <TableHead>Valor</TableHead>
                         <TableHead>Precio Minimo</TableHead>
                         <TableHead>Precio Máximo</TableHead>
                         <TableHead>Opciones</TableHead>
@@ -33,6 +34,9 @@ export function PromotionsSkeleton({ rows }: { rows: number }) {
                         <TableRow key={index} className="lg:bg-white lg:border-b-1 lg:border-gray-200">
                             <TableCell>
                                 <span className="skeleton h-5 w-24" />
+                            </TableCell>
+                            <TableCell>
+                                <span className="skeleton h-5 w-16" />
                             </TableCell>
                             <TableCell>
                                 <span className="skeleton h-5 w-16" />

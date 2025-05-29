@@ -27,7 +27,7 @@ export const SelectOrderBy: FC<Props> = memo(({ filters }) => {
     }, []);
 
     return (
-        <Select defaultValue={(searchParams.get("ordering") ?? "").toString()} onValueChange={handleSelect}>
+        <Select onValueChange={handleSelect}>
             <SelectTrigger className="w-full h-11 bg-transparent md:w-fit">
                 <SelectValue placeholder="Ordenar lista" />
             </SelectTrigger>
@@ -36,7 +36,7 @@ export const SelectOrderBy: FC<Props> = memo(({ filters }) => {
                 <SelectItem value="null">Cancelar selección</SelectItem>
                 {filters.map((filter, index) => (
                     <div key={index}>
-                        <SelectItem value={`+${filter.value}`}>
+                        <SelectItem value={`${filter.value}`}>
                             {filter.label}
                             <ArrowUp size={24} className="text-green-500" />
                         </SelectItem>

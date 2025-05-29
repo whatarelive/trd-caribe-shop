@@ -6,7 +6,7 @@ import type { IFilters } from "@/interfaces/components";
 import type { PromotionsResponse } from "@/interfaces/models/promotions.interface";
 
 
-export async function getPromotions({ page, limit, search }: IFilters) {
+export async function getPromotions({ page, limit, search, ordering }: IFilters) {
     const session = await auth();
     
     try {
@@ -18,6 +18,7 @@ export async function getPromotions({ page, limit, search }: IFilters) {
             limit: limit.toString(),
             offset: ((page - 1) * limit).toString(),
             ...(search && { search }),
+            ...(ordering && { ordering }),
         });
 
         const response = await fetch(`${API_URL}/store/discounts?${params}`, {

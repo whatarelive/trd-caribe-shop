@@ -1,4 +1,4 @@
-import { DollarSign, Percent, Tag, Trash2 } from "lucide-react";
+import { ClipboardType, DollarSign, Percent, Tag, Trash2 } from "lucide-react";
 import { deletePromotion } from "@/actions/promotions/delete-promotion";
 import { AlertModal } from "@/components/global/AlertModal";
 import { DataSection } from "@/components/admin/data-section";
@@ -29,14 +29,20 @@ export function PromotionCard({ promotion }: { promotion: IPromotions }) {
                 {/* Información principal */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <DataSection
-                        label="Porcentaje"
-                        value={`${promotion.percentage}%`}
+                        label="Valor"
+                        value={`${promotion.valor}%`}
                         icon={<Percent className="w-4 h-4 text-blue-600" />}
+                    />
+
+                     <DataSection
+                        label="Tipo de Promoción"
+                        value={promotion.tipo === "percentage" ? "procentage" : "fija"}
+                        icon={<ClipboardType className="w-4 h-4 text-blue-600" />}
                     />
 
                     <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                         <span className="text-sm font-medium text-gray-500 uppercase">
-                            Tipo
+                            Variante
                         </span>
                         <PromotionChoice choice={promotion.choice} />
                     </div>

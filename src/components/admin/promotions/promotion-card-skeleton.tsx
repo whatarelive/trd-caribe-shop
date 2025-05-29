@@ -18,6 +18,7 @@ export function PromotionCardSkeleton() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <span className="skeleton h-14 w-full"/>
                     <span className="skeleton h-12 w-full"/>
+                    <span className="skeleton h-12 w-full"/>
                 </div>
 
                 {/* Valores mínimo y máximo */}
