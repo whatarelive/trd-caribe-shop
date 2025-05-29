@@ -1,54 +1,45 @@
-import Link from "next/link";
-import { MdOutlineInfo } from "react-icons/md";
-import { ButtonDeleteItem } from "@/components/admin/buttons";
-import { DataSection } from "@/components/admin/sales/sales-utils";
-import { UserNameView } from "@/components/admin/users/users-utils";
-import { ComplaintState } from "@/components/admin/complaints-suggestions/complaints-utils";
+import { CalendarArrowDown, CalendarArrowUp } from "lucide-react";
+import { format } from "@/lib/format-date";
+import { DataSection } from "@/components/admin/data-section";
+import { Badge } from "@/components/ui/badge";
+import { Avatar } from "@/components/ui/avatar";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { TextCommentDialog } from "@/components/admin/complaints-suggestions/text-comment-dialog";
+import { CreateResponseForm } from "@/components/admin/complaints-suggestions/create-response-form";
+import type { IComplaints } from "@/interfaces/models/complaints-suggestions.interface";
 
-import type { FC } from "react";
-import type { IComplaintsAndSuggestions } from "@/interfaces/models/complaints-suggestions.interface";
 
-export const ComplaintsCard: FC<{ suggestion: IComplaintsAndSuggestions }> = ({ suggestion }) => {
+export function ComplaintsCard({ complaint }: { complaint: IComplaints }) {
     return (
-        <li className="flex flex-col p-4 gap-3 bg-white rounded-md">
-            <div className="flex flex-col min-[390px]:flex-row gap-2 justify-between">
-                <UserNameView value={suggestion.user}/>
-                <ComplaintState active={suggestion.active}/>
-            </div>
+        <Card className="shadow-md">
+            <CardHeader className="flex justify-between items-center">
+                <CardTitle className="inline-flex gap-2 items-center">
+                    <Avatar>{complaint.user.slice(0, 2)}</Avatar>                            
+                    <span className="line-clamp-1">{complaint.user}</span>
+                </CardTitle>
 
-            <hr className="text-gray-300"/>
-
-            <div className="flex justify-between">
+                <Badge variant={complaint.active ? "destructive" : "success"}>
+                    {complaint.active ? "No resuelta" : "Resuelta"}
+                </Badge>
+            </CardHeader>
+            
+            <CardContent className="flex gap-3 flex-col sm:flex-row justify-between">
                 <DataSection 
-                    label="Creado:" 
-                    className="flex-col"
-                    value={suggestion.created} 
+                    label="Fecha de Creación:" 
+                    value={format(complaint.created)} 
+                    icon={<CalendarArrowDown size={18} className="text-red-400"/>}
                 />
                 
                 <DataSection 
-                    label="Resuelto:" 
-                    className="flex-col"
-                    value={suggestion.upate.length === 0 ? "--/--/--" : suggestion.upate} 
+                    label="Fecha de Respuesta:" 
+                    value={complaint.active ? "-- / -- / --" : format(complaint.upate)} 
+                    icon={<CalendarArrowUp size={18} className="text-green-400"/>}
                 />
-            </div>
-
-            <p className="line-clamp-5 text-wrap">
-                { suggestion.text }
-            </p>
-            
-            <div className="flex gap-4">
-                <Link 
-                    href={`/admin/complaints-suggestions/${suggestion.id}`} 
-                    className="button-primary-v3 grow"
-                >
-                    <MdOutlineInfo size={20}/>
-                    Detalles
-                </Link>
-
-                <ButtonDeleteItem className="flex grow items-center justify-center gap-1.5 border bg-white">
-                    Eliminar
-                </ButtonDeleteItem>
-            </div>
-        </li>
+            </CardContent>
+            <CardFooter className="flex gap-2">
+                <TextCommentDialog text={complaint.text} user={complaint.user} />
+                <CreateResponseForm user={complaint.user} />
+            </CardFooter>
+        </Card>
     )
 }

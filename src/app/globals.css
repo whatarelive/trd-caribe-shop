@@ -7,38 +7,18 @@ body {
   user-select: none;
 }
 
-.input-container {
-  @apply flex flex-col w-full h-[85px] mb-2
+.template-page {
+  display: grid;
+  min-height: 100dvh;
+  grid-template-rows: 1fr auto;
 }
 
-.input-subcontainer {
-  @apply flex h-10 items-center px-1.5 rounded-sm focus-within:ring-blue-300 focus-within:ring-2 
-  focus-within:outline-none inset-ring-transparent
+.skeleton {
+  @apply animate-pulse flex rounded-md bg-neutral-200
 }
 
-.button-primary {
-  @apply p-2 rounded-sm cursor-pointer font-semibold bg-blue-600 text-white hover:bg-blue-500 select-none
-}
-
-.button-primary-v2 {
-  @apply inline-flex items-center gap-1.5 p-2 rounded-md cursor-pointer font-semibold text-gray-400 select-none
-  bg-gray-100 hover:text-white hover:bg-blue-500 transition-colors
-}
-
-.button-primary-v3 {
-  @apply flex items-center bg-blue-400 p-2 rounded-md gap-1.5 text-white font-semibold justify-center active:bg-blue-500 select-none
-}
-
-.loader {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  display: block;
-  margin: 8px auto;
-  position: relative;
-  background: #FFF;
-  box-sizing: border-box;
-  animation: shadowExpandX 2s linear infinite alternate;
+.title-page {
+  @apply text-2xl lg:text-2xl font-semibold text-neutral-500
 }
 
 @keyframes shadowExpandX {

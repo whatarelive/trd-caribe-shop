@@ -8,8 +8,8 @@ export const NavBar = async () => {
     const session = await auth();
 
     return (
-        <header className="fixed w-full z-50 bg-white shadow-2xs mt-0 top-0">
-            <div className="max-w-7xl m-auto flex items-center py-2 justify-between">
+        <header className="fixed z-50 w-full bg-white shadow-md">
+            <div className="container m-auto flex items-center py-2 justify-between">
                 <Link href="/" className="text-xl font-medium hover:text-blue-400">
                     <h1>Tienda Caribe</h1>
                 </Link>

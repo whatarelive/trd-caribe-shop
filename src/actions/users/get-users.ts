@@ -1,15 +1,12 @@
 'use server'
 
 import { auth } from "@/auth.config";
+import { API_URL } from "@/config/constants";
+import type { IFilters } from "@/interfaces/components";
 import type { UserResponse } from "@/interfaces/models/user.interface";
 
-interface Props {
-    page: number;
-    limit: number;
-    search?: string;
-}
 
-export async function getUsers({ page, limit, search }: Props) {
+export async function getUsers({ page, limit, search, ordering }: IFilters) {
     const session = await auth();
     
     try {
@@ -21,9 +18,10 @@ export async function getUsers({ page, limit, search }: Props) {
             limit: limit.toString(),
             offset: ((page - 1) * limit).toString(),
             ...(search && { search }),
+            ...(ordering && { ordering }),
         });
 
-        const response = await fetch(`/user/users?${params}`, {
+        const response = await fetch(`${API_URL}/user/users?${params}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${session.accessToken}`,

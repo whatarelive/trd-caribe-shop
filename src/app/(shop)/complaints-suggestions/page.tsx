@@ -1,13 +1,16 @@
-import { Textarea } from "@/components/ui/textarea";
-import { TextInput } from "@/components/ui/input/input-text";
-import { Pagination } from "@/components/ui/pagination";
-import { ComplaintsCard } from "@/components/shop/complaints-suggestions/complaints-card";
-import { suggestions } from "@/lib/data/suggestions";
+import { Suspense } from "react";
+import { ComplaintsCreateForm } from "@/components/shop/complaints-suggestions/complaints-create-form";
+import { ComplaintsList } from "@/components/shop/complaints-suggestions/complaints-list";
+import { ComplaintsListSkeleton } from "@/components/shop/complaints-suggestions/complaints-list-skeleton";
+import type { IPage } from "@/interfaces/components";
 
-export default function ComplaintsPage() {
+
+export default async function ComplaintsPage({ searchParams }: IPage) {
+    const { page = "1" } = await searchParams;
+
     return (
         <>
-            <section className="max-w-7xl mx-auto w-full mb-4 py-8 text-center">
+            <section className="container mx-auto py-8 text-center">
                 <h2 className="text-3xl font-bold">
                     Comentarios de nuestros clientes
                 </h2>
@@ -15,63 +18,15 @@ export default function ComplaintsPage() {
                 <p className="mt-2 mb-4 text-muted-foreground">
                     Descubre lo que opinan nuestros clientes sobre nuestros productos
                 </p>
+
+                {/* Formulario de creación de comentarios */}
+                <ComplaintsCreateForm />
             </section>
 
-            {/* Sección Listado de comentarios */}
-            <section className="flex flex-col gap-8 max-w-7xl mx-auto w-full">
-                <ul className="list-none space-y-6">
-                    {
-                        suggestions.slice(1,5).map((suggestion) => (
-                            <ComplaintsCard key={suggestion.id} suggestion={suggestion}/>
-                        ))
-                    }
-                </ul>
-
-                <div className="my-8">
-                    <Pagination totalPages={6} />
-                </div>
-            </section>
-
-            <section className="mx-auto mb-16 mt-6 max-w-7xl bg-white rounded-md p-6 shadow-lg">
-                <h2 className="text-3xl font-bold">
-                    Haz tu comentario
-                </h2>
-
-                <p className="mb-4 text-muted-foreground">
-                    Danos una comentario como cliente fiel sobre nuestros productos
-                </p>
-
-                <form>
-                    <TextInput 
-                        label="Nombre" 
-                        type="text" 
-                        name="name" 
-                        placeholder="Ingrese su nombre completo"
-                        aria-describedby="username-error"
-                        // onFocus={handleFocus}
-                        // errors={showErrors ? errorMessage.errors?.name : undefined}
-                    />
-    
-                    <Textarea 
-                        label="Comentario"
-                        name="coment" 
-                        placeholder="Ingrese el contenido del comentario"
-                    />
-    
-                    <button 
-                        type="submit" 
-                        className="button-primary w-full h-12 mt-10"
-                        // disabled={isPending}
-                    >
-                        {/* {
-                            isPending 
-                                ? <span className="loader"></span> 
-                                : 'Crear Comentario'
-                        } */}
-                        Crear Comentario
-                    </button>
-                </form>
-            </section>
+                {/* Sección Listado de comentarios */}
+            <Suspense key={page} fallback={<ComplaintsListSkeleton/>}>
+                <ComplaintsList page={Number(page)}/>
+            </Suspense>
         </>
     )
 }

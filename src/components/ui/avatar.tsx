@@ -7,7 +7,7 @@ export const Avatar: FC<ComponentProps<"span">> = ({ children }) => (
     >
         <span
             data-slot="avatar-fallback"
-            className="bg-muted flex size-full items-center justify-center rounded-full"
+            className="bg-muted flex size-full items-center justify-center rounded-full uppercase"
         >
             { children }
         </span>

@@ -3,8 +3,8 @@ import { MdEmail, MdPhone } from "react-icons/md";
 
 export const Footer = () => {
     return (
-        <footer className="w-full relative bottom-0 bg-gray-500">
-            <div className="max-w-7xl py-8 md:py-12 mx-auto">
+        <footer className="w-full bg-gray-500">
+            <div className="container py-8 md:py-12 mx-auto">
                 <div className="grid grid-cols-1 gap-8 text-white md:grid-cols-2 lg:grid-cols-4">    
                     <div>
                         <h3 className="text-2xl font-semibold">Tienda Caribe</h3>

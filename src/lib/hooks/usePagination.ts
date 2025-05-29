@@ -1,8 +1,7 @@
-"use client"
+'use client'
 
-import { useCallback, useMemo } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
-
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useMemo } from "react";
 
 interface Props {
     currentPage: number;
@@ -14,10 +13,15 @@ export function usePagination({ currentPage, totalPages }: Props) {
     // Recuperación del path y los searchParams de la ruta.
     const pathname = usePathname();
     const searchParams = useSearchParams();
+    const { replace } = useRouter();
 
     // Creación del arreglo de páginas
     const allPages = useMemo(
         () => {
+            if (totalPages === 1) {
+                return [];
+            }
+            
             if (totalPages <= 7) {
                 return Array.from({ length: totalPages }, (_, i) => i + 1);
             }
@@ -34,6 +38,18 @@ export function usePagination({ currentPage, totalPages }: Props) {
         },
         [currentPage, totalPages]
     );
+
+    // Efecto para asegurar que no se pueda navegar a una página sin información
+    useEffect(() => {
+        if (currentPage <= totalPages) return;
+
+        const params = new URLSearchParams(searchParams);
+        params.set("page", totalPages.toString());
+
+        replace(`${pathname}?${params.toString()}`)
+      
+    }, [currentPage, totalPages]);
+    
 
     // Creación de la URL de navegación entre páginas
     const createPageURL = useCallback((page: number | string) => {

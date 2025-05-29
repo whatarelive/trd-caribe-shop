@@ -2,16 +2,17 @@ import { Footer } from "@/components/shop/Footer";
 import { NavBar } from "@/components/shop/nav/NavBar";
 import type { ILayout } from "@/interfaces/components";
 
+
 export default function ShopLayout({ children }: ILayout) {
     return (
-        <>
+        <div className="template-page">
             <NavBar/>
-          
-            <main className="w-full min-h-screen mt-20 xl:gap-8 bg-gray-50 select-all">
+            
+            <main className="bg-gray-50 select-text mt-14">
                 { children }
             </main>
             
             <Footer/>
-        </>
+        </div>
     )
 }

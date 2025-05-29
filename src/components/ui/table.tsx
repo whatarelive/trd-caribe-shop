@@ -44,3 +44,9 @@ export const TableCell: FC<Props> = ({ className, children }) => (
     { children }
   </td>
 )
+
+export const TableCaption: FC<Props> = ({ className, children }) => (
+  <caption className={cn("my-2 text-sm text-muted-foreground", className)}>
+    { children }
+  </caption>
+)

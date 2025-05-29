@@ -15,7 +15,7 @@ export const LinkComponent: FC<Props> = ({ href, children, isActive }) => {
         <Link 
             href={ href }
             className={clsx(
-                "flex items-center gap-3 py-2 px-4 rounded-md hover:bg-blue-100 hover:text-blue-500 transition-colors", 
+                "flex items-center gap-3 py-2 px-4 rounded-md hover:bg-blue-100 hover:text-blue-500 xl:shadow-md transition-colors", 
                 { 
                     "text-blue-500 bg-blue-100 hover:bg-blue-200 hover:text-blue-600": isActive,
                     "bg-gray-50" : !isActive

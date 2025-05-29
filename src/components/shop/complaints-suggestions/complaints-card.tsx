@@ -1,21 +1,28 @@
-import { UserNameView } from "@/components/admin/users/users-utils";
+import { format } from "@/lib/format-date";
+import { Card } from "@/components/ui/card";
+import { Avatar } from "@/components/ui/avatar";
+import type { IComplaints } from "@/interfaces/models/complaints-suggestions.interface";
 
-import type { FC } from "react";
-import type { IComplaintsAndSuggestions } from "@/interfaces/models/complaints-suggestions.interface";
 
-export const ComplaintsCard: FC<{ suggestion: IComplaintsAndSuggestions }> = ({ suggestion }) => {
+export function ComplaintsCard({ complaint }: { complaint: IComplaints }) {
     return (
-        <li className="flex flex-col p-4 gap-3 bg-white rounded-md shadow-md hover:cursor-pointer hover:shadow-lg">
-            <div className="flex flex-col min-[390px]:flex-row gap-2 justify-between">
-                <UserNameView value={ suggestion.user }/>
-                <b>{ suggestion.created }</b>
-            </div>
+        <Card className="flex gap-3 px-4 justify-between shadow-md">
+            <div className="flex justify-between">
+                <div className="flex gap-2 items-center">
+                    <Avatar>{complaint.user.slice(0, 2)}</Avatar>                            
+                    <span className="line-clamp-1">{complaint.user}</span>
+                </div>
 
+                <span className="text-nowrap">
+                    {format(complaint.created)}
+                </span>
+            </div>
+            
             <hr className="text-gray-300"/>
 
-            <p className="text-wrap">
-                { suggestion.text }
-            </p>
-        </li>
+            <div className="relative grow">
+                <p className="">{complaint.text}</p>
+            </div>
+        </Card>
     )
 }

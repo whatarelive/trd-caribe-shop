@@ -7,23 +7,25 @@ import { ButtonLogout } from "@/components/admin/nav/button-logout";
 export const SideBar = () => {
     return (
         <section className="hidden xl:flex xl:flex-col xl:gap-2 p-4 min-w-64">
-            <div className="flex flex-col px-4 py-8 items-center justify-center rounded-md bg-blue-600">
-                <div className="flex gap-3 py-1 border-b border-white">
-                    <LayoutDashboard size={30} className="text-white"/>
+            <div className="p-1 bg-white rounded-md shadow-md">
+                <div className="flex flex-col px-4 py-8 items-center justify-center rounded-sm bg-blue-600">
+                    <div className="flex gap-3 py-1 border-b border-white">
+                        <LayoutDashboard size={30} className="text-white"/>
 
-                    <h1 className="text-2xl text-white font-medium">
-                        TRD CARIBE
-                    </h1>
+                        <h1 className="text-2xl text-white font-medium">
+                            TRD CARIBE
+                        </h1>
+                    </div>
+
+                    <p className="mt-1 text-white text-sm font-medium">
+                        Panel de Administración
+                    </p>
                 </div>
-
-                <p className="mt-1 text-white font-medium">
-                    Panel de Administración
-                </p>
             </div>
 
             <NavList />
 
-            <div className="bg-gray-50 h-full rounded-md"/>
+            <div className="bg-gray-50 h-full rounded-md shadow-md"/>
 
             <ButtonLogout />
         </section>

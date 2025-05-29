@@ -1,16 +1,29 @@
-import z from "zod";
+import { z } from "zod";
 
 export const PromotionsCreateSchema = z.object({
-    name: z.string(),
-    porcentage: z.coerce.number(),
+    name: z.string().min(3).max(50),
+    tipo: z.enum(["percentage", "fixed"]),
+    valor: z.coerce.number().min(1).max(100),
     choice: z.enum(["greater", "less", "between"]),
-    min_value: z.coerce.number().min(0).optional(),
-    max_value: z.coerce.number().min(1).optional(),
+    min_price: z.coerce.number().min(0).optional(),
+    max_price: z.coerce.number().min(0).optional(),
+})
+.refine((data) => data.choice !== "less" || data.max_price !== undefined,  { 
+    path: ["choice"],
+})
+.refine((data) => data.choice !== "greater" || data.min_price !== undefined, {
+    path: ["choice"],
+})
+.refine((data) => {
+    if (data.choice === "between") {
+        return (
+            data.min_price !== undefined && 
+            data.max_price !== undefined && 
+            data.min_price < data.max_price
+        );
+    }
 
-}).refine((data) => data.choice === "less" && data.max_value,  { 
-    path: ["choice"],
-}).refine((data) => data.choice === "greater" && data.min_value, {
-    path: ["choice"],
-}).refine((data) => data.choice === "between" && data.max_value && data.min_value && data.max_value > data.min_value, {
+    return true;
+}, {
     path: ["choice"],
 });

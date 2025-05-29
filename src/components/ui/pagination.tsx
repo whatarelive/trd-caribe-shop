@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import Link from "next/link";
 import clsx from "clsx";
@@ -63,7 +63,11 @@ const PaginationArrow: FC<ArrowProps> = memo(({ href, direction, isDisabled }) =
 })
 
 // Componente Principal para la paginación.
-export const Pagination: FC<PaginationProps> = memo(({ currentPage, totalPages, className }) => {
+export const Pagination: FC<PaginationProps> = memo(({ currentPage, count, limit, className }) => {
+    // Se calcula la cantidad de páginas necesarias.
+    const calcPages = Math.ceil(count / limit);
+    // Se comprueba que la cantidad de páginas no sea menor que 1.
+    const totalPages = calcPages > 1 ? calcPages : 1;
     // Custom Hook para manejar la lógica de páginación.
     const { allPages, createPageURL } = usePagination({ currentPage, totalPages });
 
