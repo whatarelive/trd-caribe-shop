@@ -1,47 +1,34 @@
 'use server'
 
-import { isAxiosError } from "axios";
-import { auth } from "@/auth.config";
-import { backend } from "@/config/api";
+import { service } from "@/config/api";
+import { HttpException } from "@/lib/error-adapter";
+import type { IFilters } from "@/interfaces/components";
 import type { ComplaintsResponse } from "@/interfaces/models/complaints-suggestions.interface";
 
-interface Props {
-    limit: number;
-    page: number;
-    search?: string;
-}
 
-export async function getComplaintsUser({ limit, page, search }: Props) {
-    const session = await auth();
-    
+export async function getComplaintsUser(params: IFilters) {
     try {
-        if (!session || !session.accessToken) throw new Error("Usuario no Autorizado");
-        
-        const searchParams = {
-            limit: limit.toString(),
-            offset: ((page - 1) * limit).toString(),
-            ...(search && { search }),
-        };
-
-        const { data } = await backend.get<ComplaintsResponse>(`/store/complaints-suggestions/user`, {
-            params: searchParams,
-            headers: { Authorization: `Bearer ${session.accessToken}` },
-        });
+        const response = await service.getAll<ComplaintsResponse>(
+            `/store/complaints-suggestions/user/`, params,
+            {
+                isProtected: true,
+                error: "Fallo la carga de los comentarios del usuario",
+                cache: "no-store",
+            }
+        );
 
         return {
             result: true,
-            count: data.count,
-            data: data.results,
+            count: response.count,
+            data: response.results,
         };
 
     } catch (error) {
         console.error("Error en GetComplaintsUser", error);
 
-        let message = "Error desconocido";
-        
-        if (error instanceof Error) message = error.message;
-        if (isAxiosError(error)) message = "Fallo la carga de los comentarios del usuario";
-        
-        return { result: false, error: message };
+        return { 
+            result: false, 
+            error: (error instanceof HttpException) ? error.message : "Error desconocido", 
+        };
     }   
 }

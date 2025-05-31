@@ -1,38 +1,30 @@
 'use server'
 
+import { service } from "@/config/api";
+import { HttpException } from "@/lib/error-adapter";
+import type { IFilters } from "@/interfaces/components";
 import type { ProductResponse } from "@/interfaces/models/product.interface";
 
-interface Props {
-    limit: number;
-    page: number;
-    search?: string;
-}
 
-export async function getProducts({ limit, page, search }: Props) {
-    const params = new URLSearchParams({
-        limit: limit.toString(),
-        offset: ((page - 1) * limit).toString(),
-        ...(search && { search }),
-    });
-
+export async function getProducts(params: IFilters) {
     try {
-        const response = await fetch(`/store/products?${params}`, {
-            method: "GET",
-            cache: "force-cache",
-            next: {
-                revalidate: 900,
-                tags: ["products-data"],
+        const response = await service.getAll<ProductResponse>(
+            `/store/products/`, params, 
+            {
+                isProtected: false,
+                error: "Fallo la carga de los productos",
+                cache: "force-cache",
+                next: {
+                    revalidate: 900,
+                    tags: ["products-data"],
+                }
             }
-        });
-
-        if (!response.ok) throw new Error("Error en el servidor");
-
-        const data: ProductResponse = await response.json();
+        );
 
         return {
             result: true,
-            count: data.count,
-            results: data.results,
+            count: response.count,
+            results: response.results,
         };
         
     } catch (error) {
@@ -40,7 +32,7 @@ export async function getProducts({ limit, page, search }: Props) {
 
         return { 
             result: false, 
-            error: (error instanceof Error) ? error.message : "Fallo la carga de los productos",
+            error: (error instanceof HttpException) ? error.message : "Error desconocido",
         };   
     }
 }

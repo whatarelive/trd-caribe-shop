@@ -1,44 +1,36 @@
 'use server'
 
 import { revalidateTag } from "next/cache";
-import { isAxiosError } from "axios";
-import { auth } from "@/auth.config";
-import { backend } from "@/config/api";
+import { service } from "@/config/api";
+import { BadRequestException, HttpException } from "@/lib/error-adapter";
 import { CreateProductSchema } from "@/actions/products/validations/products-schema";
 
 
 export async function createProduct(formData: FormData) {
-    const session = await auth();
+    const fields = Object.fromEntries(formData.entries());       
+    const { data, success } = await CreateProductSchema.safeParseAsync(fields);
     
-    try {
-        if (!session || !session.accessToken || !session.user?.isAdmin) {
-            throw new Error("Usuario no autorizado");
-        }
-
-        const fields = Object.fromEntries(formData.entries());       
-        const validation = await CreateProductSchema.safeParseAsync(fields);
-        
-        if (!validation.success) throw new Error("Información incorrecta");
+    try {    
+        if (!success) throw new BadRequestException();
  
-        await backend.post("/store/products/", validation.data, {
-            headers: { Authorization: `Bearer ${session.accessToken}` },
+        await service.post("/store/products/", data, {
+            isProtected: true,
+            error: "Fallo la creación del producto",
         });
 
         revalidateTag("products-data");
 
         return {
             result: true,
-            message: "Producto creado exitosamente"
+            message: "Producto creado exitosamente",
         };
         
     } catch (error) {
         console.error("Error en CreateProduct", error);
 
-        let message = "Error desconocido";
-
-        if (error instanceof Error) message = error.message;
-        if (isAxiosError(error)) message = "Fallo la creación del producto";  
-
-        return { result: false, message };
+        return { 
+            result: false, 
+            message: (error instanceof HttpException) ? error.message : "Error desconocido",  
+        };
     }    
 }

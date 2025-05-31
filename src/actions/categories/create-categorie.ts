@@ -1,45 +1,39 @@
 'use server'
 
-import { revalidatePath, revalidateTag } from "next/cache";
-import { isAxiosError } from "axios";
-import { auth } from "@/auth.config";
-import { backend } from "@/config/api";
+import { revalidateTag } from "next/cache";
+import { service } from "@/config/api";
+import { BadRequestException, HttpException } from "@/lib/error-adapter";
 import { CategorieCreateSchema } from "@/actions/categories/validations/categorie-schema";
 
 
 export async function createCategorie(formData: FormData) {    
-    const session = await auth();
+    const fields = Object.fromEntries(formData.entries());
+    const { data, success } = await CategorieCreateSchema.safeParseAsync(fields);
     
     try {
-        if (!session || !session.accessToken || !session.user?.isAdmin) {
-            throw new Error("Usuario no Autorizado");
-        }
-
-        const fields = Object.fromEntries(formData.entries());
-        const validation = await CategorieCreateSchema.safeParseAsync(fields);
-
-        if (!validation.success) throw new Error("Información Incorrecta");
+        if (!success) throw new BadRequestException();
         
-        await backend.post("/store/categories/create/", validation.data, {
-            headers: { Authorization: `Bearer ${session.accessToken}` }
-        });
+        await service.post("/store/categories/create/", 
+            data, 
+            {
+                isProtected: true,
+                error: "Fallo la creación de la categoría",
+            }
+        );
 
         revalidateTag("categories-data");
-        revalidatePath("/admin/products/");
 
         return {
             result: true,
-            message: `Categoría ${validation.data.name} creada`,
-        }
+            message: `Categoría ${data.name} creada`,
+        };
         
     } catch (error) {
         console.error("Error en CreateCategorie", error);
         
-        let message = "Error desconocido"; 
-        
-        if (error instanceof Error) message = error.message;
-        if (isAxiosError(error)) message = "Fallo la creación de la categoría";
-
-        return { result: false, message };
+        return { 
+            result: false, 
+            message: (error instanceof HttpException) ? error.message : "Error desconocido",
+        };
     }
 }

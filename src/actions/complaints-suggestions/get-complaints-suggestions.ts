@@ -1,42 +1,30 @@
 'use server'
 
-import { auth } from "@/auth.config";
-import { API_URL } from "@/config/constants";
+import { service } from "@/config/api";
+import { HttpException } from "@/lib/error-adapter";
 import type { IFilters } from "@/interfaces/components";
 import type { ComplaintsResponse } from "@/interfaces/models/complaints-suggestions.interface";
 
 
-export async function getComplaints({ limit, page, search, ordering }: IFilters) {
-    const session = await auth();
-
+export async function getComplaints(params: IFilters) {
     try {
-        if (!session || !session.accessToken) throw new Error("Usuario no Autorizado");
-
-        const params = new URLSearchParams({
-            limit: limit.toString(),
-            offset: ((page - 1) * limit).toString(),
-            ...(search && { search }),
-            ...(ordering && { ordering }),
-        })
-
-        const response = await fetch(`${API_URL}/store/complaints-suggestions?${params}`, {
-            method: "GET",
-            cache: "force-cache",
-            headers: { 'Authorization': `Bearer ${session.accessToken}` },
-            next: {
-                revalidate: 900,
-                tags: ["complaints-data"],
+        const response = await service.getAll<ComplaintsResponse>(
+            "/store/complaints-suggestions", params, 
+            {
+                isProtected: true,
+                error: "Fallo la carga de los comentarios",
+                cache: "force-cache",
+                next: {
+                    revalidate: 900,
+                    tags: ["complaints-data"],
+                }
             }
-        });
-
-        if (!response.ok) throw new Error("Fallo la carga de los comentarios");
-
-        const data: ComplaintsResponse = await response.json();
+        );
 
         return {
             result: true,
-            count: data.count,
-            data: data.results,
+            count: response.count,
+            data: response.results,
         };
 
     } catch (error) {
@@ -44,7 +32,7 @@ export async function getComplaints({ limit, page, search, ordering }: IFilters)
 
         return { 
             result: false, 
-            error: (error instanceof Error) ? error.message : "Error desconocido", 
+            error: (error instanceof HttpException) ? error.message : "Error desconocido", 
         };
     }   
 }

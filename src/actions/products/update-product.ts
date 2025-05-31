@@ -1,29 +1,24 @@
 'use server'
 
 import { revalidateTag } from "next/cache";
-import { isAxiosError } from "axios";
-import { auth } from "@/auth.config";
-import { backend } from "@/config/api";
+import { service } from "@/config/api";
+import { BadRequestException, HttpException } from "@/lib/error-adapter";
 import { UpdateProductSchema } from "@/actions/products/validations/products-schema";
 
 
 export async function updateProduct(id: number, formData: FormData) {
     try {
-        if (typeof id !== "number" || id <= 0) throw new Error("ID invalido");
-
-        const session = await auth();
-        
-        if (!session || !session.accessToken || !session.user?.isAdmin) {
-            throw new Error("Usuario no autorizado");
+        if (typeof id !== "number" || id <= 0) {
+            throw new BadRequestException("ID invalido");
         }
 
         const fields = Object.fromEntries(formData.entries());
-        const validation = await UpdateProductSchema.safeParseAsync(fields);
+        const { data, success } = await UpdateProductSchema.safeParseAsync(fields);
+        
+        if (!success) throw new BadRequestException();
 
-        if (!validation.success) throw new Error("Información incorrecta");
-
-        await backend.patch(`/store/products/update/${id}`, validation.data, {
-            headers: { Authorization: `Bearer ${session.accessToken}` },
+        await service.update(`/store/products/update/${id}`, data, {
+            error: "Fallo la actualización del producto",
         });
 
         revalidateTag("products-data");
@@ -36,11 +31,9 @@ export async function updateProduct(id: number, formData: FormData) {
     } catch (error) {
         console.error("Error en UpdateProduct", error);
         
-        let message = "Error desconocido";
-
-        if (error instanceof Error) message = error.message;
-        if (isAxiosError(error)) message = "Fallo la actualización del producto";
-        
-        return { result: false, message };
+        return { 
+            result: false, 
+            message: (error instanceof HttpException) ? error.message : "Error desconocido", 
+        };
     }
 }

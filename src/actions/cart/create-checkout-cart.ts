@@ -1,19 +1,15 @@
 'use client'
 
 import { revalidatePath } from "next/cache";
-import { isAxiosError } from "axios";
-import { auth } from "@/auth.config";
-import { backend } from "@/config/api";
+import { service } from "@/config/api";
+import { HttpException } from "@/lib/error-adapter";
 
 
 export async function checkoutCartSale() {
-    const session = await auth();
-
     try {
-        if (!session || !session.accessToken) throw new Error("Usuario no autorizado");
-        
-        await backend.post("/sales/cart/checkout/", undefined, {
-            headers: { Authorization: `Bearer ${session.accessToken}` },  
+        await service.post("/sales/cart/checkout/", undefined, {
+            isProtected: true,
+            error: "Fallo la confirmación de la compra",  
         });
 
         revalidatePath("/shop/cart");
@@ -25,12 +21,10 @@ export async function checkoutCartSale() {
         
     } catch (error) {
         console.error("Error en CheckoutCartSale", error);
-        
-        let message = "Error desconocido";
 
-        if (error instanceof Error) message = error.message;
-        if (isAxiosError(error)) message = "Fallo la confirmación de la compra";
-        
-        return { result: false, message };
+        return { 
+            result: false, 
+            message: (error instanceof HttpException) ? error.message : "Error desconocido",
+        };
     }
 }

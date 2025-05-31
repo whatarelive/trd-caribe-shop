@@ -1,6 +1,6 @@
 import NextAuth, { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { backend } from "@/config/api";
+import { service } from "@/config/api";
 import { isRegisterUser } from "@/lib/guards/user-type-guards";
 import type { ResponseLogin, UserLogin, UserRegister } from "@/interfaces/models/user.interface";
 
@@ -60,19 +60,22 @@ export const authConfig: NextAuthConfig = {
             if (token.refreshTokenExpires && token.accessTokenExpires && Date.now() > token.accessTokenExpires) {
                 try {
                     // Intenta renovar el token de acceso usando el token de refresco
-                    const { data } = await backend.post<ResponseToken>(
-                        "/user/login/refresh/", 
+                    const response = await service.post("/user/login/refresh/", 
                         { refresh: token.refreshToken },
+                        { 
+                            isProtected: false, 
+                            error: "Fallo la renovación del token",
+                        },
                     );
 
-                    if (!data) throw new Error("Error al renovar el token");
+                    const body: ResponseToken = await response.json();
 
                     // Actualiza el token de acceso y su tiempo de expiración
-                    token.accessToken = data.access;
+                    token.accessToken = body.access;
                     token.accessTokenExpires = Date.now() + 60 * 59 * 1000;
 
                 } catch (error) {
-                    console.log("Error al renovar el token de acceso", error);
+                    console.error("Error al renovar el token de acceso", error);
                     // En caso de error, limpiar todos los datos del token
                     return {};
                 }
@@ -127,28 +130,30 @@ export const authConfig: NextAuthConfig = {
                         accessToken: user.token.access,
                         refreshToken: user.token.refresh
                     }
-
-                } else {
-                    // Si es un intento de login, hacer la petición al endpoint de login
-                    const { data, status } = await backend.post<ResponseLogin>(
-                        "/user/login/", 
-                        { ...user }
-                    );
-
-                    // Si no hay datos en la respuesta, retornar null
-                    if (!data || status === 400 || status === 401) return null;
-                    
-                    // Retornar los datos del usuario y sus tokens de acceso
-                    return {
-                        username: data.username,
-                        email: data.email,
-                        first_name: data.first_name,
-                        last_name: data.last_name,
-                        isAdmin: data.is_staff,
-                        accessToken: data.access,
-                        refreshToken: data.refresh
-                    }
                 }
+                    
+                // Si es un intento de login, hacer la petición al endpoint de login
+                // Si falla la petición el error se controla en la server action.
+                const response = await service.post("/user/login/", 
+                    { ...user }, 
+                    { 
+                        isProtected: false, 
+                        error: "Error al iniciar sesión",
+                    },
+                );
+
+                const body: ResponseLogin = await response.json();
+                
+                // Retornar los datos del usuario y sus tokens de acceso
+                return {
+                    username: body.username,
+                    email: body.email,
+                    first_name: body.first_name,
+                    last_name: body.last_name,
+                    isAdmin: body.is_staff,
+                    accessToken: body.access,
+                    refreshToken: body.refresh,
+                };
             }
         })
     ]

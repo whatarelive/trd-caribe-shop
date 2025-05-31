@@ -1,44 +1,39 @@
 'use server'
 
 import { revalidateTag } from "next/cache";
-import { isAxiosError } from "axios";
-import { auth } from "@/auth.config";
-import { backend } from "@/config/api";
+import { service } from "@/config/api";
+import { BadRequestException, HttpException } from "@/lib/error-adapter";
 import { UpdateComplaintsSchema } from "./validation/complaints-suggestions-schema";
 
 
 export async function updateComplaints(id: number, formData: FormData) {
     try {
-        if (typeof id !== "number" || id <= 0) throw new Error("ID invalido");
-        
-        const session = await auth();
-        
-        if (!session || !session.accessToken) throw new Error("Usuario no Autorizado");
+        if (typeof id !== "number" || id <= 0) {
+            throw new BadRequestException("ID invalido");
+        } 
         
         const fields = Object.fromEntries(formData.entries());
         const { data, success } = await UpdateComplaintsSchema.safeParseAsync(fields);
     
-        if (!success) throw new Error("Datos incorrectos");
+        if (!success) throw new BadRequestException();
         
-        await backend.put(`/store/complaints-suggestions/${id}/`, data, {
-            headers: { Authorization: `Bearer ${session.accessToken}` },
+        await service.update(`/store/complaints-suggestions/${id}/`, data, {
+            error: "Fallo la edición del comentario",
         });
 
         revalidateTag("complaints-data");
 
         return {
             result: true,
-            message: "Comentario editado"
-        }
+            message: "Comentario editado",
+        };
 
     } catch (error) {
         console.error("Error en UpdateComplaints", error);
 
-        let message = "Error desconocido";
-
-        if (error instanceof Error) message = error.message;
-        if (isAxiosError(error)) message = "Fallo la edición del comentario";
-
-        return { result: false, message };
+        return { 
+            result: false, 
+            message: (error instanceof HttpException) ? error.message : "Error desconcocido", 
+        };
     }
 }
