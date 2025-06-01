@@ -1,26 +1,35 @@
 'use server'
 
-import { isAxiosError } from "axios";
-import { backend } from "@/config/api";
-import type { IProducts } from "@/interfaces/models/product.interface";
+import { service } from "@/config/api";
+import { BadRequestException, HttpException } from "@/lib/error-adapter";
+import { productFromAPI } from "@/actions/products/adapters/product-adapters";
 
 
-export async function getPromotionInfo(id: number) {
+export async function getProductsInfo(id: number) {
     try {
-        if (typeof id !== "number" || id <= 0) throw new Error("ID invalido");
-        
-        const { data } = await backend.get<IProducts>(`/store/discounts/${id}/`);
+        if (typeof id !== "number" || id <= 0) {
+            throw new BadRequestException("ID invalido");
+        }
 
-        return { result: true, data };
+        const response = await service.getById(
+            `/store/products/${id}/`, 
+            {
+                isProtected: false,
+                error: "Fallo la carga del producto",
+            }
+        );
+
+        return { 
+            result: true, 
+            data: productFromAPI(response), 
+        };
         
     } catch (error) {
         console.error("Error en GetProductsInfo", error);
 
-        let message = "Error desconocido";
-
-        if (error instanceof Error) message = error.message; 
-        if (isAxiosError(error)) message = "Fallo la carga del producto";
-        
-        return { result: false, error: message };
+        return { 
+            result: false, 
+            error: (error instanceof HttpException) ? error.message : "Error desconocido", 
+        };
     }
 }

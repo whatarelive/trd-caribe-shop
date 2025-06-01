@@ -1,26 +1,23 @@
 'use server'
 
 import { revalidateTag } from "next/cache";
-import { isAxiosError } from "axios";
-import { auth } from "@/auth.config";
-import { backend } from "@/config/api";
+import { service } from "@/config/api";
+import { BadRequestException, HttpException } from "@/lib/error-adapter";
 import { UpdateSchema } from "@/actions/auth/validation/user-schema";
+import { userFormatAPI } from "@/actions/users/adapters/users-adapters";
 
 
 export async function updateUser(formData: FormData) {
-    const session = await auth();
+    const fields = Object.fromEntries(formData.entries());
+    const { data, success } = await UpdateSchema.safeParseAsync(fields);
     
     try {
-        if (!session || !session.accessToken) throw new Error("Usuario no Autorizado");
-        
-        const fields = Object.fromEntries(formData.entries());
-        const validation = await UpdateSchema.safeParseAsync(fields);
-    
-        if (!validation.success) throw new Error("Información incorrecta");
-        
-        await backend.put(`/user/update/`, validation.data, {
-            headers: { Authorization: `Bearer ${session.accessToken}` },
-        });
+        if (!success) throw new BadRequestException();
+
+        await service.update("/user/update-profile/", 
+            userFormatAPI(data), 
+            { error: "Fallo la actualización del perfil" },
+        );
 
         revalidateTag("users-data");
         
@@ -32,11 +29,9 @@ export async function updateUser(formData: FormData) {
     } catch (error) {
         console.error("Error en UpdateUser", error);
 
-        let message = "Error desconocido";
-
-        if (error instanceof Error) message = error.message;
-        if (isAxiosError(error)) message = "Fallo la actualización del perfil";
-
-        return { result: false, message };
+        return { 
+            result: false, 
+            message: (error instanceof HttpException) ? error.message : "Error desconocido", 
+        };
     }
 }

@@ -1,27 +1,29 @@
 'use server'
 
-import { API_URL } from "@/config/constants";
+import { service } from "@/config/api";
+import { HttpException } from "@/lib/error-adapter";
+import { categoriesFromAPI } from "@/actions/categories/adapters/categories-adapters";
 import type { CategoriesResponse } from "@/interfaces/models/categorie.interface";
 
 
 export async function getCategories() {
     try {
-        const response = await fetch(`${API_URL}/store/categories/`, {
-            method: "GET",
-            cache: "force-cache",
-            next: {
-                revalidate: 900,
-                tags: ["categories-data"],
+        const response = await service.getAll<CategoriesResponse>(
+            `/store/categories/`, null,
+            {
+                isProtected: false,
+                error: "Fallo la carga de las categorías",
+                cache: "force-cache",
+                next: {
+                    revalidate: 900,
+                    tags: ["categories-data"],
+                }
             }
-        });
-
-        if (!response.ok) throw new Error("Fallo la carga de las categorías");
-
-        const data: CategoriesResponse = await response.json();
+        );
 
         return { 
             result: true, 
-            data: data.results,
+            data: response.results.map(categoriesFromAPI),
         };
 
     } catch (error) {
@@ -29,7 +31,7 @@ export async function getCategories() {
 
         return { 
             result: false, 
-            error: (error instanceof Error) ? error.message : "Error desconocido", 
+            error: (error instanceof HttpException) ? error.message : "Error desconocido", 
         };
     }
 }

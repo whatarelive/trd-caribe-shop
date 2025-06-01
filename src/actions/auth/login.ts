@@ -3,6 +3,7 @@
 import { AuthError } from "next-auth";
 import { signIn } from "@/auth.config";
 import { LoginSchema } from "@/actions/auth/validation/user-schema";
+import { BadRequestException, HttpException } from "@/lib/error-adapter";
 
 
 /**
@@ -15,14 +16,14 @@ export async function autheticate(formData: FormData) {
     const fields = Object.fromEntries(formData.entries());
 
     // Validar los datos usando el schema apropiado
-    const validation = await LoginSchema.safeParseAsync(fields);
+    const { data, success } = await LoginSchema.safeParseAsync(fields);
 
     try {
         // Si la validación falla, retornar mensaje de error.
-        if (!validation.success) throw new Error("Información incorrectas");
+        if (!success) throw new BadRequestException();
 
         // Iniciar sesión con las credenciales
-        await signIn("credentials", { ...validation.data, redirect: false });
+        await signIn("credentials", { ...data, redirect: false });
 
         return {
             result: true,
@@ -35,7 +36,7 @@ export async function autheticate(formData: FormData) {
         let message = "Error desconocido";
 
         // Mensaje de error condificional cuando ocurre un problema en la petición
-        if (error instanceof Error) message = error.message;
+        if (error instanceof HttpException) message = error.message;
         if (error instanceof AuthError) message = "Credenciales incorrectas";
 
         return { result: false, message };

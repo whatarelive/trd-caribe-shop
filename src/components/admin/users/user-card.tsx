@@ -15,11 +15,11 @@ export function UserCard({ user }: { user: IUser }) {
                 <div className="flex flex-col items-start gap-3 mb-4">
                     <div className="inline-flex gap-2 items-center">
                         <Avatar className="h-12 w-12 border-2 border-gray-100">
-                            { user.first_name.slice(0, 2) }
+                            { user.fullName.slice(0, 2) }
                         </Avatar>
 
                         <h3 className="font-semibold text-gray-900 text-lg leading-tight mb-1 line-clamp-2">
-                            {`${user.first_name} ${user.last_name}`}
+                            {user.fullName}
                         </h3>
                     </div>
 
@@ -37,8 +37,8 @@ export function UserCard({ user }: { user: IUser }) {
                 </div>
 
                 <div className="flex items-center justify-between gap-3">
-                    <Badge className="flex justify-center gap-2 w-full h-9" variant={user.is_staff ? "success" : "destructive"}>
-                        {user.is_staff ? (
+                    <Badge className="flex justify-center gap-2 w-full h-9" variant={user.isAdmin ? "success" : "destructive"}>
+                        {user.isAdmin ? (
                             <>
                                 <Shield className="h-4 w-4" />
                                 Administrador
@@ -53,7 +53,7 @@ export function UserCard({ user }: { user: IUser }) {
 
                     <AlertModal
                         title="Cambio de Rol"
-                        message={`¿Desea cambiar el rol de ${user.is_staff ? "administrador" : "cliente"} al usuario ${user.username}?`}
+                        message={`¿Desea cambiar el rol de ${user.isAdmin ? "administrador" : "cliente"} al usuario ${user.username}?`}
                         action={updateUserRole.bind(null, user.id, user.username)}
                     >
                         <Button

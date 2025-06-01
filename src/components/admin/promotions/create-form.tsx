@@ -1,7 +1,7 @@
 'use client'
 
 import { useActionState, useState } from "react";
-import { Plus } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import { createPromotion } from "@/actions/promotions/create-promotion";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -58,17 +58,17 @@ export function CreatePromotionForm() {
                         />
                     </div>
                     <div className="space-y-2 mb-4">
-                        <Label htmlFor="valor">Valor de descuento</Label>
+                        <Label htmlFor="value">Valor de descuento</Label>
                         <Input
-                            id="valor" 
+                            id="value" 
                             type="text" 
-                            name="valor" 
+                            name="value" 
                             placeholder="Ingrese el valor de descuento"
                         />
                     </div>
                     <div className="space-y-2 mb-4">
-                        <Label htmlFor="tipo">Tipo de Promoción</Label>
-                        <Select name="tipo">
+                        <Label htmlFor="type">Tipo de Promoción</Label>
+                        <Select name="type">
                             <SelectTrigger className="w-full bg-transparent">
                                 <SelectValue placeholder="Seleccionar Tipo" />
                             </SelectTrigger>
@@ -93,23 +93,23 @@ export function CreatePromotionForm() {
                     </div>
                     <div className="flex flex-col md:flex-row gap-x-4">
                         <div className={`space-y-2 mb-4 grow ${ type === "less" ? "hidden" : "block" }`}>
-                            <Label htmlFor="min_price">Valor minimo</Label>
+                            <Label htmlFor="minPrice">Valor minimo</Label>
                             <Input
-                                id="min_price" 
+                                id="minPrice" 
                                 type="number"
                                 min={0}
-                                name="min_price" 
+                                name="minPrice" 
                                 placeholder="Ingrese el valor minimo"
                             />
                         </div>
                 
                         <div className={`space-y-2 mb-4 grow ${ type === "greater" ? "hidden" : "block" }`}>
-                            <Label htmlFor="max_price">Valor máximo</Label>
+                            <Label htmlFor="maxPrice">Valor máximo</Label>
                             <Input
-                                id="max_price" 
+                                id="maxPrice" 
                                 type="number"
                                 min={0} 
-                                name="max_price" 
+                                name="maxPrice" 
                                 placeholder="Ingrese el valor máximo"
                             />
                         </div>
@@ -117,7 +117,8 @@ export function CreatePromotionForm() {
 
                     <Modal.DialogFooter className="flex flex-col md:flex-row mt-4">
                         <Button type="submit" disabled={isPending}>
-                            { isPending ? "Guardando..." : 'Crear Promoción' }
+                            { isPending ? "Guardando" : "Crear Promoción" }
+                            { isPending && <Loader2 className="w-4 h-4 ml-1 animate-spin"/> }              
                         </Button>
 
                         <Modal.DialogClose variant="outline">

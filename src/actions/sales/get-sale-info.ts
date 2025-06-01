@@ -1,32 +1,32 @@
 'use server'
 
-import { auth } from "@/auth.config"
-import { backend } from "@/config/api";
-import type { ISalesDetail } from "@/interfaces/models/sales.interface";
+import { service } from "@/config/api";
+import { BadRequestException, HttpException } from "@/lib/error-adapter";
+import { saleDetailFromAPI } from "@/actions/sales/adapter/sales-adapters";
 
 
 export async function getSaleInfo(id: number) {
     try {
-        if (typeof id !== "number" || id <= 0) throw new Error("ID invalido");    
-        
-        const session = await auth();
-        
-        if (!session || !session.accessToken || !session.user?.isAdmin) {
-            throw new Error("Usuario no Autorizado");
+        if (typeof id !== "number" || id <= 0) {
+            throw new BadRequestException("ID invalido");
         }
-        
-        const { data } = await backend.get<ISalesDetail>(`/sales/detail/${id}`, {
-            headers: { Authorization: `Bearer ${session.accessToken}` },
-        });    
+
+        const response = await service.getById(`/sales/detail/${id}`, { 
+            isProtected: true,
+            error: "Fallo la carga de los detalles de la venta"
+        });
     
-        return { result: true, data };        
+        return { 
+            result: true, 
+            data: saleDetailFromAPI(response), 
+        };        
         
     } catch (error) {
         console.error("Error en GetSalesInfo", error);
 
         return {
             result: false,
-            error: (error instanceof Error) ? error.message : "Fallo la carga de la venta",
-        }
+            error: (error instanceof HttpException) ? error.message : "Error desconocido",
+        };
     }
 }

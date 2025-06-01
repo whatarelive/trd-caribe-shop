@@ -1,8 +1,8 @@
 import NextAuth, { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { backend } from "@/config/api";
-import { isRegisterUser } from "@/lib/guards/user-type-guards";
-import type { ResponseLogin, UserLogin, UserRegister } from "@/interfaces/models/user.interface";
+import { service } from "@/config/api";
+import { loginFromAPI, registerFromAPI, newTokenFromAPI } from './actions/auth/adapters/auth-adapters';
+import type { UserLogin, UserRegister } from "@/interfaces/models/user.interface";
 
 // Tipo de dato de la respuesta de la petición de refresh del token.
 type ResponseToken = {
@@ -36,15 +36,11 @@ export const authConfig: NextAuthConfig = {
         async jwt({ token, user }) {
             // Si hay un usuario, agrega los tokens de acceso y de refresco al token JWT
             if (user) {
-                token.username = user.username;
-                token.email = user.email;
-                token.first_name = user.first_name,
-                token.last_name = user.last_name,
-                token.isAdmin = user.isAdmin;
-                token.accessToken = user.accessToken;
-                token.refreshToken = user.refreshToken;
-                token.accessTokenExpires = Date.now() + 60 * 59 * 1000; // 59 minutos de vida
-                token.refreshTokenExpires = Date.now() + 23 * 60 * 60 * 1000; // 23 horas de vida
+                token = {
+                    ...user,
+                    accessTokenExpires: Date.now() + 60 * 59 * 1000, // 59 minutos de vida
+                    refreshTokenExpires: Date.now() + 23 * 60 * 60 * 1000, // 23 horas de vida
+                }
             } else {
                 return token;
             }
@@ -60,19 +56,26 @@ export const authConfig: NextAuthConfig = {
             if (token.refreshTokenExpires && token.accessTokenExpires && Date.now() > token.accessTokenExpires) {
                 try {
                     // Intenta renovar el token de acceso usando el token de refresco
-                    const { data } = await backend.post<ResponseToken>(
-                        "/user/login/refresh/", 
+                    const response = await service.post("/user/login/refresh/", 
                         { refresh: token.refreshToken },
+                        { 
+                            isProtected: false, 
+                            error: "Fallo la renovación del token",
+                        },
                     );
 
-                    if (!data) throw new Error("Error al renovar el token");
+                    // Mapeo de la respuesta
+                    const newToken = newTokenFromAPI(
+                        (await response.json())
+                    );
 
                     // Actualiza el token de acceso y su tiempo de expiración
-                    token.accessToken = data.access;
+                    token.accessToken = newToken.accessToken;
+                    token.refreshToken = newToken.refreshToken;
                     token.accessTokenExpires = Date.now() + 60 * 59 * 1000;
 
                 } catch (error) {
-                    console.log("Error al renovar el token de acceso", error);
+                    console.error("Error al renovar el token de acceso", error);
                     // En caso de error, limpiar todos los datos del token
                     return {};
                 }
@@ -94,8 +97,7 @@ export const authConfig: NextAuthConfig = {
             // Agrega la información del usuario a la sesión
             session.user.username = token.username;
             session.user.email = token.email!;
-            session.user.first_name = token.first_name;
-            session.user.last_name = token.last_name;
+            session.user.fullName = token.fullName;
             session.user.isAdmin = token.isAdmin;
             
             // Se establece el estado de la autentificación
@@ -116,39 +118,23 @@ export const authConfig: NextAuthConfig = {
                 // Convertir credentials a tipo User de forma segura
                 const user = credentials as unknown as UserLogin | UserRegister;
 
-                if (isRegisterUser(user)) {
-                    // Si es un usuario registrado, retornar los tokens y datos del usuario
-                    return {
-                        username: user.username,
-                        email: user.email,
-                        first_name: user.first_name,
-                        last_name: user.last_name,
-                        isAdmin: false,
-                        accessToken: user.token.access,
-                        refreshToken: user.token.refresh
-                    }
-
-                } else {
-                    // Si es un intento de login, hacer la petición al endpoint de login
-                    const { data, status } = await backend.post<ResponseLogin>(
-                        "/user/login/", 
-                        { ...user }
-                    );
-
-                    // Si no hay datos en la respuesta, retornar null
-                    if (!data || status === 400 || status === 401) return null;
-                    
-                    // Retornar los datos del usuario y sus tokens de acceso
-                    return {
-                        username: data.username,
-                        email: data.email,
-                        first_name: data.first_name,
-                        last_name: data.last_name,
-                        isAdmin: data.is_staff,
-                        accessToken: data.access,
-                        refreshToken: data.refresh
-                    }
+                // Si es un usuario registrado, retornar los tokens y datos del usuario
+                if ((user as UserRegister).token !== undefined) {
+                    return registerFromAPI(user);
                 }
+
+                // Si es un intento de login, hacer la petición al endpoint de login
+                // Si falla la petición el error se controla en la server action.
+                const response = await service.post("/user/login/", 
+                    { ...user }, 
+                    { 
+                        isProtected: false, 
+                        error: "Error al iniciar sesión",
+                    },
+                );
+
+                // Retornar los datos del usuario y sus tokens de acceso
+                return loginFromAPI((await response.json()));
             }
         })
     ]

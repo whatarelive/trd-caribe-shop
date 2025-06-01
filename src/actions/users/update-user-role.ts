@@ -1,28 +1,28 @@
 'use server'
 
 import { revalidateTag } from "next/cache";
-import { isAxiosError } from "axios";
 import { auth } from "@/auth.config";
-import { backend } from "@/config/api";
+import { service } from "@/config/api";
+import { userFormatAPI } from "@/actions/users/adapters/users-adapters";
+import { BadRequestException, HttpException } from "@/lib/error-adapter";
 
 
 export async function updateUserRole(id: number, username: string) {
+    const session = await auth();
+    
     try {
-        if (typeof id !== "number" || id <= 0) throw new Error("ID invalido");
-        
-        const session = await auth();
-        
-        if (!session || !session.accessToken || !session.user?.isAdmin) {
-            throw new Error("Usuario no Autorizado");
+        if (typeof id !== "number" || id <= 0) {
+            throw new BadRequestException("ID invalido");
+        }
+            
+        if (!session || !session.user || username === session.user.username) {
+            throw new BadRequestException("No puedes cambiar el rol de tu usuario");
         }
 
-        if (username === session.user.username) {
-            throw new Error("No puedes cambiar el rol de tu usuario");
-        }
-
-        await backend.patch(`/user/change-role/${id}`, { username }, {
-            headers: { Authorization: `Bearer ${session.accessToken}` },
-        });
+        await service.update(`/user/change-role/${id}`, 
+            userFormatAPI({ username }), 
+            { error: "Fallo la actualización del rol" },
+        );
     
         revalidateTag("users-data");
     
@@ -34,11 +34,9 @@ export async function updateUserRole(id: number, username: string) {
     } catch (error) {
         console.error("Error en UpdateUserRole", error);
 
-        let message = "Error desconocido";
-
-        if (error instanceof Error) message = error.message;
-        if (isAxiosError(error)) message = "Fallo la actualización del rol";
-
-        return { result: false, message };
+        return { 
+            result: false, 
+            message: (error instanceof HttpException) ? error.message : "Error desconocido",
+        };
     }
 }

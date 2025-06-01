@@ -1,32 +1,29 @@
 'use server'
 
 import { revalidatePath } from "next/cache";
-import { isAxiosError } from "axios";
-import { auth } from "@/auth.config";
-import { backend } from "@/config/api";
+import { service } from "@/config/api";
+import { BadRequestException, HttpException } from "@/lib/error-adapter";
 import { AddCartSchema } from "@/actions/cart/validation/cart-schema";
-
+import { productAddFormatAPI } from "@/actions/cart/adapters/cart-adapters";
 
 interface ProductInfo {
     id: number;
     quantity: number;
 }
 
-export async function addCart(data: ProductInfo) {
-    const session = await auth();
+export async function addCart(formData: ProductInfo) {    
+    const { data, success } = await AddCartSchema.safeParseAsync(formData);
     
-    try {
-        if (!session || !session.accessToken) throw new Error("Usuario no autorizado");
+    try {    
+        if (!success) throw new BadRequestException();
         
-        const validation = await AddCartSchema.safeParseAsync(data);
-
-        if (!validation.success) throw new Error("Información incorrecta");
-        
-        const { id, quantity } = validation.data;
-
-        await backend.post(`/sales/car/add/${id}/`, { quantity }, {
-            headers: { Authorization: `Bearer ${session.accessToken}` },
-        });
+        await service.post(`/sales/car/add/${data.id}/`,
+            productAddFormatAPI(data), 
+            {
+                isProtected: true,
+                error: "Fallo al agregar el producto al carrito",
+            }
+        );
 
         revalidatePath("/shop/cart/");
 
@@ -38,11 +35,9 @@ export async function addCart(data: ProductInfo) {
     } catch (error) {
         console.error("Error en AddCart", error);
         
-        let message = "Error desconocido";
-
-        if (error instanceof Error) message = error.message;
-        if (isAxiosError(error)) message = "Fallo al agregar el producto al carrito";
-
-        return { result: true, message };
+        return { 
+            result: true, 
+            message: (error instanceof HttpException) ? error.message : "Error desconocido", 
+        };
     }
 }

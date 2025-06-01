@@ -1,27 +1,22 @@
 'use server'
 
-import { revalidatePath, revalidateTag } from "next/cache";
-import { isAxiosError } from "axios";
-import { auth } from "@/auth.config";
-import { backend } from "@/config/api";
+import { revalidateTag } from "next/cache";
+import { service } from "@/config/api";
+import { BadRequestException, HttpException } from "@/lib/error-adapter";
 
 
 export async function deleteCategorie(id: number) {
     try {
-        if (typeof id !== "number" || id <= 0) throw new Error("ID invalido");
-        
-        const session = await auth();    
-
-        if (!session || !session.accessToken || !session.user?.isAdmin) {
-            throw new Error("Usuario no Autorizado");
+        if (typeof id !== "number" || id <= 0) {
+            throw new BadRequestException("ID invalido");
         }
-
-        await backend.delete(`/store/categories/delete/${id}/`, {
-            headers: { Authorization: `Bearer ${session.accessToken}` },
+        
+        await service.delete(`/store/categories/delete/${id}/`, {
+            error: "Fallo la eliminación de la categoría",
         });
         
         revalidateTag("categories-data");
-        revalidatePath("/admin/products/");
+        revalidateTag("products-data");
     
         return {
             result: true,
@@ -31,11 +26,9 @@ export async function deleteCategorie(id: number) {
     } catch (error) {
         console.error("Error en DeleteCategorie", error);
         
-        let message = "Error desconocido"; 
-        
-        if (error instanceof Error) message = error.message;
-        if (isAxiosError(error)) message = "Fallo la eliminación de la categoría";
-
-        return { result: false, message };
+        return { 
+            result: false, 
+            message: (error instanceof HttpException) ? error.message : "Error desconcocido",
+        };
     }   
 }

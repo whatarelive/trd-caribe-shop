@@ -4,15 +4,13 @@ import "next-auth/jwt";
 /** 
   * @property {string} username - Nombre de usuario
   * @property {string} email - Correo electronico del usuario
-  * @property {string} first_name - Nombre del usuario
-  * @property {string} last_name - Apellidos del usuario
+  * @property {string} fullName - Nombre del usuario
   * @property {boolean} isAdmin - Indica si el usuario es administrador
 */ 
 interface UserInfo {
   username?: string;
   email?: string;
-  first_name?: string;
-  last_name?: string;
+  fullName?: string;
   isAdmin?: boolean;
 }
 

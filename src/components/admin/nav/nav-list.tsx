@@ -22,7 +22,7 @@ export const NavList = () => {
                 <CreditCard size={24} />
                 Promociones
             </LinkComponent>
-            <LinkComponent href="/admin/complaints-suggestions?page=1" isActive={pathname.includes("/admin/complaints-suggestions")}>
+            <LinkComponent href="/admin/comments?page=1" isActive={pathname.includes("/admin/comments")}>
                 <MessageSquareText size={24}/>
                 Comentarios
             </LinkComponent>

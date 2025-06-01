@@ -21,7 +21,7 @@ export const NavBar = async () => {
 
                     <CategoriesList/>
                     
-                    <Link href="/complaints-suggestions/" className="hover:bg-gray-50 hover:text-blue-400 rounded-md p-1 px-3">
+                    <Link href="/comments/" className="hover:bg-gray-50 hover:text-blue-400 rounded-md p-1 px-3">
                         Comentarios
                     </Link>
                 </nav>

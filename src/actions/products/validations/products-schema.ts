@@ -11,6 +11,6 @@ export const CreateProductSchema = z.object({
     image: z.instanceof(File)
         .refine(file => file.size > 0)
         .refine(file => file.type.startsWith("image/")),
-})
+});
 
 export const UpdateProductSchema = CreateProductSchema.partial();

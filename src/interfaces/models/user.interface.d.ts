@@ -1,18 +1,25 @@
 // Estructura general del módelo de usuario
-export interface IUser {
-    id: number;
+export interface IUserAPI {
     username: string;
+    password: string;
     email: string;
     first_name:	string;
     last_name:	string;
-    is_staff: boolean;
+}
+
+export interface IUser {
+    id: number;
+    fullName: string;
+    username: string;
+    email: string;
+    isAdmin: boolean;
 }
 
 export type UserResponse = {
     count: number;
     next: string | null;
     previous: string | null;
-    results: IUser[];
+    results: any[];
 }
 
 // Tipo de dato que se va obtener cuando se halla hecho Inicio de sesión 
@@ -26,10 +33,5 @@ export type UserRegister = {
         access: string;
         refresh: string;
     };
-} & Omit<IUser, "id" | "is_staff">;
-
-export type ResponseLogin = {
-    readonly is_staff: boolean;
-    readonly access: string;
-    readonly refresh: string;
-} & Omit<IUser, "id" | "is_staff">
+    is_staff: boolean;
+} & Omit<IUserAPI, "password">;

@@ -1,19 +1,16 @@
 'use server'
 
 import { revalidateTag } from "next/cache";
-import { isAxiosError } from "axios";
-import { auth, signOut } from "@/auth.config";
-import { backend } from "@/config/api";
+import { AuthError } from "next-auth";
+import { signOut } from "@/auth.config";
+import { service } from "@/config/api";
+import { HttpException } from "@/lib/error-adapter";
 
 
 export async function deleteUser() {
-    const session = await auth();
-    
-    try {
-        if (!session || !session.accessToken) throw new Error("Usuario no Autorizado");
-        
-        await backend.delete(`/user/delete/`, {
-            headers: { Authorization: `Bearer ${session.accessToken}` },
+    try {    
+        await service.delete(`/user/delete/`, {
+            error: "Fallo la eliminación del usuario",
         });
 
         await signOut({ redirect: false });
@@ -30,10 +27,9 @@ export async function deleteUser() {
 
         let message = "Error desconocido";
 
-        if (error instanceof Error) message = error.message;
-        if (isAxiosError(error)) message = "Fallo la eliminación del usuario";
-        
+        if (error instanceof HttpException) message = error.message; 
+        if (error instanceof AuthError) message = "Fallo el cierre de sessión";
+
         return { result: false, message };
     }
-
 }

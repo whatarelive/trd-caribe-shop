@@ -64,14 +64,14 @@ export async function UsersTable({ page, limit, search, ordering }: IFilters) {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    { users.data.map(({id, email, first_name, last_name, username, is_staff}) => (
+                    { users.data.map(({id, email, fullName, username, isAdmin}) => (
                         <TableRow key={id} className="lg:bg-white lg:border-b-1 lg:border-gray-200">
                             <TableCell>
                                 <div className="inline-flex gap-2 items-center">
-                                    <Avatar>{first_name.slice(0, 2)}</Avatar>
+                                    <Avatar>{fullName.slice(0, 2)}</Avatar>
                             
                                     <span className="line-clamp-1">
-                                        { `${first_name} ${last_name}` }
+                                        { fullName }
                                     </span>
                                 </div>
                             </TableCell>
@@ -88,9 +88,9 @@ export async function UsersTable({ page, limit, search, ordering }: IFilters) {
                             <TableCell>
                                 <Badge 
                                     className="inline-flex gap-1 items-center" 
-                                    variant={is_staff ? "success" : "destructive"}
+                                    variant={isAdmin ? "success" : "destructive"}
                                 >
-                                    {is_staff ? (
+                                    {isAdmin ? (
                                         <>
                                             <Shield className="h-3 w-3" />
                                             Administrador
@@ -106,7 +106,7 @@ export async function UsersTable({ page, limit, search, ordering }: IFilters) {
                             <TableCell>
                                 <AlertModal
                                     title="Cambio de Rol" 
-                                    message={`Desesa cambiar el rol de ${is_staff ? "administrador" : "cliente"} al usuario ${username}`} 
+                                    message={`Desesa cambiar el rol de ${isAdmin ? "administrador" : "cliente"} al usuario ${username}`} 
                                     action={updateUserRole.bind(null, id, username)} 
                                 >
                                     <Button type="button" variant="outline" size="icon">
