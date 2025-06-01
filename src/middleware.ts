@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
-import { authConfig, auth as Session } from "@/auth.config";
+import { authConfig, auth as Session, signOut } from "@/auth.config";
+import { HttpException } from "@/lib/error-adapter";
 
 // Define las rutas de autenticación y las rutas públicas.
 const authRoutes = ['/auth/login', '/auth/register'];
@@ -14,11 +15,22 @@ export default middleware( async({ nextUrl, auth }) => {
     // Verifica si el usuario está autenticado.
     const isLoggedIn = !!auth;  
 
+    // Verifica que el token este activo antes de entrar a la ruta
+    if (isLoggedIn) {
+        const session = await Session();
+
+        if (session?.error instanceof HttpException) {
+            await signOut({ redirect: false });
+
+            return NextResponse.redirect(new URL("/", nextUrl));
+        };
+    }
+
     // Proteccioón de las rutas del DashBoard
     if (nextUrl.pathname.startsWith("/admin") && isLoggedIn) {
         // Se recupera la sesión del usuario.
         const session = await Session();
-        
+
         // Si el usuario es Admin se deja pasar la petición
         if (session?.user?.isAdmin) {
             return NextResponse.next();
