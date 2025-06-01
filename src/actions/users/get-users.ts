@@ -2,6 +2,7 @@
 
 import { service } from "@/config/api";
 import { HttpException } from "@/lib/error-adapter";
+import { userFromAPI } from "@/actions/users/adapters/users-adapters";
 import type { IFilters } from "@/interfaces/components";
 import type { UserResponse } from "@/interfaces/models/user.interface";
 
@@ -24,7 +25,7 @@ export async function getUsers(params: IFilters) {
         return {
             result: true,
             count: response.count,
-            data: response.results,
+            data: response.results.map(userFromAPI),
         };
 
     } catch (error) {

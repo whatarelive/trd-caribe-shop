@@ -2,7 +2,7 @@
 
 import { service } from "@/config/api";
 import { BadRequestException, HttpException } from "@/lib/error-adapter";
-import type { IPromotionsAPI } from "@/interfaces/models/promotions.interface";
+import { productFromAPI } from "@/actions/products/adapters/product-adapters";
 
 
 export async function getProductsInfo(id: number) {
@@ -11,7 +11,7 @@ export async function getProductsInfo(id: number) {
             throw new BadRequestException("ID invalido");
         }
 
-        const response = await service.getById<IPromotionsAPI>(
+        const response = await service.getById(
             `/store/products/${id}/`, 
             {
                 isProtected: false,
@@ -21,7 +21,7 @@ export async function getProductsInfo(id: number) {
 
         return { 
             result: true, 
-            data: response, 
+            data: productFromAPI(response), 
         };
         
     } catch (error) {

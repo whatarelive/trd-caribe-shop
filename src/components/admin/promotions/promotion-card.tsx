@@ -30,13 +30,13 @@ export function PromotionCard({ promotion }: { promotion: IPromotions }) {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <DataSection
                         label="Valor"
-                        value={`${promotion.valor}%`}
+                        value={`${promotion.value}%`}
                         icon={<Percent className="w-4 h-4 text-blue-600" />}
                     />
 
                      <DataSection
                         label="Tipo de Promoción"
-                        value={promotion.tipo === "percentage" ? "procentage" : "fija"}
+                        value={promotion.type === "percentage" ? "procentage" : "fija"}
                         icon={<ClipboardType className="w-4 h-4 text-blue-600" />}
                     />
 
@@ -52,13 +52,13 @@ export function PromotionCard({ promotion }: { promotion: IPromotions }) {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <DataSection
                         label="Valor Mínimo"
-                        value={promotion.min_price !== "0.00" ? `$${promotion.min_price}` : "--.--"}
+                        value={promotion.minPrice !== 0 ? `$${promotion.minPrice}` : "--.--"}
                         icon={<DollarSign className="w-4 h-4 text-green-600" />}
                     />
 
                     <DataSection
                         label="Valor Máximo"
-                        value={promotion.max_price !== "0.00" ? `$${promotion.max_price}` : "--.--"}
+                        value={promotion.maxPrice !== 0 ? `$${promotion.maxPrice}` : "--.--"}
                         icon={<DollarSign className="w-4 h-4 text-red-600" />}
                     />
                 </div>

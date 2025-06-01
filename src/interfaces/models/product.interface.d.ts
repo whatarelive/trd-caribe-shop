@@ -1,4 +1,4 @@
-export interface IProducts {
+export interface IProduct {
     id: number;
     categorie: string;
     name: string;
@@ -8,14 +8,22 @@ export interface IProducts {
     discount: string;
     created: string;
     updated: string;
-    image?: string;
-    image_url: string;
-    image_id: string;
+    imageUrl: string;
+    imageId: string;
+}
+
+export interface IProductAPI {
+    image: File;
+    name: string;
+    description: string;
+    categorie: number;
+    price: number;
+    stock: number;
 }
 
 export interface ProductResponse {
     count: number;
     next: string | null;
     previous: string | null;
-    results: IProducts[];
+    results: any[];
 }

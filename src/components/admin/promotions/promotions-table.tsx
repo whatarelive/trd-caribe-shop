@@ -49,7 +49,7 @@ export async function PromotionsTable({ limit, page, search, ordering }: IFilter
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    { promotions.data.map(({ id, name, tipo, choice, valor, max_price, min_price }) => (
+                    { promotions.data.map(({ id, name, type, choice, value, maxPrice, minPrice }) => (
                         <TableRow key={id} className="lg:border-b-1 lg:border-gray-200 lg:bg-white">
                             <TableCell>
                                 <span className="line-clamp-1">
@@ -57,19 +57,19 @@ export async function PromotionsTable({ limit, page, search, ordering }: IFilter
                                 </span>
                             </TableCell>
                             <TableCell>
-                                { tipo === "percentage" ? "porcentage" : "fija" }
+                                { type === "percentage" ? "porcentage" : "fija" }
                             </TableCell>
                             <TableCell>
                                 <PromotionChoice choice={choice}/>
                             </TableCell>
                             <TableCell>
-                                {valor} %
+                                {value} %
                             </TableCell>
                             <TableCell>
-                                {min_price !== "0.00" ? `$ ${min_price}` : "-"}
+                                {minPrice !== 0 ? `$ ${minPrice}` : "-"}
                             </TableCell>
                             <TableCell>
-                                {max_price !== "0.00" ? `$ ${max_price}` : "-"}
+                                {maxPrice !== 0 ? `$ ${maxPrice}` : "-"}
                             </TableCell>
                             <TableCell>
                                 <AlertModal

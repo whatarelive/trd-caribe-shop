@@ -2,8 +2,9 @@
 
 import { revalidateTag } from "next/cache";
 import { service } from "@/config/api";
-import { UpdateSchema } from "@/actions/auth/validation/user-schema";
 import { BadRequestException, HttpException } from "@/lib/error-adapter";
+import { UpdateSchema } from "@/actions/auth/validation/user-schema";
+import { userFormatAPI } from "@/actions/users/adapters/users-adapters";
 
 
 export async function updateUser(formData: FormData) {
@@ -13,9 +14,10 @@ export async function updateUser(formData: FormData) {
     try {
         if (!success) throw new BadRequestException();
 
-        await service.update("/user/update-profile/", data, {
-            error: "Fallo la actualización del perfil",
-        });
+        await service.update("/user/update-profile/", 
+            userFormatAPI(data), 
+            { error: "Fallo la actualización del perfil" },
+        );
 
         revalidateTag("users-data");
         

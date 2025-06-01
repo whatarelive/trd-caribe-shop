@@ -1,3 +1,6 @@
+export interface IProductAdd {
+    quantity: number;
+}
 
 export interface CartItem {
     id: number;

@@ -2,6 +2,7 @@
 
 import { service } from "@/config/api";
 import { HttpException } from "@/lib/error-adapter";
+import { saleFromAPI } from "@/actions/sales/adapter/sales-adapters";
 import type { IFilters } from "@/interfaces/components";
 import type { SalesResponse } from "@/interfaces/models/sales.interface";
 
@@ -24,7 +25,7 @@ export async function getSales(params: IFilters) {
         return {
             result: true,
             count: response.count,
-            data: response.results,
+            data: response.results.map(saleFromAPI),
         };
 
     } catch (error) {

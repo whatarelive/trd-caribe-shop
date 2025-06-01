@@ -4,6 +4,7 @@ import { revalidateTag } from "next/cache";
 import { service } from "@/config/api";
 import { BadRequestException, HttpException } from "@/lib/error-adapter";
 import { UpdateProductSchema } from "@/actions/products/validations/products-schema";
+import { productFormatAPI } from "@/actions/products/adapters/product-adapters";
 
 
 export async function updateProduct(id: number, formData: FormData) {
@@ -17,9 +18,10 @@ export async function updateProduct(id: number, formData: FormData) {
         
         if (!success) throw new BadRequestException();
 
-        await service.update(`/store/products/update/${id}`, data, {
-            error: "Fallo la actualización del producto",
-        });
+        await service.update(`/store/products/update/${id}`, 
+            productFormatAPI(data), 
+            { error: "Fallo la actualización del producto" }
+        );
 
         revalidateTag("products-data");
 

@@ -2,6 +2,7 @@
 
 import { service } from "@/config/api";
 import { HttpException } from "@/lib/error-adapter";
+import { promotionFromAPI } from "@/actions/promotions/adapters/promotions-adapter";
 import type { IFilters } from "@/interfaces/components";
 import type { PromotionsResponse } from "@/interfaces/models/promotions.interface";
 
@@ -24,7 +25,7 @@ export async function getPromotions(params: IFilters) {
         return { 
             result: true, 
             count: response.count,
-            data: response.results, 
+            data: response.results.map(promotionFromAPI), 
         };
     
     } catch (error) {

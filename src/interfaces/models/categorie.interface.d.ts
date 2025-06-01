@@ -1,3 +1,7 @@
+export interface ICategoriesAPI {
+    name: string;
+}
+
 export interface ICategories {
     id: number;
     name: string;
@@ -9,5 +13,5 @@ export type CategoriesResponse = {
     count: number;
     next: string | null;
     previous: string | null;
-    results: ICategories[];
+    results: any[];
 }

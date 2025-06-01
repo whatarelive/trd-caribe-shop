@@ -3,6 +3,7 @@
 import { revalidateTag } from "next/cache";
 import { service } from "@/config/api";
 import { BadRequestException, HttpException } from "@/lib/error-adapter";
+import { promotionApiFormat } from "@/actions/promotions/adapters/promotions-adapter";
 import { PromotionsCreateSchema } from "@/actions/promotions/validation/promotions-schema";
 
 
@@ -13,11 +14,8 @@ export async function createPromotion(formData: FormData) {
     try {
         if (!success) throw new BadRequestException();
 
-        if (data.choice === "greater") data.max_price = 0; 
-        if (data.choice === "less") data.min_price = 0;
-
         await service.post("/store/discounts/create/", 
-            data, 
+            promotionApiFormat(data), 
             { 
                 isProtected: true, 
                 error: "Fallo la creación de la promoción",

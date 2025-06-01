@@ -2,7 +2,7 @@
 
 import { service } from "@/config/api";
 import { BadRequestException, HttpException } from "@/lib/error-adapter";
-import type { ISalesDetail } from "@/interfaces/models/sales.interface";
+import { saleDetailFromAPI } from "@/actions/sales/adapter/sales-adapters";
 
 
 export async function getSaleInfo(id: number) {
@@ -11,14 +11,14 @@ export async function getSaleInfo(id: number) {
             throw new BadRequestException("ID invalido");
         }
 
-        const response = await service.getById<ISalesDetail>(`/sales/detail/${id}`, { 
+        const response = await service.getById(`/sales/detail/${id}`, { 
             isProtected: true,
             error: "Fallo la carga de los detalles de la venta"
         });
     
         return { 
             result: true, 
-            data: response, 
+            data: saleDetailFromAPI(response), 
         };        
         
     } catch (error) {

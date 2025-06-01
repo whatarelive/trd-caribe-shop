@@ -2,6 +2,7 @@
 
 import { service } from "@/config/api";
 import { HttpException } from "@/lib/error-adapter";
+import { categoriesFromAPI } from "@/actions/categories/adapters/categories-adapters";
 import type { CategoriesResponse } from "@/interfaces/models/categorie.interface";
 
 
@@ -22,7 +23,7 @@ export async function getCategories() {
 
         return { 
             result: true, 
-            data: response.results,
+            data: response.results.map(categoriesFromAPI),
         };
 
     } catch (error) {

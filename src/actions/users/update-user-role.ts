@@ -3,6 +3,7 @@
 import { revalidateTag } from "next/cache";
 import { auth } from "@/auth.config";
 import { service } from "@/config/api";
+import { userFormatAPI } from "@/actions/users/adapters/users-adapters";
 import { BadRequestException, HttpException } from "@/lib/error-adapter";
 
 
@@ -18,9 +19,10 @@ export async function updateUserRole(id: number, username: string) {
             throw new BadRequestException("No puedes cambiar el rol de tu usuario");
         }
 
-        await service.update(`/user/change-role/${id}`, { username }, {
-            error: "Fallo la actualización del rol",
-        });
+        await service.update(`/user/change-role/${id}`, 
+            userFormatAPI({ username }), 
+            { error: "Fallo la actualización del rol" },
+        );
     
         revalidateTag("users-data");
     

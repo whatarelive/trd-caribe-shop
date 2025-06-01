@@ -2,6 +2,7 @@
 
 import { service } from "@/config/api";
 import { HttpException } from "@/lib/error-adapter";
+import { cartFromAPI } from "@/actions/cart/adapters/cart-adapters";
 import type { CartResponse } from "@/interfaces/models/cart.interace";
 
 
@@ -18,7 +19,7 @@ export async function getCart() {
         return { 
             result: true,
             count: response.count,
-            data: response.results,
+            data: response.results.map(cartFromAPI),
         };
         
     } catch (error) {

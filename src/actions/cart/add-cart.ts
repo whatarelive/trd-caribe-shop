@@ -2,8 +2,9 @@
 
 import { revalidatePath } from "next/cache";
 import { service } from "@/config/api";
-import { AddCartSchema } from "@/actions/cart/validation/cart-schema";
 import { BadRequestException, HttpException } from "@/lib/error-adapter";
+import { AddCartSchema } from "@/actions/cart/validation/cart-schema";
+import { productAddFormatAPI } from "@/actions/cart/adapters/cart-adapters";
 
 interface ProductInfo {
     id: number;
@@ -16,8 +17,8 @@ export async function addCart(formData: ProductInfo) {
     try {    
         if (!success) throw new BadRequestException();
         
-        await service.post(`/sales/car/add/${data.id}/`, 
-            { quantity: data.quantity }, 
+        await service.post(`/sales/car/add/${data.id}/`,
+            productAddFormatAPI(data), 
             {
                 isProtected: true,
                 error: "Fallo al agregar el producto al carrito",

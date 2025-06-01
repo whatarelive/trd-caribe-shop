@@ -4,8 +4,8 @@ import { AuthError } from "next-auth";
 import { signIn } from "@/auth.config";
 import { service } from "@/config/api";
 import { RegisterSchema } from "@/actions/auth/validation/user-schema";
+import { userFormatAPI } from "@/actions/users/adapters/users-adapters";
 import { BadRequestException, HttpException } from "@/lib/error-adapter";
-import type { UserRegister } from "@/interfaces/models/user.interface";
 
 
 /**
@@ -24,19 +24,17 @@ export async function createUser(formData: FormData) {
         // Si la validación falla, retornar mensaje de error
         if (!success) throw new BadRequestException();
     
-        // Extraer los datos validados para crear el usuario
-        const { passwordConfirm: _, ...rest } = data;
-
         // Intentar crear el usuario en el backend mediante una petición POST
         const response = await service.post("/user/register/", 
-            { ...rest }, 
+            userFormatAPI(data), 
             {
                 isProtected: false,
                 error: "Fallo el registro del usuario",
             }
         );
 
-        const body: UserRegister = await response.json();
+        // Se parsea la respuesta
+        const body = await response.json();
 
         // Si el registro es exitoso, iniciar sesión automáticamente con las credenciales
         await signIn("credentials", { ...body, redirect: false });

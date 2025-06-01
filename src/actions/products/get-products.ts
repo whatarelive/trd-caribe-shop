@@ -2,6 +2,7 @@
 
 import { service } from "@/config/api";
 import { HttpException } from "@/lib/error-adapter";
+import { productFromAPI } from "@/actions/products/adapters/product-adapters";
 import type { IFilters } from "@/interfaces/components";
 import type { ProductResponse } from "@/interfaces/models/product.interface";
 
@@ -9,7 +10,7 @@ import type { ProductResponse } from "@/interfaces/models/product.interface";
 export async function getProducts(params: IFilters) {
     try {
         const response = await service.getAll<ProductResponse>(
-            `/store/products/`, params, 
+            "/store/products/", params, 
             {
                 isProtected: false,
                 error: "Fallo la carga de los productos",
@@ -24,7 +25,7 @@ export async function getProducts(params: IFilters) {
         return {
             result: true,
             count: response.count,
-            results: response.results,
+            results: response.results.map(productFromAPI),
         };
         
     } catch (error) {
