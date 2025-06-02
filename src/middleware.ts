@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
-import { authConfig, auth as Session } from "@/auth.config";
+import { authConfig, auth as Session, signOut } from "@/auth.config";
+import { HttpException } from "@/lib/error-adapter";
 
 // Define las rutas de autenticación y las rutas públicas.
 const authRoutes = ['/auth/login', '/auth/register'];
@@ -14,28 +15,34 @@ export default middleware( async({ nextUrl, auth }) => {
     // Verifica si el usuario está autenticado.
     const isLoggedIn = !!auth;  
 
-    // Proteccioón de las rutas del DashBoard
-    if (nextUrl.pathname.startsWith("/admin") && isLoggedIn) {
-        // Se recupera la sesión del usuario.
+    // Verifica que el token este activo antes de entrar a la ruta
+    if (isLoggedIn) {
         const session = await Session();
-        
-        // Si el usuario es Admin se deja pasar la petición
-        if (session?.user?.isAdmin) {
-            return NextResponse.next();
-        } 
-        
-        // Si no se redirecciona a la página pública
-        else return NextResponse.redirect(new URL("/", nextUrl));
-    }
 
+        if (session?.error instanceof HttpException) {
+            await signOut({ redirect: false });
+
+            return NextResponse.redirect(new URL("/", nextUrl));
+        };
+
+        // Proteccioón de las rutas del DashBoard
+        if (nextUrl.pathname.startsWith("/admin")) {
+            // Si el usuario es Admin se deja pasar la petición
+            if (session?.user?.isAdmin) return NextResponse.next();
+            
+            // Si no se redirecciona a la página pública
+            else return NextResponse.redirect(new URL("/", nextUrl));
+        }
+
+        // Restricción de rutas de autentificación.
+        if (authRoutes.includes(nextUrl.pathname)) {
+            return NextResponse.redirect(new URL("/", nextUrl));
+        }
+    } 
+    
     // Protección de rutas privadas.
-    if (privateRoutes.includes(nextUrl.pathname) && !isLoggedIn) {
+    else if (privateRoutes.includes(nextUrl.pathname) && !isLoggedIn) {
         return NextResponse.redirect(new URL("/auth/login", nextUrl));
-    }
-
-    // Restricción de rutas de autentificación.
-    if (authRoutes.includes(nextUrl.pathname) && isLoggedIn) {
-        return NextResponse.redirect(new URL("/", nextUrl));
     }
 
     return NextResponse.next();

@@ -1,3 +1,4 @@
+import { SessionException } from "@/lib/error-adapter";
 import "next-auth";
 import "next-auth/jwt";
 
@@ -26,6 +27,7 @@ declare module "next-auth" {
     accessToken?: string;
     refreshToken?: string;
     isAuthenticated?: boolean;
+    error?: Error;
     user?: UserInfo;
   }
 
@@ -49,6 +51,7 @@ declare module "next-auth/jwt" {
    * @property {number} refreshTokenExpires - Timestamp de expiración del token de refresco
    */
   interface JWT extends UserInfo {
+    error?: Error;
     accessToken?: string;
     accessTokenExpires?: number;
     refreshToken?: string;

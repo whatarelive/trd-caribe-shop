@@ -1,14 +1,10 @@
 import NextAuth, { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { service } from "@/config/api";
-import { loginFromAPI, registerFromAPI, newTokenFromAPI } from './actions/auth/adapters/auth-adapters';
+import { SessionException } from "@/lib/error-adapter";
+import { loginFromAPI, registerFromAPI, newTokenFromAPI } from "@/actions/auth/adapters/auth-adapters";
 import type { UserLogin, UserRegister } from "@/interfaces/models/user.interface";
 
-// Tipo de dato de la respuesta de la petición de refresh del token.
-type ResponseToken = {
-    readonly access: string; // Token de accseso
-    readonly refresh: string; // Token de refresh
-}
 
 // Declaración de la configuración de autentificación
 export const authConfig: NextAuthConfig = {
@@ -36,25 +32,17 @@ export const authConfig: NextAuthConfig = {
         async jwt({ token, user }) {
             // Si hay un usuario, agrega los tokens de acceso y de refresco al token JWT
             if (user) {
-                token = {
-                    ...user,
-                    accessTokenExpires: Date.now() + 60 * 59 * 1000, // 59 minutos de vida
-                    refreshTokenExpires: Date.now() + 23 * 60 * 60 * 1000, // 23 horas de vida
-                }
-            } else {
+                return { ...token, ...user };
+            
+            } else if (Date.now() < token.accessTokenExpires!) {
                 return token;
-            }
-
-            // Verificar si el token de refresco ha expirado
-            if (token.refreshTokenExpires && Date.now() > token.refreshTokenExpires) {
-                console.log("El token de refresco ha expirado - Cerrando sesión");
-                // Limpiar TODOS los datos del token para forzar el cierre de sesión
-                return {};
-            }
-
-            // Verificar si el token de acceso ha expirado y renovarlo usando el token de refresco
-            if (token.refreshTokenExpires && token.accessTokenExpires && Date.now() > token.accessTokenExpires) {
+            
+            } else {
                 try {
+                    // Validación del tiempo de expiración del token de refresh
+                    if (!token.refreshTokenExpires) throw new SessionException();
+                    if (token.refreshTokenExpires < Date.now()) throw new SessionException();
+
                     // Intenta renovar el token de acceso usando el token de refresco
                     const response = await service.post("/user/login/refresh/", 
                         { refresh: token.refreshToken },
@@ -65,43 +53,38 @@ export const authConfig: NextAuthConfig = {
                     );
 
                     // Mapeo de la respuesta
-                    const newToken = newTokenFromAPI(
-                        (await response.json())
-                    );
+                    const newToken = newTokenFromAPI((await response.json()));
 
                     // Actualiza el token de acceso y su tiempo de expiración
                     token.accessToken = newToken.accessToken;
                     token.refreshToken = newToken.refreshToken;
                     token.accessTokenExpires = Date.now() + 60 * 59 * 1000;
 
+                    return token;
+
                 } catch (error) {
                     console.error("Error al renovar el token de acceso", error);
+                    token.error = error as Error;
                     // En caso de error, limpiar todos los datos del token
-                    return {};
+                    return token;
                 }
             }
-
-            // Retorna el token JWT modificado
-            return token;
         },
         
         // Callback que se ejecuta cuando se crea la sesión
         async session({ session, token }) {  
-            // Si no se encuentra el token de acceso se elimina la sesión
-            if (token.accessToken === undefined) return session;
-
             // Agrega los tokens de acceso y de refresco a la sesión
             session.accessToken = token.accessToken;
             session.refreshToken = token.refreshToken;
-
             // Agrega la información del usuario a la sesión
             session.user.username = token.username;
             session.user.email = token.email!;
             session.user.fullName = token.fullName;
             session.user.isAdmin = token.isAdmin;
             
+            session.error = token.error;
             // Se establece el estado de la autentificación
-            session.isAuthenticated = session.accessToken ? true : false;
+            session.isAuthenticated = token.accessToken ? true : false;
 
             // Retorna la sesión modificada
             return session;
