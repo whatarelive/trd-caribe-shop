@@ -24,30 +24,25 @@ export default middleware( async({ nextUrl, auth }) => {
 
             return NextResponse.redirect(new URL("/", nextUrl));
         };
-    }
 
-    // Proteccioón de las rutas del DashBoard
-    if (nextUrl.pathname.startsWith("/admin") && isLoggedIn) {
-        // Se recupera la sesión del usuario.
-        const session = await Session();
+        // Proteccioón de las rutas del DashBoard
+        if (nextUrl.pathname.startsWith("/admin")) {
+            // Si el usuario es Admin se deja pasar la petición
+            if (session?.user?.isAdmin) return NextResponse.next();
+            
+            // Si no se redirecciona a la página pública
+            else return NextResponse.redirect(new URL("/", nextUrl));
+        }
 
-        // Si el usuario es Admin se deja pasar la petición
-        if (session?.user?.isAdmin) {
-            return NextResponse.next();
-        } 
-        
-        // Si no se redirecciona a la página pública
-        else return NextResponse.redirect(new URL("/", nextUrl));
-    }
-
+        // Restricción de rutas de autentificación.
+        if (authRoutes.includes(nextUrl.pathname)) {
+            return NextResponse.redirect(new URL("/", nextUrl));
+        }
+    } 
+    
     // Protección de rutas privadas.
-    if (privateRoutes.includes(nextUrl.pathname) && !isLoggedIn) {
+    else if (privateRoutes.includes(nextUrl.pathname) && !isLoggedIn) {
         return NextResponse.redirect(new URL("/auth/login", nextUrl));
-    }
-
-    // Restricción de rutas de autentificación.
-    if (authRoutes.includes(nextUrl.pathname) && isLoggedIn) {
-        return NextResponse.redirect(new URL("/", nextUrl));
     }
 
     return NextResponse.next();
