@@ -17,7 +17,7 @@ export const authConfig: NextAuthConfig = {
     // Configuración de la estrategia de sesión
     session: { 
         strategy: "jwt",
-        maxAge: 23 * 60 * 60, // 23 horas en segundos
+        maxAge: 23 * 60 * 60,
     },
 
     // Callbacks para personalizar el comportamiento de la autenticación
@@ -34,7 +34,7 @@ export const authConfig: NextAuthConfig = {
             if (user) {
                 return { ...token, ...user };
             
-            } else if (Date.now() < token.accessTokenExpires!) {
+            } else if (token.accessTokenExpires && Date.now() < token.accessTokenExpires) {
                 return token;
             
             } else {
@@ -57,7 +57,6 @@ export const authConfig: NextAuthConfig = {
 
                     // Actualiza el token de acceso y su tiempo de expiración
                     token.accessToken = newToken.accessToken;
-                    token.refreshToken = newToken.refreshToken;
                     token.accessTokenExpires = Date.now() + 60 * 59 * 1000;
 
                     return token;

@@ -3,9 +3,10 @@ export interface IProduct {
     categorie: string;
     name: string;
     price: number;
+    finalPrice: number;
     description: string;
     stock: number;
-    discount: string;
+    discount: boolean;
     created: string;
     updated: string;
     imageUrl: string;

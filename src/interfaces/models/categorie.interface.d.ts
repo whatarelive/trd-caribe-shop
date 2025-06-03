@@ -1,7 +1,3 @@
-export interface ICategoriesAPI {
-    name: string;
-}
-
 export interface ICategories {
     id: number;
     name: string;

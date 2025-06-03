@@ -1,50 +1,79 @@
 import Link from "next/link";
-import { MdOutlineEdit } from "react-icons/md";
-import { ButtonDeleteItem } from "@/components/admin/buttons";
-import type { FC } from "react";
-import type { IProducts } from "@/interfaces/models/product.interface";
+import { Blocks, DollarSign, Edit2, Trash2 } from "lucide-react";
+import { deleteProduct } from "@/actions/products/delete-product";
+import { AlertModal } from "@/components/global/AlertModal";
+import { DataSection } from "@/components/admin/data-section";
+import { Badge } from "@/components/ui/badge";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import type { IProduct } from "@/interfaces/models/product.interface";
 
-type ProductProps = Pick<IProducts, "id" | "name" | "categorie" | "description" | "price" | "stock">;
 
-export const ProductCard: FC<{ product: ProductProps }> = ({ product }) => {
+export function ProductCard({ product }: { product: IProduct }) {
     return (
-         <li className="flex flex-col gap-2 p-2 bg-white rounded-md">
-            <div className="flex items-center justify-between gap-2">
-                <h3 className="font-medium line-clamp-2 max-w-3/5">
+         <Card className="shadow-md">
+            <CardHeader>
+                <CardTitle className="font-medium line-clamp-2 max-w-3/5">
                     {product.name}
-                </h3>
+                </CardTitle>
 
-                <span className="max-w-2/5 font-medium text-orange-400 text-sm w-fit line-clamp-1">
-                    { product.categorie }
-                </span>
-            </div>
+                <CardDescription className="text-wrap text-sm line-clamp-3 text-neutral-500">
+                    {product.description}
+                </CardDescription>
+            </CardHeader>
             
-            <hr className="text-gray-300"/>
+            <CardContent>
+                <div className="flex justify-between">
+                    <Badge variant="category">
+                        { product.categorie }
+                    </Badge>
 
-            <div className="flex justify-start gap-4">
-                <span className="text-sm font-medium">
-                    { product.stock } unidades
-                </span>
+                    <Badge variant={ product.discount ? "acept" : "outline" }>
+                        $ { (product.price - product.finalPrice).toFixed(2) }
+                    </Badge>
+                </div>
 
-                <span className="text-sm font-medium">
-                    { product.price } x unidad
-                </span>
-            </div>
+                <div className="flex flex-col justify-start gap-4 mt-3">
+                    <DataSection
+                        label="Existencias"
+                        value={`${product.stock} unidades`}
+                        icon={<Blocks className="text-blue-500 w-4 h-4"/>}
+                    />
 
-            <p className="text-wrap text-sm line-clamp-3 w-fit text-neutral-500">
-                {product.description}
-            </p>
+                    <DataSection
+                        label="Precio x unidad"
+                        value={`$ ${product.price}`}
+                        icon={<DollarSign className="text-red-500 w-4 h-4"/>}
+                    />
 
-            <div className="flex gap-2">
-                <Link href={`/admin/products/${product.id}`} className="button-primary-v3 grow">
-                    <MdOutlineEdit size={24}/>
+                    <DataSection
+                        label="Precio final"
+                        value={`$ ${product.finalPrice}`}
+                        icon={<DollarSign className="text-green-500 w-4 h-4"/>}
+                    />
+                </div>
+            </CardContent>
+
+            <CardFooter className="flex gap-3">
+                <Link 
+                    href={`/admin/products/${product.id}`} 
+                    className={buttonVariants({ variant: "default", className: "h-11 grow" })}
+                >
+                    <Edit2 size={24}/>
                     Editar
                 </Link>
 
-                <ButtonDeleteItem className="flex grow items-center justify-center gap-1.5 border bg-white">
-                    Eliminar
-                </ButtonDeleteItem>
-            </div>
-        </li>
+                <AlertModal
+                    title="Eliminar Producto" 
+                    message={`Deseas eliminar el producto ${product.name} de la plataforma`} 
+                    action={deleteProduct.bind(null, product.id)} 
+                >
+                    <Button type="button" variant="outline" className="h-11 grow">
+                        <Trash2 size={24}/>
+                        Eliminar
+                    </Button>
+                </AlertModal>
+            </CardFooter>
+        </Card>
     )
 }

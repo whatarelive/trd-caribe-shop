@@ -1,12 +1,7 @@
-'use client'
-
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
-
-export default function ErrorPage() {
-    const { refresh } = useRouter()
-
+ 
+export default function NotFound() {
     return (
         <div className="min-h-screen w-full flex items-center justify-center p-4">
             <div className="text-center max-w-md mx-auto">
@@ -28,26 +23,25 @@ export default function ErrorPage() {
 
                 <div className="mb-4">
                     <span className="text-6xl font-black text-transparent bg-gradient-to-r from-slate-600 to-slate-800 bg-clip-text tracking-tight">
-                        Oops
+                        404
                     </span>
                 </div>
 
                 <h1 className="text-2xl font-bold text-slate-800 mb-3">Algo salió mal</h1>
 
                 <p className="text-slate-600 mb-8 leading-relaxed">
-                    No pudimos cargar los datos que solicitaste.
+                    No se encontró el producto con el id solicitado.
                     <br />
-                    <span className="text-sm">Intenta nuevamente en unos momentos.</span>
+                    <span className="text-sm">Si el error persiste puede que el producto no exista en el sistema.</span>
                 </p>
 
-                <Button
-                    onClick={() => refresh()}
-                    className="font-medium px-8 py-3 rounded-full shadow-lg hover:shadow-xl"
-                    size="lg"
+                <Link
+                    href={"/admin/products"}
+                    className="inline-flex gap-2 font-medium px-8 py-3 rounded-full shadow-lg hover:shadow-xl"
                 >
                     <ArrowLeft className="w-5 h-5" />
                     Regresar
-                </Button>
+                </Link>
             </div>
         </div>
     )

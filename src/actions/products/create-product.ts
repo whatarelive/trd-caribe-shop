@@ -13,9 +13,9 @@ export async function createProduct(formData: FormData) {
     
     try {    
         if (!success) throw new BadRequestException();
- 
-        await service.post("/store/products/", 
-            productFormatAPI(data), 
+
+        await service.postFile("/store/products/create/", 
+            productFormatAPI(data),
             {
                 isProtected: true,
                 error: "Fallo la creación del producto",

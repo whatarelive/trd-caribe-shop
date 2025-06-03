@@ -1,219 +1,194 @@
-"use client";
+'use client'
 
-import { FC, useRef, useState } from 'react';
-import { MdSaveAs } from 'react-icons/md';
-import { IoCloudUploadOutline } from 'react-icons/io5';
-// import { useFormError } from '@/lib/hooks/useFormError';
-import { TextInput } from '@/components/ui/input/input-text';
-import { ModalCreateCategorie } from '@/components/admin/categories/modal-create';
-import { ModalListCategorie } from '@/components/admin/categories/modal-list';
-import { SelectCategories } from '@/components/admin/products/select-categories';
-import type { IProducts } from '@/interfaces/models/product.interface';
-import type { ICategories } from '@/interfaces/models/categorie.interface';
-import { ButtonDeleteItem } from '../buttons';
+import { memo, useActionState, type FC } from "react";
+import { Loader2, Trash2 } from "lucide-react";
+import { deleteProduct } from "@/actions/products/delete-product";
+import { updateProduct } from "@/actions/products/update-product";
+import { AlertModal } from "@/components/global/AlertModal";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { showErrorToast, showSuccessToast } from "@/components/ui/sonner";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import type { IProduct } from "@/interfaces/models/product.interface";
+import type { ICategories } from "@/interfaces/models/categorie.interface";
 
 interface Props {
-    product: IProducts;
+    product: IProduct;
     categories: ICategories[];
 }
 
-export const EditProductForm: FC<Props> = ({ product, categories }) => {
-    // const initialState: CreateProductState = { errors: {} };
-
-    const [image, setImage] = useState<string | undefined>(product.image);
-    
-    // Referencia al input de archivo
-    const inputRef = useRef<HTMLInputElement>(null);
-    
-    // Función para manejar el clic en el botón de carga de imagen
-    const handleClick = () => inputRef.current?.click();
-
-    // Función para manejar el cambio en el input de archivo
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0] || null;
-        setImage(file ? file.name : undefined);
-    }
-
-    // const [ _errorMessage, formAction, isPending ] = useActionState(
-    //     async (_state: CreateProductState, _formData: FormData) => {
-    //         return {
-
-    //         };
-    //     }, 
-    //     initialState
-    // );
-    
-    // const { showErrors, handleFocus } = useFormError({ errors: errorMessage });
-
-    const productCategorie = categories.find((categ) => categ.name === product.categorie)!;
-    const restCategories = categories.filter((categ) => categ.name !== product.categorie);
+export const EditProductForm: FC<Props> = memo(({ product, categories }) => {
+    const [_state, formAction, isPending] = useActionState(
+        async (_prev: null | void, formData: FormData) => {
+            const { result, message } = await updateProduct(product.id, formData);
+        
+            if (result) {
+                showSuccessToast({ title: message });
+            }
+            else showErrorToast({ title: message });
+        }, 
+        null
+    );
 
     return (
-        <form 
-            // action={formAction} 
-            className="flex flex-col mt-6 w-full md:bg-gray-50 md:p-6 md:rounded-lg"
-        >
-            {/* Sección con las fechas de creación y actualización */}
-            <div className="flex flex-col justify-between my-4 md:mt-0 md:flex-row">
-                <span>
-                    <b className="mr-2">
-                        Fecha de creación: 
-                    </b>
-                    {product.created}
-                </span>
-                
-                <span>
-                    <b className="mr-2">
-                        Fecha de actualización: 
-                    </b>
-                    {product.updated ?? "-/-/-"}
-                </span>
-            </div>
+        <Card className="w-full">
+            <CardHeader>
+                <CardTitle>Detalles del producto</CardTitle>
+                <CardDescription>
+                    Formulario para editar los detalles del producto seleccionado.
+                </CardDescription>
+            </CardHeader>
             
-            {/* Sección de visualización de los datos */}
-            <div className="flex flex-col w-full lg:flex-row lg:gap-4">
-                {/* Sección de la Imagen y los datos de fecha */}
-                <div className="flex flex-col">
-                    <picture>
-                        <img 
-                            src={image} 
-                            alt={`Imagen del producto ${product.name}`} 
-                            width={400}
-                            height={400}
-                            className="w-full h-fit rounded-md md:min-w-[400px]"    
-                        />
-                    </picture>
-                    
-                    {/* Boton de acción */}
-                    <div className="flex w-full items-center gap-2 mt-3 md:mt-5">
-                        <button 
-                            type="button" 
-                            onClick={handleClick} 
-                            className="flex w-full justify-center p-2 rounded-sm border border-neutral-300 items-center gap-2 
-                            text-neutral-400 text-sm cursor-pointer hover:bg-green-500 hover:text-white"
-                        >
-                            
-                            <IoCloudUploadOutline size={24} />
-                            <span className="hidden lg:block text-sm">Cambiar imagen</span>
-                        </button>            
+            <form action={formAction}>
+                <CardContent>
+                    {/* Sección con las fechas de creación y actualización */}
+                    <div className="flex flex-col justify-between my-4 md:mt-0 md:flex-row">
+                        <span>
+                            <b className="mr-2">
+                                Fecha de creación: 
+                            </b>
+                            {product.created}
+                        </span>
+                        
+                        <span>
+                            <b className="mr-2">
+                                Fecha de actualización: 
+                            </b>
+                            {product.updated ?? "-/-/-"}
+                        </span>
                     </div>
-                        
-                    {/* Campo de entrada */}
-                    <input 
-                        type="file" 
-                        ref={inputRef}
-                        onChange={handleChange} 
-                        accept="image/*" 
-                        className="hidden" 
-                        name="imagen" 
-                    />
-                </div>
-
-                {/* Sección de los datos modificables del producto */}
-                <div className="flex flex-col w-full">
-                    <TextInput 
-                        label="Nombre del producto" 
-                        type="text" 
-                        name="name"
-                        defaultValue={product.name} 
-                        placeholder="Ingrese el nombre"
-                        aria-describedby="name-error"
-                        // onFocus={handleFocus}
-                        // errors={showErrors ? errorMessage.errors?.name : undefined}
-                    />
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 md:gap-x-4">
-                        <TextInput 
-                            label="Descuento del producto" 
-                            type="text"
-                            name="discount"
-                            defaultValue={product.discount} 
-                            placeholder="Ingrese el descuento"
-                            aria-describedby="discount-error"
-                            // onFocus={handleFocus}
-                            // errors={showErrors ? errorMessage.errors?.stock : undefined}
-                        />
-                        
-                        <div className="flex gap-2">
-                            <SelectCategories 
-                                label="Categoría" 
-                                name="categorie"
-                                id="categorie" 
-                                categories={restCategories}
-                                aria-describedby="categorie-error"
-                                // onFocus={handleFocus}
-                                // errors={showErrors ? errorMessage.errors?.categorie : undefined}
-                            >
-                                <option value={productCategorie.id}>
-                                    {productCategorie.name}
-                                </option>
-                            </SelectCategories>
-
-                            {/* Modal para crear una nueva categoria */}
-                            <ModalCreateCategorie/>
-
-                            {/* Modal para listar las categorías */}
-                            <ModalListCategorie categories={categories}/>
+                    
+                    {/* Sección de visualización de los datos */}
+                    <div className="flex flex-col w-full lg:flex-row lg:gap-4">
+                        {/* Sección de la Imagen y los datos de fecha */}
+                        <div className="flex flex-col">
+                            <picture>
+                                <img 
+                                    src={product.imageUrl} 
+                                    alt={`Imagen del producto ${product.name}`} 
+                                    width={400}
+                                    height={400}
+                                    className="w-full h-fit rounded-md md:min-w-[400px]"    
+                                />
+                            </picture>
+                            
+                            {/* Campo de entrada */}
+                            <div className="space-y-2 mt-4 mb-4 md:mb-0">
+                                <Label htmlFor="image">Cambiar Imagen</Label>
+                                <Input 
+                                    id="image"
+                                    name="image" 
+                                    type="file" 
+                                    accept="image/*" 
+                                />
+                            </div>
                         </div>
 
-                        <TextInput 
-                            label="Cantidad exitente" 
-                            type="number"
-                            name="stock"
-                            min={0}
-                            defaultValue={product.stock} 
-                            placeholder="Ingrese la cantidad existente"
-                            aria-describedby="stock-error"
-                            // onFocus={handleFocus}
-                            // errors={showErrors ? errorMessage.errors?.stock : undefined}
-                        />
+                        {/* Sección de los datos modificables del producto */}
+                        <div className="flex flex-col w-full">
+                            <div className="space-y-2 mb-4">
+                                <Label htmlFor="name">Nombre del producto</Label>
+                                <Input  
+                                    id="name"
+                                    name="name"
+                                    type="text" 
+                                    defaultValue={product.name} 
+                                    placeholder="Ingrese el nombre"
+                                />
+                            </div>
 
-                        <TextInput 
-                            label="Precio del producto" 
-                            type="number" 
-                            name="price"
-                            min={0} 
-                            defaultValue={product.price}
-                            placeholder="Ingrese el precio"
-                            aria-describedby="price-error"
-                            // onFocus={handleFocus}
-                            // errors={showErrors ? errorMessage.errors?.price : undefined}
-                        />
+                            <div className="grid grid-cols-1 md:grid-cols-2 md:gap-x-4">
+                                <div className="space-y-2 mb-4">
+                                    <Label htmlFor="discount">Descuento del producto</Label>
+                                    <Input 
+                                        id="discount"
+                                        name="discount"
+                                        type="text"
+                                        disabled
+                                        defaultValue={product.price - product.finalPrice} 
+                                        placeholder="Ingrese el descuento"
+                                    />
+                                </div>
+                                
+                                <div className="space-y-2 mb-4">
+                                    <Label htmlFor="categorie">Categoría del producto</Label>
+                                    <Select name="categorie">
+                                        <SelectTrigger className="w-full bg-transparent">
+                                            <SelectValue placeholder={product.categorie} />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup>
+                                                <SelectLabel>Categorias disponibles</SelectLabel>
+                                                {categories.map(({ id, name }) => (
+                                                    <SelectItem key={id} value={id.toString()}>
+                                                        { name }
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+
+                                <div className="space-y-2 mb-4">
+                                    <Label htmlFor="stock">Cantidad exitente</Label>
+                                    <Input  
+                                        id="stock"
+                                        name="stock"
+                                        type="number"
+                                        min={0}
+                                        defaultValue={product.stock} 
+                                        placeholder="Ingrese la cantidad existente"
+                                    />
+                                </div>
+
+                                <div className="space-y-2 mb-4">
+                                    <Label htmlFor="price">Precio del producto</Label>
+                                    <Input  
+                                        id="price"
+                                        name="price"
+                                        type="number" 
+                                        min={0} 
+                                        defaultValue={product.price}
+                                        placeholder="Ingrese el precio"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="space-y-2 mb-4">
+                                <Label htmlFor="description">Descripción del producto</Label>
+                                <Textarea
+                                    id="description"
+                                    name="description"
+                                    defaultValue={product.description}
+                                    placeholder="Ingrese la descripción del producto"    
+                                />
+                            </div>
+                        </div>
                     </div>
 
-                    <TextInput 
-                        label="Descripción del producto" 
-                        type="text"
-                        name="description"
-                        defaultValue={product.description}
-                        placeholder="Ingrese la descripción del producto"
-                        aria-describedby="description-error"
-                        // onFocus={handleFocus}
-                        // errors={showErrors ? errorMessage.errors?.description : undefined}
-                    />
-                </div>
-            </div>
+                    {/* Botón para actualizar el prodcuto */}
+                    <div className="flex flex-col md:flex-row gap-2 md:gap-4">
+                        <Button type="submit" disabled={isPending} className="h-11">
+                            { isPending ? "Guardando" : "Editar producto" }
+                            { isPending && <Loader2 className="w-4 h-4 ml-1 animate-spin"/> }
+                        </Button>
 
-            {/* Botón para actualizar el prodcuto */}
-            <div className="flex justify-end items-end flex-col md:flex-row gap-2 md:gap-4">
-                <button 
-                    type="submit" 
-                    className="button-primary flex gap-1.5 justify-center items-center w-full h-12 mt-4"
-                    // disabled={isPending}
-                >
-                    {/* {
-                        isPending 
-                            ? <span className="loader"></span> 
-                            : 'Guardar producto'
-                    } */}
-                    <MdSaveAs size={20}/>
-                    Guardar Producto
-                </button>
-
-                <ButtonDeleteItem className="flex w-full justify-center items-center gap-1.5 h-12">
-                    Eliminar Producto
-                </ButtonDeleteItem>
-            </div>
-        </form>
+                        <AlertModal
+                            title="Eliminar Producto" 
+                            message={`Deseas eliminar el producto ${product.name} de la plataforma`} 
+                            action={deleteProduct.bind(null, product.id)} 
+                        >
+                            <Button type="button" variant="outline" className="h-11">
+                                <Trash2 size={24}/>
+                                Eliminar Producto
+                            </Button>
+                        </AlertModal>
+                    </div>
+                </CardContent>
+            </form>
+        </Card>
     )
-}
+})

@@ -27,7 +27,7 @@ export const SelectOrderBy: FC<Props> = memo(({ filters }) => {
     }, []);
 
     return (
-        <Select onValueChange={handleSelect}>
+        <Select onValueChange={handleSelect} defaultValue={searchParams.get("ordering")?.toString() ?? ""}>
             <SelectTrigger className="w-full h-11 bg-transparent md:w-fit">
                 <SelectValue placeholder="Ordenar lista" />
             </SelectTrigger>

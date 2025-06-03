@@ -1,26 +1,16 @@
-import { redirect } from "next/navigation";
-import { TitlePage } from "@/components/admin/title-page";
-import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { getCategories } from "@/actions/categories/get-categories";
 import { CreateProductForm } from "@/components/admin/products/create-form";
+import { CategoriesList } from "@/components/admin/categories/categories-list";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 
-/**
- * Página para la creación de nuevos productos en el panel de administración.
- * Esta página proporciona una interfaz para que los administradores puedan
- * agregar nuevos productos al catálogo de la tienda.
- */
+
 export default async function ProductCreatePage() {
-    const data = await getCategories();
-
-    if (!data) {
-        return redirect("/admin/products");
-    }
+    const { data = [] } = await getCategories();
 
     return (
         <section className="flex flex-col w-full gap-6 p-4 min-[375px]:p-8 xl:pr-16">
-            {/* Sección del formulario con fondo blanco y bordes redondeados */}
             <div>
-                <TitlePage title="Creación de Productos"/>
+                <h1 className="title-page">Crear Producto</h1>
 
                 <Breadcrumbs 
                     breadcrumbs={[
@@ -32,10 +22,10 @@ export default async function ProductCreatePage() {
             </div>
 
             {/* Formulario de creación de producto */}
-            <CreateProductForm categories={[{ id:1, name: "Alimentos", created: "", updated: "" }]}/>
-            
-            <div id="modal-create-categorie" />
-            <div id="modal-list-categorie"/>
+            <section className="flex flex-col lg:flex-row gap-6">
+                <CreateProductForm categories={data} />   
+                <CategoriesList categories={data} /> 
+            </section>
         </section>
     );
 }

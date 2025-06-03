@@ -5,7 +5,7 @@ import { memo, useCallback, type FC } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 
-export const SelectLimit: FC<{ label: string }> = memo(({ label }) => {
+export const SelectLimit: FC<{ label: string, count?: number }> = memo(({ label, count }) => {
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const { replace } = useRouter(); 
@@ -26,7 +26,7 @@ export const SelectLimit: FC<{ label: string }> = memo(({ label }) => {
             </SelectTrigger>
             <SelectContent>
                 <SelectItem value="null">Cancelar selección</SelectItem>
-                {Array.from({ length: 10 }).map((_, index) => (
+                {Array.from({ length: count ?? 10 }).map((_, index) => (
                     <SelectItem key={index} value={(index + 1).toString()}>
                         { index + 1 } { index === 0 ? label : `${label}s` }
                     </SelectItem>

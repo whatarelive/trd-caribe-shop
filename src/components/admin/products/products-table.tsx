@@ -1,21 +1,36 @@
-import Link from 'next/link';
-import { MdOutlineEdit } from "react-icons/md";
-import { ButtonDeleteItem } from '@/components/admin/buttons';
-import { Pagination } from '@/components/ui/pagination';
-import { ProductCard } from '@/components/admin/products/product-card';
-import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from "@/components/ui/table"
-import { products } from "@/lib/data/products";
+import Link from "next/link";
+import { Edit2, Trash2 } from "lucide-react";
+import { getProducts } from "@/actions/products/get-products";
+import { deleteProduct } from "@/actions/products/delete-product";
+import { AlertModal } from "@/components/global/AlertModal";
+import { ErrorSection } from "@/components/global/ErrorSection";
+import { ProductCard } from "@/components/admin/products/product-card";
+import { Badge } from "@/components/ui/badge";
+import { Pagination } from "@/components/ui/pagination";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from "@/components/ui/table";
+import type { IFilters } from "@/interfaces/components";
 
-export const ProductsTable = () => {
+
+export async function ProductsTable({ page, limit, search, ordering }: IFilters) {
+    const products = await getProducts({ page, limit, search, ordering });
+
+     // Mensajes de en la UI según el error que ocurra.
+    if (products.count === 0 && search && search.length !== 0)
+        return <ErrorSection variant="search"/>
+
+    if (products.count === 0 && !search)
+        return <ErrorSection variant="data"/>
+    
+    if (!products.result || !products.count) 
+        return <ErrorSection variant="error"/>
+
     return (
         <>
             {/* Listado de productos para dispositivos moviles */}
-            <ul className="flex flex-col gap-2 bg-gray-50 p-2 lg:hidden">
-                {products.map((product) => (
-                    <ProductCard 
-                        key={product.id} 
-                        product={product}
-                    />
+            <ul className="flex flex-col gap-5 lg:hidden">
+                {products.data.map((product) => (
+                    <ProductCard key={product.id} product={product}/>
                 ))}
             </ul>
 
@@ -23,36 +38,40 @@ export const ProductsTable = () => {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead className="w-60">
+                        <TableHead className="w-64">
                             Producto
                         </TableHead>
-                        <TableHead>
+                        <TableHead className="w-16">
                             Categoría
                         </TableHead>
-                        <TableHead>
+                        <TableHead className="w-24">
                             Existencia
                         </TableHead>
-                        <TableHead>
-                            Precio x Unidad
+                        <TableHead className="w-20">
+                            Precio Base
                         </TableHead>
-                        <TableHead>
+                        <TableHead className="w-20">
+                            Descuento
+                        </TableHead>
+                        <TableHead className="w-20">
+                            Precio Final
+                        </TableHead>
+                        <TableHead className="text-center">
                             Opciones
                         </TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    { products.map((product) => (
-                        <TableRow key={product.id} className="lg:border-b-2 lg:border-gray-200 lg:bg-white">
+                    { products.data.map((product) => (
+                        <TableRow key={product.id} className="lg:border-b-1 lg:border-gray-200 lg:bg-white">
                             <TableCell className="w-60">
                                 <div className="flex items-center gap-4">
-                                    <picture>
+                                    <picture className="flex justify-center w-full max-w-24 max-h-16 rounded-md">
                                         <img 
-                                            src={product.image} 
-                                            alt={`Imagen del producto ${product.image}`}
-                                            width={64}
-                                            height={64}
+                                            src={product.imageUrl} 
+                                            alt={`Imagen del producto ${product.name}`}
                                             loading="lazy"
-                                            className="rounded-xl min-w-16 h-16"
+                                            className="object-contain h-16 rounded-md"
                                         />
                                     </picture>
                 
@@ -68,23 +87,42 @@ export const ProductsTable = () => {
                                 </div>
                             </TableCell>
                             <TableCell>
-                                <span className="font-medium text-sm text-white bg-orange-400 py-1 px-2 rounded-sm max-w-40 w-fit line-clamp-1">
-                                    { product.categorie }
-                                </span>
+                                <Badge variant="category">
+                                    {product.categorie}
+                                </Badge>
                             </TableCell>
                             <TableCell>
-                                { product.stock } unidades
+                                {product.stock} unidades
                             </TableCell>
-                            <TableCell className="font-medium">
-                                $ { product.price }
+                            <TableCell>
+                                $ {product.price}
+                            </TableCell>
+                            <TableCell>
+                                <Badge variant={product.discount ? "acept" : "outline"}>
+                                    $ {(product.price - product.finalPrice).toFixed(2)}
+                                </Badge>
                             </TableCell>    
+                             <TableCell>
+                                $ {product.finalPrice}
+                            </TableCell>
                             <TableCell>
-                                <div className="inline-flex items-center gap-4">
-                                    <Link href={`/admin/products/${product.id}`} className="button-primary-v2">
-                                        <MdOutlineEdit size={20}/>
+                                <div className="flex justify-center items-center gap-4">
+                                    <Link 
+                                        href={`/admin/products/${product.id}`} 
+                                        className={buttonVariants({ variant: "outline" })}
+                                    >
+                                        <Edit2 size={20}/>
                                     </Link>
 
-                                    <ButtonDeleteItem/>
+                                    <AlertModal
+                                        title="Eliminar Producto" 
+                                        message={`Deseas eliminar el producto ${product.name} de la plataforma`} 
+                                        action={deleteProduct.bind(null, product.id)} 
+                                    >
+                                        <Button type="button" variant="outline" size="icon">
+                                            <Trash2 size={24}/>
+                                        </Button>
+                                    </AlertModal>
                                 </div>
                             </TableCell>
                         </TableRow>
@@ -93,7 +131,12 @@ export const ProductsTable = () => {
             </Table>
                         
             {/* Componente para la paginación de los productos */}
-            <Pagination currentPage={1} totalPages={8} className="hidden md:flex"/>
+            <Pagination 
+                limit={limit} 
+                currentPage={page} 
+                count={products.count} 
+                className="hidden md:flex"
+            />
         </>
     )
 }
