@@ -28,3 +28,9 @@ export interface SalesResponse {
     previous: string | null;
     results: any[];
 }
+
+export interface SaleChartData {
+    name: string;
+    total: number;
+    sales: number;
+}
