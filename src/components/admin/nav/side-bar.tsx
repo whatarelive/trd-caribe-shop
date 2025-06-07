@@ -1,6 +1,6 @@
 import { LayoutDashboard } from "lucide-react";
 import { NavList } from "@/components/admin/nav/nav-list";
-import { ButtonLogout } from "@/components/admin/nav/button-logout";
+import { ButtonLogout } from "@/components/global/ButtonLogout";
 
 
 // Barra lateral de navegación.

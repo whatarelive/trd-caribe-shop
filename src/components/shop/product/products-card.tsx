@@ -1,13 +1,13 @@
 import Link from "next/link";
-import { MdBookmarkBorder } from "react-icons/md";
+import { Bookmark } from "lucide-react";
 import { CartCounter } from "@/components/shop/product/cart-counter";
 
-import type { FC } from "react";
-import type { IProducts } from "@/interfaces/models/product.interface";
+interface Props {
+    product: any;
+    isAuth: boolean;
+}
 
-type ProductProps = Pick<IProducts, "id" | "name" | "categorie" | "description" | "price" | "image">;
-
-export const ProductCard: FC<{ product: ProductProps }> = ({ product }) => {
+export function ProductCard({ product, isAuth }: Props) {
     return (
         <li className="max-w-72 h-fit gap-2 z-0 bg-white rounded-md shadow-md hover:cursor-pointer hover:shadow-lg">
             <Link href={`/${product.categorie.toLowerCase()}/product/${product.id}`}>
@@ -25,7 +25,7 @@ export const ProductCard: FC<{ product: ProductProps }> = ({ product }) => {
                     </h3>
 
                     <div className="flex items-center">
-                        <MdBookmarkBorder size={16} className="text-orange-400"/>
+                        <Bookmark size={16} className="text-orange-400"/>
                         
                         <span className="font-medium text-orange-400 text-sm">
                             { product.categorie }
@@ -47,7 +47,11 @@ export const ProductCard: FC<{ product: ProductProps }> = ({ product }) => {
             </Link>
 
             {/* Operador para establecer el producto en el carrito de compras */}
-            <CartCounter stock={20}/>
+            { isAuth ? (
+                <CartCounter stock={20}/>
+            ) : (
+                <></>
+            )}
         </li>
     )
 }

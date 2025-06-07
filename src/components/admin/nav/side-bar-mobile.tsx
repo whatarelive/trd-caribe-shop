@@ -4,7 +4,7 @@ import clsx from "clsx";
 import { useState } from "react";
 import { ChevronRight, LayoutDashboard } from "lucide-react";
 import { NavList } from "@/components/admin/nav/nav-list";
-import { ButtonLogout } from "@/components/admin/nav/button-logout";
+import { ButtonLogout } from "@/components/global/ButtonLogout";
 
 
 // Barra lateral de navegación para dispositivos móviles que se muestra/oculta mediante un estado global.
