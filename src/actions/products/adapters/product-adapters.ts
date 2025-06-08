@@ -1,8 +1,8 @@
 import { format } from "@/lib/format-date";
-import type { IProduct, IProductAPI } from "@/interfaces/models/product.interface";
+import type { ProductFromAPI, ProductToAPI, ProductClient } from "@/interfaces/models/product.interface";
 
 // Adapter para mapear los datos de un producto reibido desde la API.
-export const productFromAPI = (product: any): IProduct => ({
+export const productFromAPI = (product: ProductFromAPI): ProductClient => ({
     id: product.id,
     categorie: product.categorie,
     name: product.name,
@@ -18,7 +18,7 @@ export const productFromAPI = (product: any): IProduct => ({
 });
 
 // Adapter para mapear los datos de un producto que se van a enviar a la API.
-export const productFormatAPI = (data: any): FormData => {
+export const productFormatAPI = (data: Partial<ProductToAPI>): FormData => {
     const payload = new FormData();
 
     if (data.name) payload.append("name", data.name);

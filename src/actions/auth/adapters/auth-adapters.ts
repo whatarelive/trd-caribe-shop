@@ -1,5 +1,7 @@
+import type { LoginResponse, RegisterResponse, SessionAuth, TokenAuth, TokenResponse } from "@/interfaces/models/user.interface";
+
 // Apdater para mapear los datos de la sesión del usuario recibidos en el inicio de sesión.
-export const loginFromAPI = (session: any) => ({
+export const loginFromAPI = (session: LoginResponse): SessionAuth => ({
     username: session.username,
     email: session.email,
     fullName: `${session.first_name} ${session.last_name}`,
@@ -11,7 +13,7 @@ export const loginFromAPI = (session: any) => ({
 });
 
 // Apdater para mapear los datos de la sesión del usuario recibidos en el registro.
-export const registerFromAPI = (session: any) => ({
+export const registerFromAPI = (session: RegisterResponse): SessionAuth => ({
     username: session.username,
     email: session.email,
     fullName: `${session.first_name} ${session.last_name}`,
@@ -23,7 +25,7 @@ export const registerFromAPI = (session: any) => ({
 });
 
 // Adapter para mapear los datos de la revalidación del token de la sesión.
-export const newTokenFromAPI = (token: any) => ({
+export const newTokenFromAPI = (token: TokenResponse): TokenAuth => ({
     accessToken: token.access,
     refreshToken: token.refresh,
 });

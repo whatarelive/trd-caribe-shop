@@ -12,7 +12,7 @@ export async function getComments(params: IFilters) {
         const response = await service.getAll<CommentsResponse>(
             "/store/complaints-suggestions", params, 
             {
-                isProtected: true,
+                isProtected: false,
                 error: "Fallo la carga de los comentarios",
                 cache: "force-cache",
                 next: {

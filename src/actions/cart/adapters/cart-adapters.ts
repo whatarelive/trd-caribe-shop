@@ -6,6 +6,6 @@ export const cartFromAPI = (cart: any) => ({
 });
 
 // Adapter para mapear los datos de un producto para el carrito que se envia a la API.
-export const productAddFormatAPI = (product: any): IProductAdd => ({
+export const productAddFormatAPI = (product: IProductAdd): IProductAdd => ({
     quantity: product.quantity,
 });

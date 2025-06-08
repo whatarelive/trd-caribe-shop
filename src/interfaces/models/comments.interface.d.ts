@@ -1,25 +1,35 @@
-export interface ICommentsAPI {
+// Estructura base del módelo de comentario
+interface Comment {
+    id: number;	
     text: string;
+    user: string;
     active: boolean;
+    created: string;
 }
 
-export interface IResponseAPI {
+// Estructura general del módelo de la respuesta al comentario.
+export interface ResponseComment {
     username: string;
     response: string;
 }
 
-export interface IComments {
-    id: number;	
-    user: string;
-    text: string;
-    active: boolean;
-    created: string;
-    update: string;
-}
+// Estructura del objeto que se recibe desde la API.
+export interface CommentFromAPI extends Comment {
+    upate: string;
+};
 
-export interface CommentsResponse {
+// Estructura del objeto que se renderiza en la UI.
+export interface CommentClient extends Comment {
+    update: string;
+};
+
+// Estructura del objeto que se envia hacia la API.
+export type CommentToAPI = Pick<Comment, "text" | "active">;
+
+// Estructura del objeto de la petición de listar comentarios desde la API.
+export type CommentsResponse = {
     count: number;
     next: string | null;
     previous: string | null;
-    results: any[];
+    results: CommentFromAPI[];
 }
