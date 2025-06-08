@@ -15,9 +15,9 @@ export function CategoriesList() {
 
     if (isLoading) {
         return (
-            <ul className="flex gap-3 overflow-x-scroll max-w-screen pb-2">
-                {Array.from({ length: 8 }).map((_, index) => (
-                    <li key={index} className="skeleton py-2 px-4">
+            <ul className="flex gap-3 overflow-x-auto elegant-scrollbar max-w-screen pb-2">
+                {Array.from({ length: 12 }).map((_, index) => (
+                    <li key={index} className="skeleton w-32 h-9">
                         <span></span>
                     </li>
                 ))}

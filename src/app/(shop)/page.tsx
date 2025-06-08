@@ -5,6 +5,8 @@ import { CategoriesList } from "@/components/shop/home/categories-list";
 import { CommentsCarousel } from "@/components/shop/home/comments-carousel";
 import { AdvertisingCarousel } from "@/components/shop/home/advertising-carousel";
 import { ProductProminentList } from "@/components/shop/home/prominent-products-list";
+import { CommentsCarouselSkeleton } from "@/components/shop/home/skeletons";
+import { ProductListSkeleton } from "@/components/shop/product/skeletons";
 import { buttonVariants } from "@/components/ui/button";
 
 
@@ -12,7 +14,7 @@ import { buttonVariants } from "@/components/ui/button";
  * @description Componente Page que define la página principal 
  * de la tienda virtual
 */ 
-export default async function HomePage() {
+export default function HomePage() {
     return (
         <>                
             <AdvertisingCarousel/>
@@ -32,7 +34,7 @@ export default async function HomePage() {
                     Productos destacados
                 </h3>
 
-                <Suspense fallback={<p>Cargando...</p>}>
+                <Suspense fallback={<ProductListSkeleton/>}>
                     <ProductProminentList/>
                 </Suspense>
             </section>
@@ -49,7 +51,7 @@ export default async function HomePage() {
                     </Link>
                 </div>
 
-                <Suspense fallback={<p>Cargando...</p>}>
+                <Suspense fallback={<CommentsCarouselSkeleton/>}>
                     <CommentsCarousel/>
                 </Suspense>
             </section>

@@ -15,11 +15,11 @@ export async function CommentsCarousel() {
     return (
         <Carousel 
             opts={{ loop: true }}
-            className="relative px-6 container xl:h-96 mx-auto mt-12 xl:px-0" 
+            className="relative max-w-screen" 
         >
             <CarouselContent>
                 {comments.data.map((comment) => (
-                    <CarouselItem key={comment.id}>
+                    <CarouselItem key={comment.id} className="lg:basis-2/4 xl:basis-1/3">
                         <div className="p-1">
                            <Card className="flex gap-3 px-4 justify-between shadow-md">
                                 <div className="flex justify-between">
@@ -33,10 +33,10 @@ export async function CommentsCarousel() {
                                     </span>
                                 </div>
                                 
-                                <hr className="text-gray-300"/>
-                    
                                 <div className="relative grow">
-                                    <p className="">{comment.text}</p>
+                                    <p className="text-sm line-clamp-2 text-muted-foreground">
+                                        {comment.text}
+                                    </p>
                                 </div>
                             </Card>
                         </div>

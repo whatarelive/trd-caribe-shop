@@ -1,9 +1,9 @@
 import { Card } from "@/components/ui/card";
 import { Avatar } from "@/components/ui/avatar";
-import type { IComments } from "@/interfaces/models/comments.interface";
+import type { CommentClient } from "@/interfaces/models/comments.interface";
 
 
-export function CommentsCard({ comment }: { comment: IComments }) {
+export function CommentsCard({ comment }: { comment: CommentClient }) {
     return (
         <Card className="flex gap-3 px-4 justify-between shadow-md">
             <div className="flex justify-between">
