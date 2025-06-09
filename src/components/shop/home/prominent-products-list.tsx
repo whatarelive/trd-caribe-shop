@@ -17,11 +17,9 @@ export async function ProductProminentList() {
     return (
         <ul className="flex flex-wrap gap-6 justify-center w-fit mb-8">
             {products.data.map((product, index) => (
-                <ProductCard 
-                    key={index} 
-                    product={product} 
-                    isAuth={session?.isAuthenticated ?? false}
-                />
+                <li key={index}>
+                    <ProductCard product={product} isAuth={session?.isAuthenticated ?? false}/>
+                </li>
             ))}
         </ul>
     )

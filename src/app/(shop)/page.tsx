@@ -34,7 +34,7 @@ export default function HomePage() {
                     Productos destacados
                 </h3>
 
-                <Suspense fallback={<ProductListSkeleton/>}>
+                <Suspense fallback={<ProductListSkeleton cant={10}/>}>
                     <ProductProminentList/>
                 </Suspense>
             </section>

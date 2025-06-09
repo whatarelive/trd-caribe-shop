@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Bookmark } from "lucide-react";
 import { CartCounter } from "@/components/shop/product/cart-counter";
+import { Card } from "@/components/ui/card";
 import type { ProductClient } from "@/interfaces/models/product.interface";
 
 interface Props {
@@ -11,14 +12,14 @@ interface Props {
 
 export function ProductCard({ product, isAuth }: Props) {
     return (
-        <li className="max-w-72 h-fit gap-2 z-0 bg-white rounded-md shadow-md hover:cursor-pointer hover:shadow-lg">
+        <Card className="max-w-72 p-0 gap-2 bg-white rounded-md shadow-md hover:cursor-pointer hover:shadow-lg">
             <Link href={`/${product.categorie.toLowerCase()}/product/${product.id}`}>
-                <picture>
+                <picture className="min-w-72 min-h-72">
                     {product.imageUrl ? (
                         <img 
                             src={product.imageUrl ?? "/images/no_data.jpg"} 
                             alt={`Imagen del prodcuto ${product.name}`} 
-                            className="w-72 h-72 object-cover aspect-video rounded-t-md"
+                            className="object-contain w-72 h-72 rounded-t-md"
                         />
                     ) : (
                         <Image
@@ -64,6 +65,6 @@ export function ProductCard({ product, isAuth }: Props) {
 
             {/* Operador para establecer el producto en el carrito de compras */}
             { isAuth && <CartCounter stock={product.stock}/> }
-        </li>
+        </Card>
     )
 }

@@ -21,19 +21,12 @@ function ProductCardSkeleton() {
     )
 }
 
-export function ProductListSkeleton() {
+export function ProductListSkeleton({ cant }: { cant: number }) {
     return (
         <ul className="flex flex-wrap gap-6 justify-center w-fit mb-8">
-            <ProductCardSkeleton/>
-            <ProductCardSkeleton/>
-            <ProductCardSkeleton/>
-            <ProductCardSkeleton/>
-            <ProductCardSkeleton/>
-            <ProductCardSkeleton/>
-            <ProductCardSkeleton/>
-            <ProductCardSkeleton/>
-            <ProductCardSkeleton/>
-            <ProductCardSkeleton/>
+            {Array.from({ length: cant }).map((_, index) => (
+                <ProductCardSkeleton key={index}/>
+            ))}
         </ul>
     )
 }

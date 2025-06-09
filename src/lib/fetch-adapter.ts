@@ -66,9 +66,10 @@ export class ApiService {
         let searchParams: URLSearchParams | undefined;
 
         if (params) {
-            const { limit, page, search, ordering } = params;
+            const { limit, page, search, ordering, categorie } = params;
     
             searchParams = new URLSearchParams({
+                ...(categorie && { categorie: categorie.toString() }),
                 limit: limit.toString(),
                 offset: ((page - 1) * limit).toString(),
                 ...(search && { search }),
