@@ -10,13 +10,13 @@ import { useCategoriesStore } from "@/store/categorie-store";
 
 export function CategoriesFilter() {
     const pathname = usePathname();
-    const { categories, setCategories } = useCategoriesStore();
+    const { categories, isLoading, setCategories } = useCategoriesStore();
 
     useEffect(() => {
         if (!categories || categories.length === 0) {
             setCategories();
         }
-    }, [])
+    }, []);
 
     return (
         <div className="hidden min-w-max h-fit bg-white p-6 border shadow-md rounded-md lg:flex lg:flex-col lg:justify-between">
@@ -25,7 +25,7 @@ export function CategoriesFilter() {
                     Listado de categorías
                 </h3>
 
-                <ul className="space-y-1 overflow-y-auto elegant-scrollbar mt-5 h-full">
+                <ul className="space-y-1 overflow-y-auto elegant-scrollbar mt-3 h-full">
                     {categories.map(({ id, name }) => (
                         <li key={id}>
                             <Link 
@@ -45,7 +45,7 @@ export function CategoriesFilter() {
                 </ul>
             </div>
 
-            <span className="text-sm text-center text-muted-foreground mt-20">
+            <span className="text-sm text-center text-muted-foreground mt-10">
                 {categories.length} categorías disponibles
             </span>
         </div>
