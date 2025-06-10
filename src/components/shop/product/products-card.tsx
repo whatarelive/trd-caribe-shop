@@ -1,6 +1,7 @@
 import Link from "next/link";
-import Image from "next/image";
+import clsx from "clsx";
 import { Bookmark } from "lucide-react";
+import { LoadingImage } from "@/components/global/LodingImage";
 import { CartCounter } from "@/components/shop/product/cart-counter";
 import { Card } from "@/components/ui/card";
 import type { ProductClient } from "@/interfaces/models/product.interface";
@@ -10,27 +11,25 @@ interface Props {
     isAuth: boolean;
 }
 
+
 export function ProductCard({ product, isAuth }: Props) {
     return (
         <Card className="max-w-72 p-0 gap-2 bg-white rounded-md shadow-md hover:cursor-pointer hover:shadow-lg">
             <Link href={`/${product.categorie.toLowerCase()}/product/${product.id}`}>
-                <picture className="min-w-72 min-h-72">
-                    {product.imageUrl ? (
-                        <img 
-                            src={product.imageUrl ?? "/images/no_data.jpg"} 
-                            alt={`Imagen del prodcuto ${product.name}`} 
-                            className="object-contain w-72 h-72 rounded-t-md"
-                        />
-                    ) : (
-                        <Image
-                            src="/images/no_data.jpg"
-                            width={288} height={288}
-                            alt="Imagen modelo"
-                            className="w-72 h-72 object-cover aspect-video rounded-t-md"
-                        />
+                <LoadingImage
+                    src={product.imageUrl ?? "/images/no_data.jpg"}
+                    width={288} 
+                    height={288}
+                    alt={`Imagen del producto ${product.name}`}
+                    className={clsx(
+                        "w-72 h-72 aspect-video rounded-t-md border-8 border-gray-200/50", 
+                        {
+                            "object-contain p-2" : product.imageUrl,
+                            "object-cover" : !product.imageUrl,
+                        }
                     )}
-                </picture>
-
+                />
+            
                 <div className="flex flex-col p-3">
                     <h3 className="font-medium line-clamp-2">
                         {product.name}
