@@ -5,10 +5,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
-import type { IUser } from "@/interfaces/models/user.interface";
+import type { UserClient } from "@/interfaces/models/user.interface";
 
 
-export function UserCard({ user }: { user: IUser }) {
+export function UserCard({ user }: { user: UserClient }) {
     return (
         <Card className="w-full shadow-md bg-gradient-to-br from-white to-gray-50/50">
             <CardContent>

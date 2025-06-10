@@ -11,10 +11,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { showErrorToast, showSuccessToast } from "@/components/ui/sonner";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import type { ICategories } from "@/interfaces/models/categorie.interface";
+import type { Categorie } from "@/interfaces/models/categorie.interface";
 
 
-export function CreateProductForm({ categories }: { categories: ICategories[] }) {
+export function CreateProductForm({ categories }: { categories: Categorie[] }) {
     const { back } = useRouter();
     
     const [_state, formAction, isPending] = useActionState(

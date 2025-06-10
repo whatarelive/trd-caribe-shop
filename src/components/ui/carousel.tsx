@@ -41,7 +41,7 @@ function useCarousel() {
 }
 
 export const Carousel: FC<ComponentProps<"div"> & CarouselProps> = ({ 
-    orientation, setApi, opts, className, children, ...props
+    setApi, opts, className, children, ...props
 }) => {
     const [carouselRef, api] = useEmblaCarousel(
         { ...opts, axis: "x" }, 

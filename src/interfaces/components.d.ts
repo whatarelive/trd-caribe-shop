@@ -1,5 +1,3 @@
-import type { ComponentProps, DetailedHTMLProps, InputHTMLAttributes } from "react";
-
 export interface ILayout {
     readonly children: React.ReactNode;
 };

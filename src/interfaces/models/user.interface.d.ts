@@ -28,7 +28,7 @@ export type UserClient = Omit<User, "first_name" | "last_name" | "is_staff" | "p
 export type UserFromAPI = Omit<User, "fullName" | "isAdmin" | "password">;
 
 // Estructura del objeto que se envía hacia la API.
-export type UserFormatAPI = Omit<User, "id" | "fullName" | "isAdmin" | "is_staff">;
+export type UserToAPI = Omit<User, "id" | "fullName" | "isAdmin" | "is_staff">;
 
 // Estructura del objeto de la petición de listar usuarios desde la API.
 export type UserResponse = {

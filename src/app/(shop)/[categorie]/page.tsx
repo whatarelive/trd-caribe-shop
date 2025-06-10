@@ -14,7 +14,7 @@ export default function ProductsCategoriePage() {
 
     const getCategorieId = useCategoriesStore((state) => state.getCategorieId);
 
-    const formatCategorie = decodeURIComponent(categorie?.toString()!);
+    const formatCategorie = decodeURIComponent(categorie?.toString() ?? "");
     const { id } = getCategorieId(formatCategorie);
     
     if (!id) notFound();        

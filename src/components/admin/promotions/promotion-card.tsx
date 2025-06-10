@@ -6,10 +6,10 @@ import { PromotionChoice } from "@/components/admin/promotions/promotions-choice
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { IPromotions } from "@/interfaces/models/promotions.interface";
+import type { PromotionClient } from "@/interfaces/models/promotions.interface";
 
 
-export function PromotionCard({ promotion }: { promotion: IPromotions }) {
+export function PromotionCard({ promotion }: { promotion: PromotionClient }) {
     return (
         <Card className="shadow-md">
             <CardHeader className="pb-1">

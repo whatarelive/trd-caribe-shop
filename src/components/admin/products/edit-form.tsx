@@ -12,12 +12,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { showErrorToast, showSuccessToast } from "@/components/ui/sonner";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
-import type { IProduct } from "@/interfaces/models/product.interface";
-import type { ICategories } from "@/interfaces/models/categorie.interface";
+import type { ProductClient } from "@/interfaces/models/product.interface";
+import type { Categorie } from "@/interfaces/models/categorie.interface";
 
 interface Props {
-    product: IProduct;
-    categories: ICategories[];
+    product: ProductClient;
+    categories: Categorie[];
 }
 
 export const EditProductForm: FC<Props> = memo(({ product, categories }) => {

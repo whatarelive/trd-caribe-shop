@@ -3,6 +3,7 @@
 import { service } from "@/config/api";
 import { BadRequestException, HttpException } from "@/lib/error-adapter";
 import { saleDetailFromAPI } from "@/actions/sales/adapter/sales-adapters";
+import type { ISalesDetail } from "@/interfaces/models/sales.interface";
 
 
 export async function getSaleInfo(id: number) {
@@ -18,7 +19,7 @@ export async function getSaleInfo(id: number) {
     
         return { 
             result: true, 
-            data: saleDetailFromAPI(response), 
+            data: saleDetailFromAPI(response as ISalesDetail), 
         };        
         
     } catch (error) {

@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { ArrowDown, ArrowLeftRight, ArrowUp } from "lucide-react";
-import type { PromotionsChoice } from "@/interfaces/models/promotions.interface";
+import type { PromotionChoice } from "@/interfaces/models/promotions.interface";
 
 const CHOICES = {
     greater: "Mayor que", 
@@ -8,7 +8,7 @@ const CHOICES = {
     between: "Entre",
 }
 
-export function PromotionChoice({ choice }: { choice: PromotionsChoice }) {
+export function PromotionChoice({ choice }: { choice: PromotionChoice }) {
     return (
         <span 
             className={clsx(

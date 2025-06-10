@@ -10,7 +10,7 @@ import { useCategoriesStore } from "@/store/categorie-store";
 
 export function CategoriesFilter() {
     const pathname = usePathname();
-    const { categories, isLoading, setCategories } = useCategoriesStore();
+    const { categories, setCategories } = useCategoriesStore();
 
     useEffect(() => {
         if (!categories || categories.length === 0) {

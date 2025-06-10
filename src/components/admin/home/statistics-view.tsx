@@ -3,7 +3,7 @@ import { StatisticsCard } from "@/components/admin/home/statistics-card";
 
 
 export async function StatisticsView() {
-    const statistics = await new Promise((resolve) => {
+    await new Promise((resolve) => {
         setTimeout(() => resolve("Hola"), 3000)
     })
 

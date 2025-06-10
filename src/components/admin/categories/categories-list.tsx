@@ -6,10 +6,10 @@ import { CreateCategorieForm } from "@/components/admin/categories/create-form";
 import { AlertModal } from "@/components/global/AlertModal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import type { ICategories } from "@/interfaces/models/categorie.interface";
+import type { Categorie } from "@/interfaces/models/categorie.interface";
 
 
-export function CategoriesList({ categories }: { categories: ICategories[] }) {
+export function CategoriesList({ categories }: { categories: Categorie[] }) {
     return (
         <Card className="max-w-sm w-full h-fit">
             <CardHeader>

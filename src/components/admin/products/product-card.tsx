@@ -6,10 +6,10 @@ import { DataSection } from "@/components/admin/data-section";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import type { IProduct } from "@/interfaces/models/product.interface";
+import type { ProductClient } from "@/interfaces/models/product.interface";
 
 
-export function ProductCard({ product }: { product: IProduct }) {
+export function ProductCard({ product }: { product: ProductClient }) {
     return (
          <Card className="shadow-md">
             <CardHeader>
