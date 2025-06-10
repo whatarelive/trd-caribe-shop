@@ -1,6 +1,6 @@
 'use server'
 
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { service } from "@/config/api";
 import { BadRequestException, HttpException } from "@/lib/error-adapter";
 import { UpdateSchema } from "@/actions/auth/validation/user-schema";
@@ -20,6 +20,7 @@ export async function updateUser(formData: FormData) {
         );
 
         revalidateTag("users-data");
+        revalidatePath("/user/");
         
         return {
             result: true,
