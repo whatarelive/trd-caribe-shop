@@ -1,8 +1,7 @@
 'use client'
 
 import { useEffect } from "react";
-import { useSession } from "next-auth/react";
-import { signOut } from "@/auth.config";
+import { signOut, useSession } from "next-auth/react";
 import { HttpException } from "@/lib/error-adapter";
 import { showErrorToast, showSuccessToast } from "@/components/ui/sonner";
 

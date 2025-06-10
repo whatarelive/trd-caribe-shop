@@ -11,17 +11,17 @@ interface ProductInfo {
     quantity: number;
 }
 
-export async function addCart(formData: ProductInfo) {    
+export async function removeQuantity(formData: ProductInfo) {    
     const { data, success } = await AddCartSchema.safeParseAsync(formData);
     
     try {    
         if (!success) throw new BadRequestException();
         
-        await service.post(`/sales/cart/add/${data.id}/`,
+        await service.post(`/sales/cart/remove-quantity/${data.id}/`,
             productAddFormatAPI(data), 
             {
                 isProtected: true,
-                error: "Fallo al agregar el producto al carrito",
+                error: "Fallo al disminuir la cantidad del producto",
             }
         );
 
@@ -29,11 +29,11 @@ export async function addCart(formData: ProductInfo) {
 
         return {
             result: true,
-            message: "Producto agregado al carrito",
+            message: "Cantidad disminuida",
         };
         
     } catch (error) {
-        console.error("Error en AddCart", error);
+        console.error("Error en RemoveQuantity", error);
         
         return { 
             result: true, 

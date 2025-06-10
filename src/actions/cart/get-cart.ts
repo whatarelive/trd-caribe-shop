@@ -3,12 +3,12 @@
 import { service } from "@/config/api";
 import { HttpException } from "@/lib/error-adapter";
 import { cartFromAPI } from "@/actions/cart/adapters/cart-adapters";
-import type { CartResponse } from "@/interfaces/models/cart.interace";
+import type { CartFromAPI } from "@/interfaces/models/cart.interace";
 
 
 export async function getCart() {
     try {
-        const response = await service.getAll<CartResponse>(
+        const response = await service.getAll<CartFromAPI>(
             "/sales/cart/", null, 
             {
                 isProtected: true,
@@ -18,8 +18,7 @@ export async function getCart() {
 
         return { 
             result: true,
-            count: response.count,
-            data: response.results.map(cartFromAPI),
+            data: cartFromAPI(response),
         };
         
     } catch (error) {

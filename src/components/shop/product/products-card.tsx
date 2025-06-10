@@ -64,7 +64,7 @@ export function ProductCard({ product, isAuth }: Props) {
             </Link>
 
             {/* Operador para establecer el producto en el carrito de compras */}
-            { isAuth && <CartCounter stock={product.stock}/> }
+            { isAuth && <CartCounter id={product.id} stock={product.stock}/> }
         </Card>
     )
 }

@@ -7,6 +7,7 @@ import { getProductsInfo } from "@/actions/products/get-product-info";
 import { CartCounter } from "@/components/shop/product/cart-counter";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { auth } from "@/auth.config";
 
 interface PageProps {
     params: Promise<{ id: string, categorie: string }>;
@@ -14,6 +15,9 @@ interface PageProps {
 
 export default async function ProductPage({ params }: PageProps) {
     const { id, categorie } = await params;
+    
+    const session = await auth();
+
     const formatCategorie = decodeURIComponent(categorie);
     
     if (!id) notFound();
@@ -110,10 +114,11 @@ export default async function ProductPage({ params }: PageProps) {
                         </p>
                     </CardContent>
                         
-                    {/* Quantity selector */}
-                    <CardFooter className="mt-6">
-                        <CartCounter stock={data.stock} className="p-0 w-full"/>
-                    </CardFooter>
+                    {session?.isAuthenticated && (
+                        <CardFooter className="mt-6">
+                            <CartCounter id={data.id} stock={data.stock} className="p-0 w-full"/>
+                        </CardFooter>
+                    )}
                 </Card>
             </section>
         </>
