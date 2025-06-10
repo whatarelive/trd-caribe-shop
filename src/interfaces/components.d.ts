@@ -1,5 +1,3 @@
-import type { ComponentProps, DetailedHTMLProps, InputHTMLAttributes } from "react";
-
 export interface ILayout {
     readonly children: React.ReactNode;
 };
@@ -12,6 +10,7 @@ export interface IPage {
 export interface IFilters {
     search?: string;
     ordering?: string;
+    categorie?: number;
     page: number;
     limit: number;
 }

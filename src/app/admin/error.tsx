@@ -5,7 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function ErrorPage() {
-    const { back } = useRouter()
+    const { refresh } = useRouter()
 
     return (
         <div className="min-h-screen w-full flex items-center justify-center p-4">
@@ -41,7 +41,7 @@ export default function ErrorPage() {
                 </p>
 
                 <Button
-                    onClick={() => back()}
+                    onClick={() => refresh()}
                     className="font-medium px-8 py-3 rounded-full shadow-lg hover:shadow-xl"
                     size="lg"
                 >

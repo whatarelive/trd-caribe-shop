@@ -1,7 +1,7 @@
-import type { IPromotions, IPromotionsAPI } from "@/interfaces/models/promotions.interface";
+import type { PromotionClient, PromotionCreate, PromotionToAPI, PromotionFromAPI } from "@/interfaces/models/promotions.interface";
 
 // Adapter para mapear datos de una promoción recibidos desde la API.
-export const promotionFromAPI = (promo: any): IPromotions => ({
+export const promotionFromAPI = (promo: PromotionFromAPI): PromotionClient => ({
     id: promo.id,
     name: promo.name,
     type: promo.tipo,
@@ -12,7 +12,7 @@ export const promotionFromAPI = (promo: any): IPromotions => ({
 });
 
 // Adapter para mapear datos de una promoción que se van a enviar a la API.
-export const promotionApiFormat = (promo: any): IPromotionsAPI => ({
+export const promotionApiFormat = (promo: PromotionCreate): PromotionToAPI => ({
     name: promo.name,
     choice: promo.choice,
     tipo: promo.type,

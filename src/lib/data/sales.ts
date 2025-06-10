@@ -1,6 +1,5 @@
-import type { ISales, ISalesDetail } from "@/interfaces/models/sales.interface";
 
-export const sales: ISales[] = [{
+export const sales = [{
     id: 1,
     user: "Pepe el Salvaje",
     total: 400,
@@ -44,7 +43,7 @@ export const sales: ISales[] = [{
     status: "CANCELED"
 },]
 
-export const saleForId: ISalesDetail = {
+export const saleForId = {
     id: 1,
     user: "Pepe el Salvaje",
     total: 1240,

@@ -1,8 +1,8 @@
 import { format } from "@/lib/format-date";
-import type { IComments, ICommentsAPI, IResponseAPI } from "@/interfaces/models/comments.interface";
+import type { CommentFromAPI, CommentClient, CommentToAPI, ResponseComment } from "@/interfaces/models/comments.interface";
 
 // Adapter para mapear los datos de un comentario recibidos desde la API.
-export const commentsFromAPI = (comment: any): IComments => ({
+export const commentsFromAPI = (comment: CommentFromAPI): CommentClient => ({
     id: comment.id,
     user: comment.user,
     text: comment.text,
@@ -13,13 +13,13 @@ export const commentsFromAPI = (comment: any): IComments => ({
 
 // Adapter para mapear los datos de un comentario que se va a enviar a la API.
 // Estructura condicional para peticiones POST y PATCH.
-export const commentsFormatAPI = (comment: any): ICommentsAPI => ({
+export const commentsFormatAPI = (comment: Partial<CommentToAPI>): Partial<CommentToAPI> => ({
     ...(comment.text && { text: comment.text }),
     ...(comment.active !== undefined && { active: Boolean(comment.active) }),
 });
 
 // Adapter para mapear los datos de la respuesta de un comentario que se va a enviar a la API.
-export const responseFormatAPI = (response: any): IResponseAPI => ({
+export const responseFormatAPI = (response: ResponseComment): ResponseComment => ({
     username: response.username,
     response: response.response,
 })

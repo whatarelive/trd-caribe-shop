@@ -1,82 +1,125 @@
+import Link from "next/link";
+import Image from "next/image";
+import { notFound } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 import { fontText } from "@/config/fonts";
-import { Title } from "@/components/shop/Title";
-import { productsForShop } from "@/lib/data/products"
-import { Breadcrumbs } from "@/components/ui/breadcrumbs";
+import { getProductsInfo } from "@/actions/products/get-product-info";
 import { CartCounter } from "@/components/shop/product/cart-counter";
-
-const product = productsForShop[0];
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { auth } from "@/auth.config";
 
 interface PageProps {
-    params: Promise<{ categorie: string }>;
+    params: Promise<{ id: string, categorie: string }>;
 }
 
 export default async function ProductPage({ params }: PageProps) {
-    const categorie = (await params).categorie;
+    const { id, categorie } = await params;
+    
+    const session = await auth();
+
+    const formatCategorie = decodeURIComponent(categorie);
+    
+    if (!id) notFound();
+
+    const { result, data } = await getProductsInfo(Number(id));
+
+    if (!result || !data) notFound();
 
     return (
         <>
-            <section className="max-w-7xl mx-auto">
-                <Title title="Detalles del producto"/>
+            <section className="flex justify-between px-6 md:flex-col lg:px-0">
+                <h1 className="text-lg md:text-xl font-medium lg:text-2xl">
+                    Detalles del producto
+                </h1>
 
-                <Breadcrumbs 
-                    breadcrumbs={[
-                        { label: "Inicio", destiny: "/" },
-                        { label: `Categoría de ${categorie}`, destiny: `/${categorie}` }
-                    ]} 
-                    final="Detalles"
-                />
+                <Link href={`/${formatCategorie}`} className="border p-1 px-1.5 rounded-md active:bg-gray-200 md:hidden">
+                    <ArrowLeft size={16}/>
+                </Link>
+
+                <div className="hidden md:block">
+                    <Breadcrumbs
+                        breadcrumbs={[
+                            { label: "Inicio", destiny: "/" },
+                            { label: `Categoría de ${formatCategorie}`, destiny: `/${formatCategorie}` }
+                        ]}
+                        final={data.name.substring(0, 32).concat("...")}
+                    />
+                </div>
             </section>
 
-
-            <section className="max-w-7xl flex flex-col mt-8 lg:flex-row gap-8 mx-auto">
+            <section className="flex flex-col px-6 mt-8 gap-8 mx-auto xl:flex-row lg:px-0">
                 {/* Imagen del producto */}
-                <picture>
-                    <img 
-                        src={product.image} 
-                        alt={`Imagen del producto ${product.name}`}
-                        width={1200} height={800}
-                        className="object-cover rounded-md"
-                    />
-                </picture>
+                <Card className="p-6 items-center shadow-md">
+                    <h3 className="text-lg md:text-xl text-center font-medium">
+                        Imagen Ampliada
+                    </h3>
+
+                    <picture className="w-fit">
+                        {data.imageUrl ? (
+                            <img 
+                                src={data.imageUrl} 
+                                alt={`Imagen del prodcuto ${data.name}`}
+                                width={480} height={320}
+                                className="object-cover rounded-md"
+                            />
+                        ) : (
+                            <Image
+                                src="/images/no_data.jpg"
+                                width={480} height={320}
+                                alt="Imagen modelo"
+                                className="object-cover rounded-md"
+                            />
+                        )}
+                    </picture>
+                </Card>
 
                 {/* Detalles del producto */}
-                <div className="col-span-1 px-5 bg-white p-4 rounded-md h-fit shadow-lg">
-                    <h1 className="antialiased text-xl font-bold">
-                        { product.name }
-                    </h1>
+                <Card className="h-fit gap-0 w-full">
+                    <CardHeader className="mb-0">
+                        <CardTitle className="antialiased font-bold md:text-xl">
+                            { data.name }
+                        </CardTitle>
+                    </CardHeader>
 
-                    <div className="mb-1 flex items-center gap-2">
-                        <span className="text-lg font-bold">
-                            ${ product.price.toFixed(2)}
-                        </span>
-                    
-                        {product.price && (
-                            <span className="text-sm text-muted-foreground line-through">
-                                ${product.price + 20}
+                    <CardContent className="mt-0">
+                        <div className="flex items-center gap-2">
+                           {data.discount ? (
+                                <>
+                                    <span className="text-sm font-semibold md:text-base">
+                                        ${data.finalPrice.toFixed(2)}
+                                    </span>
+                                    <span className="text-xs text-muted-foreground line-through md:text-sm">
+                                        ${data.price}
+                                    </span>
+                                </>
+                            ) : (
+                                <span className="text-sm font-semibold md:text-base">
+                                    ${data.price.toFixed(2)}
+                                </span>
+                            )}
+                        </div>
+
+                        <div className="mb-4">
+                            <span className="text-xs md:text-sm">
+                                Disponibles: { data.stock } unidades
                             </span>
-                        )}
+                        </div>
 
-                    </div>
-
-                    <div className="mb-4">
-                        <span>
-                            Disponibles: { product.stock } unidades
-                        </span>
-                    </div>
-
-                    {/* Quantity selector */}
-                    <CartCounter 
-                        stock={product.stock} 
-                        className="p-0 mb-4"
-                    />
-        
-                    {/* Description */}
-                    <h3 className="font-bold text-sm">Descripción</h3>
-                    
-                    <p className={`${ fontText.className } antialiased font-light`}>
-                        { product.description }
-                    </p>
-                </div>
+                        {/* Description */}
+                        <h3 className="font-bold text-sm">Descripción</h3>
+                        
+                        <p className={`${ fontText.className } antialiased text-xs font-light md:text-sm `}>
+                            { data.description }
+                        </p>
+                    </CardContent>
+                        
+                    {session?.isAuthenticated && (
+                        <CardFooter className="mt-6">
+                            <CartCounter id={data.id} stock={data.stock} className="p-0 w-full"/>
+                        </CardFooter>
+                    )}
+                </Card>
             </section>
         </>
     )

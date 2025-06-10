@@ -2,8 +2,9 @@ import NextAuth, { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { service } from "@/config/api";
 import { SessionException } from "@/lib/error-adapter";
+import { LoginSchema } from "@/actions/auth/validation/user-schema";
 import { loginFromAPI, registerFromAPI, newTokenFromAPI } from "@/actions/auth/adapters/auth-adapters";
-import type { UserLogin, UserRegister } from "@/interfaces/models/user.interface";
+import type { RegisterResponse } from "@/interfaces/models/user.interface";
 
 
 // Declaración de la configuración de autentificación
@@ -17,7 +18,7 @@ export const authConfig: NextAuthConfig = {
     // Configuración de la estrategia de sesión
     session: { 
         strategy: "jwt",
-        maxAge: 23 * 60 * 60, // 23 horas en segundos
+        maxAge: 23 * 60 * 60,
     },
 
     // Callbacks para personalizar el comportamiento de la autenticación
@@ -34,7 +35,7 @@ export const authConfig: NextAuthConfig = {
             if (user) {
                 return { ...token, ...user };
             
-            } else if (Date.now() < token.accessTokenExpires!) {
+            } else if (token.accessTokenExpires && Date.now() < token.accessTokenExpires) {
                 return token;
             
             } else {
@@ -57,7 +58,6 @@ export const authConfig: NextAuthConfig = {
 
                     // Actualiza el token de acceso y su tiempo de expiración
                     token.accessToken = newToken.accessToken;
-                    token.refreshToken = newToken.refreshToken;
                     token.accessTokenExpires = Date.now() + 60 * 59 * 1000;
 
                     return token;
@@ -99,25 +99,27 @@ export const authConfig: NextAuthConfig = {
                 if (!credentials) return null;
 
                 // Convertir credentials a tipo User de forma segura
-                const user = credentials as unknown as UserLogin | UserRegister;
+                const { data, success } = await LoginSchema.safeParseAsync(credentials);
 
                 // Si es un usuario registrado, retornar los tokens y datos del usuario
-                if ((user as UserRegister).token !== undefined) {
-                    return registerFromAPI(user);
+                if (!success) {
+                    return registerFromAPI((credentials as RegisterResponse));
                 }
 
                 // Si es un intento de login, hacer la petición al endpoint de login
                 // Si falla la petición el error se controla en la server action.
                 const response = await service.post("/user/login/", 
-                    { ...user }, 
+                    data, 
                     { 
                         isProtected: false, 
                         error: "Error al iniciar sesión",
                     },
                 );
 
+                const session = await response.json()
+
                 // Retornar los datos del usuario y sus tokens de acceso
-                return loginFromAPI((await response.json()));
+                return loginFromAPI(session);
             }
         })
     ]

@@ -7,6 +7,7 @@ const API_URL = process.env.BACKEND_URL;
 
 interface RequestConfig extends RequestInit {
     isProtected: boolean;
+    isFile?: boolean;
     error: string; 
 }
 
@@ -27,12 +28,12 @@ export class ApiService {
     }
 
     private static async request(url: string, config: RequestConfig): Promise<Response> {
-        config.headers = new Headers({ "Content-Type": "application/json" });
+        config.headers = new Headers(!config.isFile ? { "Content-Type": "application/json" } : {});
         
         if (config.isProtected) {
             const accessToken = await ApiService.getAccessToken();
             config.headers.append("Authorization", `Bearer ${accessToken}`);
-        }
+        } 
 
         try {
             const response = await fetch(`${ApiService.baseUrl}${url}`, config);
@@ -65,9 +66,10 @@ export class ApiService {
         let searchParams: URLSearchParams | undefined;
 
         if (params) {
-            const { limit, page, search, ordering } = params;
+            const { limit, page, search, ordering, categorie } = params;
     
             searchParams = new URLSearchParams({
+                ...(categorie && { categorie: categorie.toString() }),
                 limit: limit.toString(),
                 offset: ((page - 1) * limit).toString(),
                 ...(search && { search }),
@@ -97,6 +99,15 @@ export class ApiService {
             ...config,
             method: "POST",
             body: JSON.stringify(data),
+        }); 
+    } 
+
+    public async postFile(url: string, data: any, config: MethodPost): Promise<Response> {
+        return await ApiService.request(url, { 
+            ...config,
+            method: "POST",
+            body: data,
+            isFile: true,
         }); 
     } 
 

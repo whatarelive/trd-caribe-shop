@@ -1,7 +1,7 @@
-import { UserNameView } from "@/components/admin/users/users-utils";
-import { SaleProductCard } from "@/components/admin/sales/sale-product-card";
-import { SaleMethod, SaleStatus } from "@/components/admin/sales/sales-utils";
-import { saleForId } from "@/lib/data/sales";
+// import { UserNameView } from "@/components/admin/users/users-utils";
+// import { SaleProductCard } from "@/components/admin/sales/sale-product-card";
+// import { SaleStatus } from "@/components/admin/sales/sales-utils";
+// import { saleForId } from "@/lib/data/sales";
 
 import "@/styles/scrollbar-style.css";
 
@@ -10,7 +10,7 @@ export const SaleDetail = () => {
         <section className="flex flex-col gap-6 lg:flex-row-reverse">
             {/* Sección de detalles */}
             <div className="flex flex-col gap-4 p-4 h-fit bg-gray-50 rounded-md lg:w-2/6">
-                <UserNameView value={saleForId.user}/>
+                {/* <UserNameView value={saleForId.user}/> */}
 
                 <hr className="text-gray-300"/>
 
@@ -20,7 +20,7 @@ export const SaleDetail = () => {
                             Método de pago
                         </h4>
 
-                        <SaleMethod method={saleForId.payment_method}/>
+                        {/* <SaleMethod method={saleForId.payment_method}/> */}
                     </div>
                     
                     <div>
@@ -28,10 +28,10 @@ export const SaleDetail = () => {
                             Estado de Venta
                         </h4>
 
-                        <SaleStatus 
+                        {/* <SaleStatus 
                             status={saleForId.status} 
                             className="flex justify-center"
-                        />                    
+                        />                     */}
                     </div>
                 </div>
             </div>
@@ -43,12 +43,12 @@ export const SaleDetail = () => {
                 </h3>
             
                 <ul className="flex flex-col gap-2 overflow-y-scroll elegant-scrollbar">
-                    {saleForId.products.map((product) => (
-                        <SaleProductCard 
-                            key={product.id} 
-                            product={product}
-                        />
-                    ))}
+                    {/* {saleForId.products.map((product) => (
+                        // <SaleProductCard 
+                        //     key={product.id} 
+                        //     // product={product}
+                        // />
+                    ))} */}
                 </ul>
             </div>
         </section>

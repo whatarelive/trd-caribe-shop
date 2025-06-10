@@ -1,46 +1,51 @@
-"use client";
+'use client'
 
+import { memo, type FC } from "react";
 import { cn } from "@/lib/utils";
-import { FC, useState } from "react";
-import { MdShoppingCart } from "react-icons/md";
+import { ShoppingCart } from "lucide-react";
+import { useCart } from "@/lib/hooks/useCart";
+import { Button } from "@/components/ui/button";
 
-export const CartCounter: FC<{ stock: number, className?: string }> = ({ stock, className }) => {
-    const [counter, setCounter] = useState(1);
+interface Props {
+    id: number;
+    stock: number | null;
+    className?: string;
+}
 
-    const increment = () => {
-        if(counter >= stock) return;
-        setCounter(counter + 1);
-    }
-
-    const decrement = () => {
-        if (counter === 1) return;
-        setCounter(counter - 1);
-    }
-
+export const CartCounter: FC<Props> = memo(({ id, stock, className }) => {
+    const { counter, increment, decrement, addProductToCart } = useCart({ id, stock });
+    
     return (
         <div className={cn("flex p-3 pt-0 justify-between items-center select-none", className)}>
             <div className="flex border border-gray-400 rounded-md">
-                <button
+                <Button
+                    variant="ghost"
                     onClick={decrement} 
-                    className="border-r border-gray-400 py-1 px-2 cursor-pointer font-medium hover:text-orange-400"
+                    className="border-r rounded-r-none border-gray-400 px-3 font-medium hover:text-orange-400"
                 >
                     -
-                </button>
+                </Button>
 
-                <span className="px-2 py-1">{ counter }</span>
+                <span className="px-2 py-1.5 min-w-10 text-center">
+                    { counter }
+                </span>
 
-                <button 
+                <Button
+                    variant="ghost" 
                     onClick={increment}
-                    className="border-l border-gray-400 py-1 px-2 cursor-pointer font-medium hover:text-orange-400"
+                    className="border-l rounded-l-none border-gray-400 px-3 font-medium hover:text-orange-400"
                 >
                     +
-                </button>
+                </Button>
             </div>
 
-            <button className="inline-flex items-center p-2 gap-1.5 rounded-md cursor-pointer bg-blue-400 text-white hover:bg-blue-500">
-                <MdShoppingCart size={20}/>
+            <Button  
+                className="gap-1.5 bg-blue-400 text-white hover:bg-blue-500"
+                onClick={addProductToCart}
+            >
+                <ShoppingCart fill="#fff" color="#fff" size={20}/>
                 Añadir
-            </button>
+            </Button>
         </div>
     )
-}
+})

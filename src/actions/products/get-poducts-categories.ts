@@ -1,0 +1,42 @@
+'use server'
+
+import { service } from "@/config/api";
+import { HttpException } from "@/lib/error-adapter";
+import { productFromAPI } from "@/actions/products/adapters/product-adapters";
+import type { IFilters } from "@/interfaces/components";
+import type { ProductResponse } from "@/interfaces/models/product.interface";
+
+interface Props extends IFilters {
+    categorie: number;
+}
+
+export async function getProductsByCategorie(params: Props) {
+    try {
+        const response = await service.getAll<ProductResponse>(
+            `/store/products`, params, 
+            {
+                isProtected: false,
+                error: "Fallo la carga de los productos de la categoría",
+                cache: "force-cache",
+                next: {
+                    revalidate: 900,
+                    tags: ["products-data"],
+                }
+            }
+        );
+
+        return {
+            result: true,
+            count: response.count,
+            data: response.results.map(productFromAPI),
+        };
+        
+    } catch (error) {
+        console.error("Error en GetProductsByCategorie", error);
+
+        return { 
+            result: false, 
+            error: (error instanceof HttpException) ? error.message : "Error desconocido",
+        };   
+    }
+}

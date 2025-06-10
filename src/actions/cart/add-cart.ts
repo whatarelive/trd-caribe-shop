@@ -17,7 +17,7 @@ export async function addCart(formData: ProductInfo) {
     try {    
         if (!success) throw new BadRequestException();
         
-        await service.post(`/sales/car/add/${data.id}/`,
+        await service.post(`/sales/cart/add/${data.id}/`,
             productAddFormatAPI(data), 
             {
                 isProtected: true,

@@ -1,13 +1,10 @@
 import { DataSection } from "@/components/admin/sales/sales-utils";
 
 import type { FC } from "react";
-import type { IProducts } from "@/interfaces/models/product.interface";
+// import type { IProducts } from "@/interfaces/models/product.interface";
 
 interface Props {
-    product: {
-        quantity: number;
-        charged_price: string;
-    } & Pick<IProducts, "id" | "name" | "price" | "discount">;
+    product: any
 }
 
 export const SaleProductCard: FC<Props> = ({ product }) => {

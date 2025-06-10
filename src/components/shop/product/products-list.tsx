@@ -1,30 +1,56 @@
-"use client";
+'use client'
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getProductsByCategorie } from "@/actions/products/get-poducts-categories";
 import { ProductCard } from "@/components/shop/product/products-card";
-import { productsForShop as demoProducts } from "@/lib/data/products";
+import { ProductListSkeleton } from "@/components/shop/product/skeletons";
+import { Pagination } from "@/components/ui/pagination";
+import { showErrorToast } from "@/components/ui/sonner";
+import type { IFilters } from "@/interfaces/components";
+import type { ProductClient } from "@/interfaces/models/product.interface";
 
-export const ProductsList = () => {
-    const [products, setProducts] = useState(demoProducts);
 
-    const addMoreProducts = async () => {
-        // Se hace la petición para más productos
-        setProducts([...products, ...demoProducts])
-    }
+interface Props extends Omit<IFilters, "limit"> {
+    isAuth: boolean;
+    categorie: number;
+}
+
+export function ProductList({ page, categorie, search, isAuth }: Props) {
+    const [count, setCount] = useState<number>(0);
+    const [products, setProducts] = useState<ProductClient[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     
-    return (
-        <section className="flex flex-col items-center max-w-7xl m-auto w-fit my-8 select-none">
-            <ul className="flex flex-wrap gap-6 justify-center w-fit mb-8">
-                {
-                    products.map((product, index) => (
-                        <ProductCard key={index} product={product}/>
-                    ))
-                }
-            </ul>
+    useEffect(() => {    
+        setIsLoading(true);
 
-            <button className="button-primary w-fit" onClick={addMoreProducts}>
-                Ver más
-            </button>
+        getProductsByCategorie({ page, limit: 10, categorie, search })
+            .then(({ data, count, result, error }) => {
+                if (!result || !data || !count) {
+                    return showErrorToast({ title: error! });
+                }
+
+                setProducts(data);
+                setCount(count);
+            })
+            .finally(() => setIsLoading(false));
+
+    }, [page, categorie, search]);
+
+    return (
+        <section className="flex flex-col items-center justify-center select-none mt-4">
+            {!isLoading ? (
+                <ul className="flex flex-wrap gap-6 mb-8 justify-center lg:justify-start w-full">
+                    {products.map((product, index) => (
+                        <li key={index}>
+                            <ProductCard product={product} isAuth={isAuth}/>
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <ProductListSkeleton cant={8}/>
+            )}
+
+            <Pagination count={count} currentPage={page} limit={10} />
         </section>
     )
 }

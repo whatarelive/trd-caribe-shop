@@ -25,7 +25,7 @@ export async function getProducts(params: IFilters) {
         return {
             result: true,
             count: response.count,
-            results: response.results.map(productFromAPI),
+            data: response.results.map(productFromAPI),
         };
         
     } catch (error) {

@@ -23,6 +23,7 @@ export async function createPromotion(formData: FormData) {
         );
         
         revalidateTag("promotions-data");
+        revalidateTag("products-data");
     
         return {
             result: true,

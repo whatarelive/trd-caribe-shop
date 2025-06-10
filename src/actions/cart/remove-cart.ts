@@ -11,7 +11,7 @@ export async function removeFromCart(id: number) {
             throw new BadRequestException("ID invalido");
         }
 
-        await service.delete(`/sales/car/delete/${id}/`, {
+        await service.delete(`/sales/cart/delete/${id}/`, {
             error: "Fallo la eliminación del producto del carrito",    
         });
 

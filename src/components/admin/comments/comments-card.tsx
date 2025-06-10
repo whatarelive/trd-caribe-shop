@@ -5,10 +5,10 @@ import { Avatar } from "@/components/ui/avatar";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { TextCommentDialog } from "@/components/admin/comments/text-comment-dialog";
 import { CreateResponseForm } from "@/components/admin/comments/create-response-form";
-import type { IComments } from "@/interfaces/models/comments.interface";
+import type { CommentClient } from "@/interfaces/models/comments.interface";
 
 
-export function CommentsCard({ comment }: { comment: IComments }) {
+export function CommentsCard({ comment }: { comment: CommentClient }) {
     return (
         <Card className="shadow-md">
             <CardHeader className="flex justify-between items-center">
