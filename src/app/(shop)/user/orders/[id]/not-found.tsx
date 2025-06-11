@@ -1,14 +1,10 @@
-'use client'
-
 import Link from "next/link";
-import { useParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
-export default function NotFoundProduct() {
-    const { categorie } = useParams();
 
+export default function NotFoundOrderDetail() {
     return (
-        <div className="container my-12 p-12 flex items-center justify-center md:p-0">
+        <section className="container my-12 p-12 flex items-center justify-center md:p-0">
             <div className="text-center max-w-md mx-auto">
                 <div className="relative mb-8">
                     <div className="w-32 h-32 mx-auto relative">
@@ -35,19 +31,19 @@ export default function NotFoundProduct() {
                 <h1 className="text-2xl font-bold text-slate-800 mb-3">Algo salió mal</h1>
 
                 <p className="text-slate-600 mb-8 leading-relaxed">
-                    No se encontró el producto con el id solicitado.
+                    No se encontró el la orden de venta con el id solicitado.
                     <br />
-                    <span className="text-sm">Si el error persiste puede que el producto no exista en la tienda.</span>
+                    <span className="text-sm">Si el error persiste puede que la orden no exista en la tienda.</span>
                 </p>
 
                 <Link
-                    href={`/${decodeURIComponent(categorie?.toString() ?? "")}`}
+                    href="/user/orders/"
                     className="inline-flex gap-2 font-medium px-8 py-3 rounded-full shadow-lg hover:shadow-xl"
                 >
                     <ArrowLeft className="w-5 h-5" />
                     Regresar
                 </Link>
             </div>
-        </div>
+        </section>
     )
 }

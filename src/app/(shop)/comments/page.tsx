@@ -23,7 +23,7 @@ export default async function CommentsPage({ searchParams }: IPage) {
                 <CommentsCreateForm />
             </section>
 
-                {/* Sección Listado de comentarios */}
+            {/* Sección Listado de comentarios */}
             <Suspense key={page} fallback={<CommentsListSkeleton/>}>
                 <CommentsList page={Number(page)}/>
             </Suspense>

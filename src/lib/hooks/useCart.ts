@@ -23,13 +23,13 @@ export function useCart({ id, stock }: Props) {
     }
 
     const addProductToCart = useCallback(
-        async () => {
-            const { result, message } = await addCart({ id, quantity: counter });
+        async (value: number) => {
+            const { result, message } = await addCart({ id, quantity: value });
 
             if (result) showSuccessToast({ title: message });
             else showErrorToast({ title: message });
 
-            return setCounter(1);
+            setCounter(1);
         }, 
         [id, stock],
     );
