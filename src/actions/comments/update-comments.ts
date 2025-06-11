@@ -4,17 +4,17 @@ import { revalidateTag } from "next/cache";
 import { service } from "@/config/api";
 import { BadRequestException, HttpException } from "@/lib/error-adapter";
 import { commentsFormatAPI } from "@/actions/comments/adapters/comments-adapters";
-import { UpdateCommentsSchema } from "@/actions/comments/validation/comments-schema";
+import { CreateCommentsSchema } from "@/actions/comments/validation/comments-schema";
 
 
-export async function updateComments(id: number, formData: FormData) {
+export async function updateComments(formData: FormData, id?: number) {
     try {
         if (typeof id !== "number" || id <= 0) {
             throw new BadRequestException("ID invalido");
         } 
         
         const fields = Object.fromEntries(formData.entries());
-        const { data, success } = await UpdateCommentsSchema.safeParseAsync(fields);
+        const { data, success } = await CreateCommentsSchema.safeParseAsync(fields);
     
         if (!success) throw new BadRequestException();
         

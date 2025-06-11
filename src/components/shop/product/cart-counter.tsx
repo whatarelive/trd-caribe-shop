@@ -41,7 +41,7 @@ export const CartCounter: FC<Props> = memo(({ id, stock, className }) => {
 
             <Button  
                 className="gap-1.5 bg-blue-400 text-white hover:bg-blue-500"
-                onClick={addProductToCart}
+                onClick={() => addProductToCart(counter)}
             >
                 <ShoppingCart fill="#fff" color="#fff" size={20}/>
                 Añadir

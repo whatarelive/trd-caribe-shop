@@ -34,7 +34,7 @@ export async function logout() {
         if (error instanceof SessionException) {
             // Se cierra la sesión de lado del servidor del frontend
             await signOut({ redirect: false });
-            
+    
             return {
                 result: true,
                 message: "Sesión cerrada",

@@ -1,13 +1,13 @@
 import Link from "next/link";
-import Image from "next/image";
 import { notFound } from "next/navigation";
+import { auth } from "@/auth.config";
+import { LoadingImage } from "@/components/global/LodingImage";
 import { ArrowLeft } from "lucide-react";
 import { fontText } from "@/config/fonts";
 import { getProductsInfo } from "@/actions/products/get-product-info";
 import { CartCounter } from "@/components/shop/product/cart-counter";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { auth } from "@/auth.config";
 
 interface PageProps {
     params: Promise<{ id: string, categorie: string }>;
@@ -56,21 +56,12 @@ export default async function ProductPage({ params }: PageProps) {
                     </h3>
 
                     <picture className="w-fit">
-                        {data.imageUrl ? (
-                            <img 
-                                src={data.imageUrl} 
-                                alt={`Imagen del prodcuto ${data.name}`}
-                                width={480} height={320}
-                                className="object-cover rounded-md"
-                            />
-                        ) : (
-                            <Image
-                                src="/images/no_data.jpg"
-                                width={480} height={320}
-                                alt="Imagen modelo"
-                                className="object-cover rounded-md"
-                            />
-                        )}
+                        <LoadingImage
+                            src={data.imageUrl ?? "/images/no_data.jpg"}
+                            alt={`Imagen del prodcuto ${data.name}`}
+                            width={480} height={320}
+                            className="object-cover rounded-md"
+                        />
                     </picture>
                 </Card>
 

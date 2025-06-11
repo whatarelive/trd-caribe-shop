@@ -1,80 +1,25 @@
+import { getSalesSummary } from "@/actions/analytics/get-sales-sumary";
 import { generateYAxis } from "@/lib/utils";
+import { ErrorSection } from "@/components/global/ErrorSection";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import type { SaleChartData } from "@/interfaces/models/sales.interface";
 
 
 export async function SalesChart() {
-    const sales = await new Promise<SaleChartData[]>((resolve) => {
-        setTimeout(() => {
-            resolve([
-                {
-                    name: "Ene",
-                    total: 1800,
-                    sales: 120,
-                },
-                {
-                    name: "Feb",
-                    total: 2200,
-                    sales: 132,
-                },
-                {
-                    name: "Mar",
-                    total: 2800,
-                    sales: 167,
-                },
-                {
-                    name: "Abr",
-                    total: 3200,
-                    sales: 198,
-                },
-                {
-                    name: "May",
-                    total: 3000,
-                    sales: 235,
-                },
-                {
-                    name: "Jun",
-                    total: 5500,
-                    sales: 270,
-                },
-                {
-                    name: "Jul",
-                    total: 4700,
-                    sales: 290,
-                },
-                {
-                    name: "Ago",
-                    total: 8200,
-                    sales: 304,
-                },
-                {
-                    name: "Sep",
-                    total: 2600,
-                    sales: 325,
-                },
-                {
-                    name: "Oct",
-                    total: 7100,
-                    sales: 370,
-                },
-                {
-                    name: "Nov",
-                    total: 6500,
-                    sales: 390,
-                },
-                {
-                    name: "Dic",
-                    total: 10000,
-                    sales: 420,
-                },
-            ])
-        }, 1000);
-    });
+    const { data, result } = await getSalesSummary();
 
-    const { yAxisLabels, topLabel } = generateYAxis(sales);
+    if (!result || !data) {
+        return (
+            <ErrorSection 
+                variant="data" 
+                className="h-full py-24"
+            />
+        ) 
+    }
+
+    const { yAxisLabels, topLabel } = generateYAxis(data);
 
     return (
-        <Card className="shadow-md grow">
+        <Card className="shadow-md grow w-full">
             <CardHeader>
                 <CardTitle>Gráfica de Ventas</CardTitle>
                 <CardDescription>
@@ -89,15 +34,15 @@ export async function SalesChart() {
                             { yAxisLabels.map((label) => <p key={label}>{label}</p> )}
                         </div>
 
-                        {sales.map((month) => (
-                            <div key={month.sales} className="flex flex-col items-center gap-2">
+                        {data?.map((sale) => (
+                            <div key={sale.month} className="flex flex-col items-center gap-2">
                                 <div 
                                     className="w-full rounded-md bg-blue-300"
-                                    style={{ height: `${(280 / topLabel) * month.total}px` }}
+                                    style={{ height: `${(280 / topLabel) * sale.total}px` }}
                                 />
 
                                 <p className="-rotate-90 text-sm text-gray-400 sm:rotate-0">
-                                    {month.name}
+                                    {sale.month.slice(0,3)}
                                 </p>
                             </div>
                         ))}

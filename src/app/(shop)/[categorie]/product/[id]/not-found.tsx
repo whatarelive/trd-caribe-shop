@@ -8,7 +8,7 @@ export default function NotFoundProduct() {
     const { categorie } = useParams();
 
     return (
-        <div className="w-full flex h-full items-center justify-center p-4">
+        <div className="container my-12 p-12 flex items-center justify-center md:p-0">
             <div className="text-center max-w-md mx-auto">
                 <div className="relative mb-8">
                     <div className="w-32 h-32 mx-auto relative">

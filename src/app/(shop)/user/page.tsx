@@ -1,20 +1,18 @@
-'use client'
-
-import { useRouter } from "next/navigation";
-import { Trash2 } from "lucide-react";
-import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { Send, ShoppingBasket, Trash2 } from "lucide-react";
+import { auth } from "@/auth.config";
 import { deleteUser } from "@/actions/users/delete-users";
+import { UpdateUserForm } from "@/components/auth/update-form";
 import { AlertModal } from "@/components/global/AlertModal";
+import { ButtonLogout } from "@/components/global/ButtonLogout";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { UpdateUserForm } from "@/components/auth/update-form";
 
 
-export default function UserPage() {    
-    const session = useSession();
-    const { push, prefetch } = useRouter();
-    const user = session.data?.user;
+export default async function UserPage() {    
+    const session = await auth();
+    const user = session?.user;
 
     return (
         <section className="container mx-auto px-6 my-12 lg:px-0">
@@ -58,23 +56,28 @@ export default function UserPage() {
                         </p>
 
                         <div className="flex flex-col gap-4 sm:flex-row">
-                            <Button 
-                                variant="outline"
-                                className="grow"
-                                onClick={() => push("/user/orders/")} 
-                                onMouseEnter={() => prefetch("/user/orders/")}
+                            <Link 
+                                href="/user/orders/" 
+                                className="flex h-9 gap-1.5 items-center justify-center grow text-sm font-medium border rounded-md hover:bg-gray-100"
                             >
-                                Ordenes de compras
-                            </Button>
-
-                            <Button 
-                                variant="outline"
-                                className="grow"
-                                onClick={() => push("/user/comments/")} 
-                                onMouseEnter={() => prefetch("/user/orders/")}
+                                <ShoppingBasket size={16}/>
+                                <span>
+                                    Mis Compras
+                                </span>
+                            </Link>
+                            <Link 
+                                href="/user/comments/" 
+                                className="flex h-9 gap-1.5 items-center justify-center grow text-sm font-medium border rounded-md hover:bg-gray-100"
                             >
-                                Mis comentarios
-                            </Button>
+                                <Send size={16}/>
+                                <span>
+                                    Mis Comentarios
+                                </span>
+                            </Link>
+                        </div>
+                        
+                        <div className="mt-4">
+                            <ButtonLogout/>
                         </div>
                     </div>
 

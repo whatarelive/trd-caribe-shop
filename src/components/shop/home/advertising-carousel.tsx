@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { LoadingImage } from "@/components/global/LodingImage";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 const images: string[] = [
@@ -14,13 +14,13 @@ export function AdvertisingCarousel() {
     return (
         <Carousel 
             opts={{ loop: true }}
-            className="relative px-4 container max-md:h-48 xl:h-96 mx-auto mt-12 xl:px-0" 
+            className="relative px-4 max-md:h-48 xl:h-96 mx-auto mt-12 xl:px-0" 
         >
             <CarouselContent>
                 {images.map((image, index) => (
                     <CarouselItem key={index}>
                         <div className="p-1">
-                            <Image 
+                            <LoadingImage 
                                 src={image} 
                                 alt={`Imagen #${index+1} del carousel`} 
                                 width={1280} height={360} 

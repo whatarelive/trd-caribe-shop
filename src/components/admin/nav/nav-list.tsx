@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname } from "next/navigation";
-import { CreditCard, House, MessageSquareText, Package, ShoppingCart, Users } from "lucide-react";
+import { CreditCard, House, MessageSquareText, Package, ShoppingCart, Store, Users } from "lucide-react";
 import { LinkComponent } from "@/components/admin/nav/nav-links";
 
 // Renderiza una barra de navegación vertical con enlaces a las diferentes secciones 
@@ -10,6 +10,10 @@ export const NavList = () => {
 
     return (
         <nav className="flex flex-col w-full max-w-64 gap-2">
+            <LinkComponent href="/" isActive={pathname === "/"}>
+                <Store size={24} />
+                Tienda
+            </LinkComponent>
             <LinkComponent href="/admin" isActive={pathname === "/admin"}>
                 <House size={24} />
                 Inicio

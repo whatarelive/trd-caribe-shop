@@ -1,10 +1,12 @@
 'use client'
 
-import { memo, useActionState, type FC } from "react";
+import { memo, useActionState, useMemo, type FC } from "react";
 import { Loader2, Trash2 } from "lucide-react";
 import { deleteProduct } from "@/actions/products/delete-product";
 import { updateProduct } from "@/actions/products/update-product";
 import { AlertModal } from "@/components/global/AlertModal";
+import { LoadingImage } from "@/components/global/LodingImage";
+import { ChangeImageModal } from "@/components/admin/products/change-image-modal";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -32,6 +34,10 @@ export const EditProductForm: FC<Props> = memo(({ product, categories }) => {
         }, 
         null
     );
+
+    const catgID = useMemo(() => {
+        return categories.find((catg) => catg.name === product.categorie)?.id
+    }, [product]);
 
     return (
         <Card className="w-full">
@@ -66,8 +72,8 @@ export const EditProductForm: FC<Props> = memo(({ product, categories }) => {
                         {/* Sección de la Imagen y los datos de fecha */}
                         <div className="flex flex-col">
                             <picture>
-                                <img 
-                                    src={product.imageUrl} 
+                                <LoadingImage 
+                                    src={product.imageUrl ?? "/images/no_data.jpg"} 
                                     alt={`Imagen del producto ${product.name}`} 
                                     width={400}
                                     height={400}
@@ -76,15 +82,7 @@ export const EditProductForm: FC<Props> = memo(({ product, categories }) => {
                             </picture>
                             
                             {/* Campo de entrada */}
-                            <div className="space-y-2 mt-4 mb-4 md:mb-0">
-                                <Label htmlFor="image">Cambiar Imagen</Label>
-                                <Input 
-                                    id="image"
-                                    name="image" 
-                                    type="file" 
-                                    accept="image/*" 
-                                />
-                            </div>
+                            <ChangeImageModal id={product.id}/>
                         </div>
 
                         {/* Sección de los datos modificables del producto */}
@@ -115,7 +113,7 @@ export const EditProductForm: FC<Props> = memo(({ product, categories }) => {
                                 
                                 <div className="space-y-2 mb-4">
                                     <Label htmlFor="categorie">Categoría del producto</Label>
-                                    <Select name="categorie">
+                                    <Select name="categorie" defaultValue={catgID?.toString()}>
                                         <SelectTrigger className="w-full bg-transparent">
                                             <SelectValue placeholder={product.categorie} />
                                         </SelectTrigger>
@@ -170,7 +168,7 @@ export const EditProductForm: FC<Props> = memo(({ product, categories }) => {
                     </div>
 
                     {/* Botón para actualizar el prodcuto */}
-                    <div className="flex flex-col md:flex-row gap-2 md:gap-4">
+                    <div className="flex flex-col md:flex-row gap-2 md:gap-4 mt-4">
                         <Button type="submit" disabled={isPending} className="h-11">
                             { isPending ? "Guardando" : "Editar producto" }
                             { isPending && <Loader2 className="w-4 h-4 ml-1 animate-spin"/> }

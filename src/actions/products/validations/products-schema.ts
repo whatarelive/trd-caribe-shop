@@ -13,4 +13,16 @@ export const CreateProductSchema = z.object({
         .refine(file => file.type.startsWith("image/")),
 });
 
-export const UpdateProductSchema = CreateProductSchema.partial();
+export const UpdateProductSchema = z.object({
+    name: z.string().min(1).max(60).optional(),
+    description: z.string().min(1).optional(),
+    categorie: z.coerce.number().min(1).optional(),
+    price: z.coerce.number().positive().min(0).optional(),
+    stock: z.coerce.number().int().positive().min(0).optional(),
+});
+
+export const UpdateImageSchema = z.object({
+    image: z.instanceof(File)
+        .refine(file => file.size > 0)
+        .refine(file => file.type.startsWith("image/")),
+})

@@ -3,6 +3,7 @@ import { Edit2, Trash2 } from "lucide-react";
 import { getProducts } from "@/actions/products/get-products";
 import { deleteProduct } from "@/actions/products/delete-product";
 import { AlertModal } from "@/components/global/AlertModal";
+import { LoadingImage } from "@/components/global/LodingImage";
 import { ErrorSection } from "@/components/global/ErrorSection";
 import { ProductCard } from "@/components/admin/products/product-card";
 import { Badge } from "@/components/ui/badge";
@@ -66,14 +67,12 @@ export async function ProductsTable({ page, limit, search, ordering }: IFilters)
                         <TableRow key={product.id} className="lg:border-b-1 lg:border-gray-200 lg:bg-white">
                             <TableCell className="w-60">
                                 <div className="flex items-center gap-4">
-                                    <picture className="flex justify-center w-full max-w-24 max-h-16 rounded-md">
-                                        <img 
-                                            src={product.imageUrl} 
-                                            alt={`Imagen del producto ${product.name}`}
-                                            loading="lazy"
-                                            className="object-contain h-16 rounded-md"
-                                        />
-                                    </picture>
+                                    <LoadingImage 
+                                        src={product.imageUrl ?? "/images/no_data.jpg"}
+                                        alt={`Imagen del producto ${product.name}`}
+                                        width={96} height={64}
+                                        className="object-contain min-w-24 h-16 rounded-md"
+                                    />
                 
                                     <div className="flex flex-col justify-center">
                                         <h3 className="font-medium line-clamp-1">

@@ -10,7 +10,7 @@ export async function LastUsersCard() {
     const users = await getUsers({ page: 1, limit: 5, ordering: "-id" });
 
     return (
-        <Card className="shadow-md grow md:min-w-md">
+        <Card className="shadow-md grow w-full md:min-w-md 2xl:max-w-md">
             <CardHeader>
                 <CardTitle>Usuarios Recientes</CardTitle>
                 <CardDescription>

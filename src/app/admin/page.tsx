@@ -39,7 +39,7 @@ export default function AdminPage() {
                         <SalesChart/>
                     </Suspense>
 
-                    <div className="flex flex-col lg:flex-row gap-6">
+                    <div className="flex flex-col w-full lg:flex-row gap-6">
                         <Suspense fallback={<LastCommentsSkeleton cant={3}/>}>
                             <LastCommentsCard/>
                         </Suspense>

@@ -17,7 +17,9 @@ import { buttonVariants } from "@/components/ui/button";
 export default function HomePage() {
     return (
         <>                
-            <AdvertisingCarousel/>
+            <section className="hidden sm:flex sm:container sm:mx-auto">
+                <AdvertisingCarousel/>
+            </section>
 
             {/* Seccion de categorías para dispositivos desktop */}
             <section className="hidden lg:px-5 lg:container lg:mx-auto lg:flex lg:flex-col lg:gap-4 lg:mt-12 xl:p-0">
@@ -30,7 +32,7 @@ export default function HomePage() {
 
             {/* Sección de productos destacados */}
             <section className="container flex flex-col mx-auto px-5 gap-4 mt-12 xl:p-0">
-                <h3 className="font-medium md:text-2xl">
+                <h3 className="font-medium text-center text-2xl">
                     Productos destacados
                 </h3>
 

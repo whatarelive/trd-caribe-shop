@@ -7,10 +7,10 @@ import type { IFilters } from "@/interfaces/components";
 import type { CommentsResponse } from "@/interfaces/models/comments.interface";
 
 
-export async function getCommentsUser(params: IFilters) {
+export async function getUserComments(params: IFilters) {
     try {
         const response = await service.getAll<CommentsResponse>(
-            "/store/complaints-suggestions/user/", params,
+            "/store/complaints-suggestions/user/", params, 
             {
                 isProtected: true,
                 error: "Fallo la carga de los comentarios del usuario",
@@ -25,7 +25,7 @@ export async function getCommentsUser(params: IFilters) {
         };
 
     } catch (error) {
-        console.error("Error en GetCommentsUser", error);
+        console.error("Error en GetUserComments", error);
 
         return { 
             result: false, 

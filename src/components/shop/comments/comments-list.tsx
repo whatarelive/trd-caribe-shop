@@ -1,13 +1,23 @@
-import { getComments } from "@/actions/comments/get-comments";
 import { ErrorSection } from "@/components/global/ErrorSection";
 import { CommentsCard } from "@/components/shop/comments/comments-card";
 import { Pagination } from "@/components/ui/pagination";
+import type { CommentClient } from "@/interfaces/models/comments.interface";
 
+interface Props {
+    page: number;
+    isUser: boolean;
+    action: () => Promise<{
+        result: boolean;
+        count?: number;
+        data?: CommentClient[];
+        error?: string;
+    }>
+}
 
-export async function CommentsList({ page }: { page: number }) {
-    const comments = await getComments({ page, limit: 8, ordering: "-created" });
+export async function CommentsList({ page, isUser, action }: Props) {
+    const comments = await action();
 
-    if (!comments.result || !comments.count || comments.error) {
+    if (!comments.result || comments.error) {
         return (
             <ErrorSection 
                 variant="error" 
@@ -16,7 +26,7 @@ export async function CommentsList({ page }: { page: number }) {
         )
     }
 
-    if (comments.count === 0) {
+    if (comments.count === 0 || !comments.data || !comments.count) {
         return (
             <ErrorSection 
                 variant="data" 
@@ -26,10 +36,14 @@ export async function CommentsList({ page }: { page: number }) {
     }
     
     return (
-        <section className="flex flex-col py-4 mb-8 gap-8 max-w-7xl mx-auto w-full">
-            <ul className="list-none space-y-5">
+        <section className="container flex flex-col py-4 mb-8 gap-8 px-6 mx-auto">
+            <ul className="list-none space-y-5 max-w-5xl w-full mx-auto">
                 {comments.data.map((comment) => (
-                    <CommentsCard key={comment.id} comment={comment}/>
+                    <CommentsCard 
+                        key={comment.id} 
+                        comment={comment} 
+                        isUser={isUser}
+                    />
                 ))}
             </ul>
 

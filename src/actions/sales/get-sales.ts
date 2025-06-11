@@ -10,7 +10,7 @@ import type { SalesResponse } from "@/interfaces/models/sales.interface";
 export async function getSales(params: IFilters) {
     try {
         const response = await service.getAll<SalesResponse>(
-            "/sales/list", params, 
+            "/sales/admin-list", params, 
             {
                 isProtected: true,
                 error: "Fallo la carga de las ventas",
