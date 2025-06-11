@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ShoppingBasket, Trash2 } from "lucide-react";
+import { Send, ShoppingBasket, Trash2 } from "lucide-react";
 import { auth } from "@/auth.config";
 import { deleteUser } from "@/actions/users/delete-users";
 import { AlertModal } from "@/components/global/AlertModal";
@@ -54,15 +54,26 @@ export default async function UserPage() {
                             Información sobre la actividad del usuario en la tienda.
                         </p>
 
-                        <Link 
-                            href="/user/orders/" 
-                            className="flex h-9 gap-1.5 items-center justify-center grow text-sm font-medium border rounded-md hover:bg-gray-100"
-                        >
-                            <ShoppingBasket size={16}/>
-                            <span>
-                                Mis Ordenes de Compra
-                            </span>
-                        </Link>
+                        <div className="flex flex-col gap-4 sm:flex-row">
+                            <Link 
+                                href="/user/orders/" 
+                                className="flex h-9 gap-1.5 items-center justify-center grow text-sm font-medium border rounded-md hover:bg-gray-100"
+                            >
+                                <ShoppingBasket size={16}/>
+                                <span>
+                                    Mis Compras
+                                </span>
+                            </Link>
+                            <Link 
+                                href="/user/comments/" 
+                                className="flex h-9 gap-1.5 items-center justify-center grow text-sm font-medium border rounded-md hover:bg-gray-100"
+                            >
+                                <Send size={16}/>
+                                <span>
+                                    Mis Comentarios
+                                </span>
+                            </Link>
+                        </div>
                     </div>
 
                     <hr />
