@@ -22,7 +22,7 @@ export default async function CommentsPage({ searchParams }: IPage) {
     const currentLimit = Number(limit);
 
     return (
-        <section className="flex flex-col gap-6 w-full p-4 min-[375px]:p-8 xl:pr-16 bg-white md:bg-transparent">
+        <section className="flex flex-col gap-6 w-full p-4 min-[375px]:p-8 xl:pr-16 bg-white lg:bg-transparent">
             <div>
                 <h1 className="title-page">Listado de Comentarios</h1>
                 
@@ -34,7 +34,7 @@ export default async function CommentsPage({ searchParams }: IPage) {
                 />
             </div>
 
-            <div className="space-y-5 md:p-5 md:shadow-md bg-white md:rounded-md">
+            <div className="space-y-5 bg-white lg:rounded-md lg:p-5 lg:shadow-md">
                 <div className="flex flex-col md:flex-row gap-3">
                     <InputSearch placeholder="Buscar comentarios"/>
                     <SelectOrderBy filters={filters}/>
@@ -43,7 +43,7 @@ export default async function CommentsPage({ searchParams }: IPage) {
 
                 <Suspense 
                     key={search + currentPage + currentLimit + ordering} 
-                    fallback={<CommentsSkeleton rows={8}/>}
+                    fallback={<CommentsSkeleton rows={currentLimit}/>}
                 >
                     <CommentsTable 
                         page={currentPage} limit={currentLimit} 

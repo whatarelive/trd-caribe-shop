@@ -1,65 +1,77 @@
 import Link from "next/link";
-import { MdInfoOutline } from "react-icons/md";
-// import { Pagination } from "@/components/ui/pagination";
-import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell } from "@/components/ui/table"
-// import { SalesCard } from "@/components/admin/sales/sales-card";
-// import { SaleStatus } from "@/components/admin/sales/sales-utils";
-// import { UserNameView } from "@/components/admin/users/users-utils";
-import { sales } from "@/lib/data/sales";
+import { Info } from "lucide-react";
+import { getSales } from "@/actions/sales/get-sales";
+import { SaleStatus } from "@/components/global/SaleStatus";
+import { SaleMethod } from "@/components/global/SaleMethod";
+import { ErrorSection } from "@/components/global/ErrorSection";
+import { SalesCard } from "@/components/admin/sales/sales-card";
+import { Avatar } from "@/components/ui/avatar";
+import { Pagination } from "@/components/ui/pagination";
+import { buttonVariants } from "@/components/ui/button";
+import { Table, TableHeader, TableHead, TableRow, TableBody, TableCell, TableCaption } from "@/components/ui/table";
+import type { IFilters } from "@/interfaces/components";
 
-export const SalesTable = () => {
+
+const columns = ["Cliente", "Monto Total", "Estado", "Método de pago", "Opciones"];
+
+export async function SalesTable({ page, limit, search }: IFilters) {
+    // Se carga el listado de usuarios desde el Backend según los filtros activos.
+    const sales = await getSales({ page, limit, search });
+
+    // Mensajes de en la UI según el error que ocurra.
+    if (sales.count === 0 && search && search.length !== 0) 
+        return <ErrorSection variant="search"/>
+    
+    if (sales.count === 0 && !search) 
+        return <ErrorSection variant="data"/>
+    
+    if (!sales.result || !sales.count) 
+        return <ErrorSection variant="error"/>
+
+
     return (
         <>
             {/* Listado de ventas para dispositivos moviles */}
-            <ul className="flex flex-col gap-2 bg-gray-50 p-2 lg:hidden">
-                {/* {sales.map((sale) => (
-                    <SalesCard
-                        key={sale.id} 
-                        sale={sale}
-                    />
-                ))} */}
+            <ul className="flex flex-col gap-5 lg:hidden w-full">
+                {sales.data.map((sale) => (
+                    <SalesCard key={sale.id} sale={sale}/>
+                ))}
             </ul>
 
             {/* Tabla de ventas para dispositivos de escritorio */}
             <Table>
+                <TableCaption>
+                    Se mostraron <b>{ limit > sales.count ? sales.count : limit } </b> 
+                    ventas de <b>{sales.count}</b> en total 
+                </TableCaption>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>
-                            Cliente
-                        </TableHead>
-                        <TableHead>
-                            Monto Total
-                        </TableHead>
-                        <TableHead>
-                            Estado
-                        </TableHead>
-                        <TableHead>
-                            Método de pago
-                        </TableHead>
-                        <TableHead>
-                            Opciones
-                        </TableHead>
+                        {columns.map((colm, index) => (
+                            <TableHead key={index}>{colm}</TableHead>
+                        ))}
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {sales.map(({ id, total }) => (
-                        <TableRow key={id} className="lg:bg-white lg:border-b-2 lg:border-gray-200">
+                    {sales.data.map(({ id, total, method, status, user }) => (
+                        <TableRow key={id} className="lg:bg-white lg:border-b-1 lg:border-gray-200">
                             <TableCell>
-                                {/* <UserNameView value={user}/> */}
+                                <div className="flex gap-2 items-center">
+                                    <Avatar>{user.slice(0, 2)}</Avatar>
+                                    <h3 className="font-medium">{user}</h3>
+                                </div>
                             </TableCell>
                             <TableCell>
                                 $ {total}
                             </TableCell>
                             <TableCell>
-                                {/* <SaleStatus status={status}/> */}
+                                <SaleStatus status={status}/>
                             </TableCell>
                             <TableCell>
-                                {/* <SaleMethod method={payment_method}/> */}
+                                <SaleMethod method={method}/>
                             </TableCell>    
                             <TableCell>
-                                <Link href={`/admin/sales/${id}`} className="button-primary-v2">
-                                    <MdInfoOutline size={20}/>
-                                    Detalles
+                                <Link href={`/admin/sales/${id}`} className={buttonVariants({ variant: "outline" })}>
+                                    <Info size={20}/>
                                 </Link>
                             </TableCell>
                         </TableRow>
@@ -68,7 +80,12 @@ export const SalesTable = () => {
             </Table>
                         
             {/* Componente para la paginación de los productos */}
-            {/* <Pagination currentPage={1} totalPages={8} className="hidden md:flex"/> */}
+            <Pagination 
+                limit={limit}  
+                currentPage={page} 
+                count={sales.count} 
+                className="hidden md:flex"
+            />
         </>
     )
 }

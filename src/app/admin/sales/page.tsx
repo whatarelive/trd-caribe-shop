@@ -1,15 +1,21 @@
 import { Suspense } from "react";
-// import { TitlePage } from "@/components/admin/title-page";
-import { Breadcrumbs } from "@/components/ui/breadcrumbs";
-// import { ToolsSectionPage } from "@/components/admin/tools-section-page";
+import { SelectLimit } from "@/components/global/SelectLimit";
 import { SalesTable } from "@/components/admin/sales/sales-table";
-// import { SaleFilters } from "@/components/admin/sales/sales-filters";c
+import { SalesTableSkeleton } from "@/components/admin/sales/sales-skeleton";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
+import type { IPage } from "@/interfaces/components";
 
-export default async function SalesPage() {
+
+export default async function SalesPage({ searchParams }: IPage) {
+    const { page = "1", limit = "8", search = "" } = await searchParams;
+
+    const currentPage = Number(page);
+    const currentLimit = Number(limit);
+
     return (
-        <section className="flex flex-col gap-6 w-full p-4 min-[375px]:p-8 xl:pr-16">
+        <section className="flex flex-col gap-6 w-full p-4 min-[375px]:p-8 xl:pr-16 bg-white lg:bg-transparent">
             <div>
-                {/* <TitlePage title="Listado de Ventas"/> */}
+                <h1 className="title-page">Listado de Usuarios</h1>
 
                 <Breadcrumbs 
                     breadcrumbs={[
@@ -19,15 +25,18 @@ export default async function SalesPage() {
                 />
             </div>
 
-            {/* <ToolsSectionPage placeholder="Buscar ventas">
-                <Suspense fallback={<p>Cargando...</p>}>
-                    <SaleFilters />
+            <div className="space-y-5 bg-white lg:shadow-md lg:rounded-md lg:p-5">
+                <div className="flex flex-col md:flex-row gap-3">
+                    <SelectLimit label="venta" />
+                </div>
+
+                <Suspense 
+                    key={search + page + limit} 
+                    fallback={<SalesTableSkeleton rows={currentLimit}/>}
+                >
+                    <SalesTable page={currentPage} limit={currentLimit} search={search}/>
                 </Suspense>
-            </ToolsSectionPage> */}
-            
-            <Suspense fallback={<p>Cargando...</p>}>
-                <SalesTable/>
-            </Suspense>
+            </div>
         </section>
     )
 }
