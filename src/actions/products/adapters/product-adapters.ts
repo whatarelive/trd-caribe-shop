@@ -17,7 +17,7 @@ export const productFromAPI = (product: ProductFromAPI): ProductClient => ({
     imageUrl: product.image_url,
 });
 
-// Adapter para mapear los datos de un producto que se van a enviar a la API.
+// Adapter para mapear los datos de un producto que se van a enviar a la API POST.
 export const productFormatAPI = (data: Partial<ProductToAPI>): FormData => {
     const payload = new FormData();
 
@@ -30,3 +30,12 @@ export const productFormatAPI = (data: Partial<ProductToAPI>): FormData => {
 
     return payload;
 }
+
+// Adapter para mapear los datos de un producto que se van a enviar a la API PACHT.
+export const productJsonFormatAPI = (data: Partial<ProductToAPI>): Partial<ProductToAPI> => ({
+    ...( data.name && { name: data.name }),
+    ...( data.description && { description: data.description }),
+    ...( data.categorie && { categorie: data.categorie }),
+    ...( data.price && { price: data.price }),
+    ...( data.stock && { stock: data.stock }),
+})

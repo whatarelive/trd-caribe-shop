@@ -3,36 +3,40 @@
 import { revalidatePath, revalidateTag } from "next/cache";
 import { service } from "@/config/api";
 import { BadRequestException, HttpException } from "@/lib/error-adapter";
-import { UpdateProductSchema } from "@/actions/products/validations/products-schema";
-import { productJsonFormatAPI } from "@/actions/products/adapters/product-adapters";
+import { UpdateImageSchema } from "./validations/products-schema";
+import { productFormatAPI } from "./adapters/product-adapters";
 
 
-export async function updateProduct(id: number, formData: FormData) {
+export async function updateImage(id: number, formData: FormData) {
     try {
         if (typeof id !== "number" || id <= 0) {
             throw new BadRequestException("ID invalido");
         }
 
         const fields = Object.fromEntries(formData.entries());
-        const { data, success } = await UpdateProductSchema.safeParseAsync(fields);
+        const { success, data } = await UpdateImageSchema.safeParseAsync(fields);
         
         if (!success) throw new BadRequestException();
 
-        await service.update(`/store/products/update/${id}`, 
-            productJsonFormatAPI(data), 
-            { error: "Fallo la actualización del producto" }
+        const response = await service.updateFile(`/store/products/update/${id}`, 
+            productFormatAPI(data),
+            { 
+                error: "Fallo la actualización de la imagen del producto",
+            }
         );
+
+        console.log({ response });
 
         revalidateTag("products-data");
         revalidatePath(`/admin/products/${id}/`);
 
         return {
             result: true,
-            message: "Producto actualizado",
+            message: "Imagen del producto actualizada",
         };
         
     } catch (error) {
-        console.error("Error en UpdateProduct", error);
+        console.error("Error en UpdateImage", error);
         
         return { 
             result: false, 

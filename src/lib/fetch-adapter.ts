@@ -122,6 +122,17 @@ export class ApiService {
         return await response.json() as T;
     }
 
+    public async updateFile<T>(url: string, data: FormData, config: MethodConfig): Promise<Response> {
+        return await ApiService.request(url, { 
+            ...config,
+            method: "PATCH",
+            isProtected: true,
+            body: data, 
+            isFile: true,
+        });
+    }
+
+
     public async delete(url: string, config: MethodConfig): Promise<string> {
         const response = await ApiService.request(url, { 
             ...config,
