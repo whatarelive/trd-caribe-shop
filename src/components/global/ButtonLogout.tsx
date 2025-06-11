@@ -1,6 +1,6 @@
 'use client'
 
-import { useRouter } from "next/navigation";
+import { redirect, usePathname, useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { LogOut } from "lucide-react";
 import { logout } from "@/actions/auth/logout";
@@ -9,6 +9,7 @@ import { showErrorToast, showSuccessToast } from "@/components/ui/sonner";
 
 
 export const ButtonLogout = () => {
+    const pathname = usePathname();
     const { refresh } = useRouter();
 
     // Función para manejar el cierre de sesión
@@ -17,7 +18,11 @@ export const ButtonLogout = () => {
         
         if (result) {
             showSuccessToast({ title: message });
-            refresh();
+            
+            if (pathname.includes("/admin")) {
+                return redirect("/");
+            }
+            else return refresh();
         } 
         else showErrorToast({ title: message });
     }, []);

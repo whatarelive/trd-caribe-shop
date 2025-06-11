@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // Calculo de las etiquetas que necesitamos mostrar en el eje y
-// basado en el registro más alto y en miles
+// basado en el registro más alto y en miles (grafica del admin)
 export const generateYAxis = (sales: SaleMonth[]) => {
   const yAxisLabels = [];
   const highestRecord = Math.max(...sales.map((month) => month.total));
