@@ -2,11 +2,12 @@ import Link from "next/link";
 import { Send, ShoppingBasket, Trash2 } from "lucide-react";
 import { auth } from "@/auth.config";
 import { deleteUser } from "@/actions/users/delete-users";
+import { UpdateUserForm } from "@/components/auth/update-form";
 import { AlertModal } from "@/components/global/AlertModal";
+import { ButtonLogout } from "@/components/global/ButtonLogout";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { UpdateUserForm } from "@/components/auth/update-form";
 
 
 export default async function UserPage() {    
@@ -73,6 +74,10 @@ export default async function UserPage() {
                                     Mis Comentarios
                                 </span>
                             </Link>
+                        </div>
+                        
+                        <div className="mt-4">
+                            <ButtonLogout/>
                         </div>
                     </div>
 

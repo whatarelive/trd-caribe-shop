@@ -1,7 +1,7 @@
 'use client'
 
 import { useActionState, useState } from "react";
-import { Image, Loader2 } from "lucide-react";
+import { ImageDown, Loader2 } from "lucide-react";
 import { updateImage } from "@/actions/products/update-image";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -28,7 +28,7 @@ export function ChangeImageModal({ id }: { id: number }) {
         <Modal.Dialog open={open} onOpenChange={setOpen}>
             <Modal.DialogTrigger asChild className="mt-4">
                 <Button variant="outline">
-                    <Image size={24}/>
+                    <ImageDown size={24}/>
                     <span>Cambiar Imagen</span>
                 </Button>
             </Modal.DialogTrigger>
