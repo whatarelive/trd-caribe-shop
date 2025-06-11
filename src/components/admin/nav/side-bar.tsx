@@ -6,7 +6,7 @@ import { ButtonLogout } from "@/components/global/ButtonLogout";
 // Barra lateral de navegación.
 export const SideBar = () => {
     return (
-        <section className="hidden xl:flex xl:flex-col xl:gap-2 p-4 min-w-64">
+        <section className="hidden sticky top-0 h-screen xl:flex xl:flex-col xl:gap-2 p-4 min-w-64">
             <div className="p-1 bg-white rounded-md shadow-md">
                 <div className="flex flex-col px-4 py-8 items-center justify-center rounded-sm bg-blue-600">
                     <div className="flex gap-3 py-1 border-b border-white">
@@ -25,7 +25,7 @@ export const SideBar = () => {
 
             <NavList />
 
-            <div className="bg-gray-50 h-full rounded-md shadow-md"/>
+            <div className="relative bg-gray-50 h-full rounded-md shadow-md"/>
 
             <ButtonLogout />
         </section>

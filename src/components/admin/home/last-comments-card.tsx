@@ -9,7 +9,7 @@ export async function LastCommentsCard() {
     const comments = await getComments({ page: 1, limit: 3, ordering: "-created" });
 
     return (
-        <Card className="shadow-md grow">
+        <Card className="shadow-md grow w-full md:min-w-md 2xl:max-w-md">
             <CardHeader>
                 <CardTitle>Comentarios Recientes</CardTitle>
                 <CardDescription>

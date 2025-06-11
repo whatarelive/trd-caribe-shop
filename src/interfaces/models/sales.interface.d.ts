@@ -57,9 +57,3 @@ export interface SalesResponse {
     previous: string | null;
     results: SalesFromAPI[];
 }
-
-export interface SaleChartData {
-    name: string;
-    total: number;
-    sales: number;
-}
