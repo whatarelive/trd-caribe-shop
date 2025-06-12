@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { useActionState } from "react";
-import { Lock, LockKeyhole, Mail, User } from "lucide-react";
+import { Loader2, Lock, LockKeyhole, Mail, User } from "lucide-react";
 import { createUser } from "@/actions/auth/register";
 import { InputPassword } from "@/components/auth/input-password";
 import { Label } from "@/components/ui/label";
@@ -121,7 +121,8 @@ export const RegisterForm = () => {
             </div>
 
             <Button type="submit" disabled={isPending}>
-                { isPending ? "Registrando..." : "Registrar Cuenta" }
+                { isPending ? "Registrando" : "Registrar Cuenta" }
+                { isPending && <Loader2 className="w-4 h-4 ml-1 animate-spin"/> }
             </Button>
         </form>
     )

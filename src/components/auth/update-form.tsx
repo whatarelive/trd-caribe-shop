@@ -108,7 +108,7 @@ export function UpdateUserForm({ username, email }: Props) {
                         />
                     </div>
 
-                    <div className="space-y-1 mb-4">
+                    <div className="space-y-1 mb-4 relative">
                         <Label htmlFor="password" className="text-sm font-medium">
                             Contraseña
                         </Label>
@@ -121,7 +121,7 @@ export function UpdateUserForm({ username, email }: Props) {
                         />
                     </div>
 
-                    <div className="space-y-1 mb-6">
+                    <div className="space-y-1 mb-6 relative">
                         <Label htmlFor="passwordConfirm" className="text-sm font-medium">
                             Confirmar Contraseña
                         </Label>

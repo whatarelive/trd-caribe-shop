@@ -10,6 +10,7 @@ interface Props {
 }
 
 export function useCart({ id, stock }: Props) {
+    const [isLoading, setIsLoading] = useState(false);
     const [counter, setCounter] = useState(1);
 
     const increment = () => {
@@ -24,11 +25,14 @@ export function useCart({ id, stock }: Props) {
 
     const addProductToCart = useCallback(
         async (value: number) => {
+            setIsLoading(true);
+
             const { result, message } = await addCart({ id, quantity: value });
 
             if (result) showSuccessToast({ title: message });
             else showErrorToast({ title: message });
 
+            setIsLoading(false);
             setCounter(1);
         }, 
         [id, stock],
@@ -37,6 +41,7 @@ export function useCart({ id, stock }: Props) {
 
     return {
         counter,
+        isLoading,
         increment,
         decrement,
         addProductToCart

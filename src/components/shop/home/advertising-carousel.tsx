@@ -14,7 +14,7 @@ export function AdvertisingCarousel() {
     return (
         <Carousel 
             opts={{ loop: true }}
-            className="relative px-4 max-md:h-48 xl:h-96 mx-auto mt-12 xl:px-0" 
+            className="relative w-full px-4 max-md:h-48 xl:h-96 mx-auto mt-12 xl:px-0" 
         >
             <CarouselContent>
                 {images.map((image, index) => (

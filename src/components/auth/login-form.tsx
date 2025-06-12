@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { useActionState } from "react";
-import { User, Lock } from "lucide-react";
+import { User, Lock, Loader2 } from "lucide-react";
 import { autheticate } from "@/actions/auth/login";
 import { InputPassword } from "@/components/auth/input-password";
 import { Label } from "@/components/ui/label";
@@ -61,7 +61,8 @@ export const LoginForm = () => {
             </div>
 
             <Button type="submit" disabled={isPending}>
-                { isPending ? "Iniciando sesión..." : 'Iniciar sesión' }
+                { isPending ? "Iniciando sesión" : 'Iniciar sesión' }
+                { isPending && <Loader2 className="w-4 h-4 ml-1 animate-spin"/> }
             </Button>
         </form>
     )
