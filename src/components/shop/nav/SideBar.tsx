@@ -2,9 +2,8 @@
 
 import clsx from "clsx";
 import Link from "next/link";
-import { memo, useEffect, type FC } from "react";
+import { memo, useEffect, useState, type FC } from "react";
 import { Bookmark, LayoutDashboard, Menu, MessageSquareTextIcon, ShoppingCart, User, X } from "lucide-react";
-import { useMenuStore } from "@/store/menu-store";
 import { useCategoriesStore } from "@/store/categorie-store";
 import { ButtonLogout } from "@/components/global/ButtonLogout";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -19,7 +18,7 @@ interface Props {
  * dispositivos moviles y tables 
 */ 
 export const SideBar: FC<Props> = memo(({ isAuth, isAdmin }) => {
-    const { isOpen, setIsOpen } = useMenuStore();
+    const [isOpen, setIsOpen] = useState(false);
     const categories = useCategoriesStore((state) => state.categories);
 
     // Función para cerrar el sidebar si se cambia el viewport

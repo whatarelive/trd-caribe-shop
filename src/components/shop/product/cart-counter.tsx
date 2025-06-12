@@ -2,7 +2,7 @@
 
 import { memo, type FC } from "react";
 import { cn } from "@/lib/utils";
-import { ShoppingCart } from "lucide-react";
+import { Loader2, ShoppingCart } from "lucide-react";
 import { useCart } from "@/lib/hooks/useCart";
 import { Button } from "@/components/ui/button";
 
@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const CartCounter: FC<Props> = memo(({ id, stock, className }) => {
-    const { counter, increment, decrement, addProductToCart } = useCart({ id, stock });
+    const { counter, isLoading, increment, decrement, addProductToCart } = useCart({ id, stock });
     
     return (
         <div className={cn("flex p-3 pt-0 justify-between items-center select-none", className)}>
@@ -42,9 +42,19 @@ export const CartCounter: FC<Props> = memo(({ id, stock, className }) => {
             <Button  
                 className="gap-1.5 bg-blue-400 text-white hover:bg-blue-500"
                 onClick={() => addProductToCart(counter)}
+                disabled={isLoading}
             >
-                <ShoppingCart fill="#fff" color="#fff" size={20}/>
-                Añadir
+                { isLoading ? (
+                    <>
+                        Guardando
+                        <Loader2 className="w-4 h-4 ml-1 animate-spin"/> 
+                    </>
+                ): (
+                    <>
+                        <ShoppingCart fill="#fff" color="#fff" size={20}/>
+                        Añadir
+                    </>
+                )}              
             </Button>
         </div>
     )

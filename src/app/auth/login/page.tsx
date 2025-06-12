@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import { LoadingImage } from "@/components/global/LodingImage";
 import { LoginForm } from "@/components/auth/login-form";
 
 
@@ -7,17 +7,15 @@ export default function LoginPage() {
     return (
         <section className="flex flex-col p-6 w-full max-w-[400px]">
             <div className="flex flex-col items-center">
-                <Image 
+                <LoadingImage 
                     src="/images/logo.png" 
                     alt="Logo de la empresa" 
                     width={200} 
                     height={100}
-                    priority
                     className="ml-7"
                 />
 
-                <h2 className="text-3xl font-semibold mt-4"
-                >
+                <h2 className="text-3xl font-semibold mt-4">
                     Bienvenido de Nuevo
                 </h2>
 
